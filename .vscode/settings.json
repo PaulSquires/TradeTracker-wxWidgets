@@ -85,5 +85,6 @@
         "future": "cpp",
         "thread": "cpp",
         "random": "cpp"
-    }
+    },
+    "C_Cpp.default.compilerPath": "cl.exe"
 }
