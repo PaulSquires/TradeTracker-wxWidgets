@@ -18,8 +18,11 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(wxWidgets)
 
-set(SRCS 
-    src/TradeTracker.cpp
+set(SRCS
+    src/TradeTracker.cpp;
+    src/TradeTracker.h;
+    src/MainWindow.cpp;
+    src/MainWindow.h
     )
 
 if(APPLE)
