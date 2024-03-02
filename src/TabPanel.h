@@ -1,3 +1,6 @@
+#ifndef SRC_TABPANEL_H
+#define SRC_TABPANEL_H
+
 #include <wx/wx.h>
 
 class TabPanel : public wxPanel {
@@ -7,3 +10,6 @@ public:
 
 };
 
+
+
+#endif  /* SRC_TABPANEL_H */

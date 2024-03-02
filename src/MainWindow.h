@@ -1,3 +1,6 @@
+#ifndef SRC_MAINWINDOW_H
+#define SRC_MAINWINDOW_H
+
 #include <wx/wx.h>
 
 class MainWindow : public wxFrame {
@@ -9,3 +12,6 @@ public:
     wxPanel* bottom_panel = nullptr;
 };
 
+
+
+#endif  /* SRC_MAINWINDOW_H */

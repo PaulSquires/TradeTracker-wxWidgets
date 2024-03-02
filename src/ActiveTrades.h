@@ -1,3 +1,6 @@
+#ifndef SRC_ACTIVETRADES_H
+#define SRC_ACTIVETRADES_H
+
 #include <wx/wx.h>
 
 class ActiveTrades : public wxPanel {
@@ -6,3 +9,12 @@ public:
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr );
 
 };
+
+
+
+
+
+
+
+
+#endif  /* SRC_ACTIVETRADES_H */
