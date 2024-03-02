@@ -1,6 +1,6 @@
 #include <wx/wx.h>
 
-class MyApp : public wxApp {
+class TradeTracker : public wxApp {
 public:
     virtual bool OnInit();
 };
