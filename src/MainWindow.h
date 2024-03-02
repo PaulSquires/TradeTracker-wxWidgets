@@ -8,3 +8,4 @@ public:
     wxPanel* right_panel = nullptr;
     wxPanel* bottom_panel = nullptr;
 };
+

@@ -22,7 +22,23 @@ set(SRCS
     src/TradeTracker.cpp;
     src/TradeTracker.h;
     src/MainWindow.cpp;
-    src/MainWindow.h
+    src/MainWindow.h;
+    src/ActiveTrades.cpp;
+    src/ActiveTrades.h;
+    src/ClosedTrades.cpp;
+    src/ClosedTrades.h;
+    src/Transactions.cpp;
+    src/Transactions.h;
+    src/TradeHistory.cpp;
+    src/TradeHistory.h;
+    src/TabPanel.cpp;
+    src/TabPanel.h;
+    src/JournalNotes.cpp;
+    src/JournalNotes.h;
+    src/TickerTotals.cpp;
+    src/TickerTotals.h;
+    src/TradePlan.cpp;
+    src/TradePlan.h
     )
 
 if(APPLE)
