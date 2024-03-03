@@ -3,15 +3,24 @@
 #include "TabPanel.h"
 #include "TradeTracker.h"
 
+TabPanelLinkButton::TabPanelLinkButton(wxWindow* parent, wxWindowID id, const wxString& label,
+    const wxPoint& pos, const wxSize& size)
+    : wxPanel(parent, id, pos, size)
+{
+    label_text = label;
+}
+
+
 TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     const wxSize& size, long style, const wxString& name)
     : wxPanel(parent, id, pos, size, style, name)
 {
     main_window_ptr = (MainWindow*) parent;
 
-    this->SetBackgroundColour(wxColor(100,100,200));
+    this->SetBackgroundColour(wxColor(0,0,0));
 
-    wxButton* btn_active_trades = new wxButton(this, wxID_ANY, "Active");
+    TabPanelLinkButton* btn_active_trades =
+    new TabPanelLinkButton(this, wxID_ANY, "Active", wxDefaultPosition, this->FromDIP(wxSize(90,36)));
 	btn_active_trades->Bind(wxEVT_BUTTON, &TabPanel::ActiveTradesClicked, this);
 
     wxButton* btn_closed_trades = new wxButton(this, wxID_ANY, "Closed");

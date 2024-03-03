@@ -4,6 +4,21 @@
 #include <wx/wx.h>
 #include "MainWindow.h"
 
+class TabPanelLinkButton : public wxPanel {
+public:
+    TabPanelLinkButton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& label = "",
+    const wxPoint& pos = wxDefaultPosition,	const wxSize& size = wxDefaultSize);
+
+    wxString label_text;
+    bool is_selected = false;
+    wxColor back_color_normal = wxColor(0,0,0);
+    wxColor back_color_selected = wxColor(22,26,27);
+    wxColor text_color_normal = wxColor(157,165,180);
+    wxColor text_color_selected = wxColor(255,255,255);
+
+};
+
+
 class TabPanel : public wxPanel {
 public:
     TabPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
