@@ -32,14 +32,15 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     wxButton* btn_trade_plan = new wxButton(this, wxID_ANY, "TradePlan");
 	btn_trade_plan->Bind(wxEVT_BUTTON, &TabPanel::TradePlanClicked, this);
 
+    size_t margin = FromDIP(5);
     wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(btn_active_trades);
-    sizer->Add(btn_closed_trades);
-    sizer->Add(btn_transactions);
-    sizer->Add(btn_trade_history);
-    sizer->Add(btn_ticker_totals);
-    sizer->Add(btn_journal_notes);
-    sizer->Add(btn_trade_plan);
+    sizer->Add(btn_active_trades, 0, wxALL, margin);
+    sizer->Add(btn_closed_trades, 0, wxALL, margin);
+    sizer->Add(btn_transactions, 0, wxALL, margin);
+    sizer->Add(btn_trade_history, 0, wxALL, margin);
+    sizer->Add(btn_ticker_totals, 0, wxALL, margin);
+    sizer->Add(btn_journal_notes, 0, wxALL, margin);
+    sizer->Add(btn_trade_plan, 0, wxALL, margin);
 
     this->SetSizerAndFit(sizer);
 

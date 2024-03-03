@@ -23,8 +23,8 @@
             "type": "shell",
             "command": "cmake",
             "args": [
-                "-DCMAKE_BUILD_TYPE=Debug",
-                "-S.",
+                "-D CMAKE_BUILD_TYPE=Debug",
+                "-S .",
                 "-B build"
             ]
         }

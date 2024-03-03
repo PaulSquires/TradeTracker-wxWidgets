@@ -51,7 +51,7 @@ else()
     # the WIN32 is needed for Windows in order for it to look for WinMain
     # instead of the main function. This is ignored on other systems,
     # so it works on all platforms
-    add_executable(TradeTracker WIN32 ${SRCS} src/TradeTracker.exe.manifest)
+    add_executable(TradeTracker WIN32 ${SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/TradeTracker.exe.manifest)
 endif()
 
 target_link_libraries(TradeTracker PRIVATE wxcore wxnet)
