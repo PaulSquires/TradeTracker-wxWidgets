@@ -2,6 +2,7 @@
 #define SRC_TABPANEL_H
 
 #include <wx/wx.h>
+#include <vector>
 #include "MainWindow.h"
 
 enum ButtonID {
@@ -21,8 +22,11 @@ public:
     const wxPoint& pos = wxDefaultPosition,	const wxSize& size = wxDefaultSize);
 
     MainWindow* main_window_ptr = nullptr;
+    TabPanel* tab_panel_ptr = nullptr;
     wxString label_text;
+
     bool is_selected = false;
+    bool is_hot = false;
 
     wxColor back_color_normal = wxColor(0,0,0);
     wxColor back_color_selected = wxColor(22,26,27);
@@ -32,6 +36,8 @@ public:
 private:
   void OnPaint(wxPaintEvent& e);
   void OnClick(wxMouseEvent& e);
+  void OnMouseEnter(wxMouseEvent& e);
+  void OnMouseLeave(wxMouseEvent& e);
 };
 
 
@@ -41,6 +47,11 @@ public:
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr);
 
     MainWindow* main_window_ptr = nullptr;
+
+    std::vector<TabPanelLinkButton*> link_buttons;
+
+    void SetSelectedLinkButton(wxWindowID id);
+
 };
 
 
