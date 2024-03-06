@@ -24,7 +24,7 @@ MainWindow::MainWindow(const wxString &title, const wxPoint &pos, const wxSize &
     ticker_totals_panel = new TickerTotals(splitter);
     journal_notes_panel = new JournalNotes(splitter);
     trade_plan_panel = new TradePlan(splitter);
-    tab_panel = new TabPanel(this, wxID_ANY, wxDefaultPosition, wxWindow::FromDIP(wxSize(200,36)));
+    tab_panel = new TabPanel(this, wxID_ANY, wxDefaultPosition, wxWindow::FromDIP(wxSize(800,36)));
 
     current_left_panel = active_trades_panel;
     current_right_panel = trade_history_panel;
@@ -35,7 +35,8 @@ MainWindow::MainWindow(const wxString &title, const wxPoint &pos, const wxSize &
 
     sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(splitter, 1, wxEXPAND);
-    sizer->Add(tab_panel, 0, wxEXPAND);
+    //sizer->Add(tab_panel, 0, wxEXPAND);
+    sizer->Add(tab_panel, 0);
 
     this->SetSizerAndFit(sizer);
 }
