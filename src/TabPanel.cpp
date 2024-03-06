@@ -16,8 +16,8 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
 
     int left = this->FromDIP(10);
     int top = 0;
-    int width = this->FromDIP(90);
-    int height = this->FromDIP(36);
+    int width = this->FromDIP(135);  // 90
+    int height = this->FromDIP(54);  // 36
 
     TabPanelLinkButton* btn_active_trades =
         new TabPanelLinkButton(this, id_active_trades, "Active Trades", wxPoint(left,top), wxSize(width,height));
