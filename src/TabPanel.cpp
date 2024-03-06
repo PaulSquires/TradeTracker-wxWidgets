@@ -14,49 +14,46 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
 
     this->SetBackgroundColour(wxColor(0,0,0));
 
-    size_t left = 10;
-    size_t top = 0;
-    size_t width = 90;
-    size_t height = 36;
+    int left = this->FromDIP(10);
+    int top = 0;
+    int width = this->FromDIP(90);
+    int height = this->FromDIP(36);
+
+std::cout << width << std::endl;
+std::cout << wxGetDisplayPPI << std::endl;
 
     TabPanelLinkButton* btn_active_trades =
-    new TabPanelLinkButton(this, id_active_trades, "Active Trades",
-        this->FromDIP(wxPoint(left,top)), this->FromDIP(wxSize(width,height)));
+        new TabPanelLinkButton(this, id_active_trades, "Active Trades", wxPoint(left,top), wxSize(width,height));
     link_buttons.push_back(btn_active_trades);
 
     left += width;
-    width = 90;
+    width = this->FromDIP(90);
     TabPanelLinkButton* btn_closed_trades =
-    new TabPanelLinkButton(this, id_closed_trades, "Closed Trades",
-        this->FromDIP(wxPoint(left,top)), this->FromDIP(wxSize(width,height)));
+        new TabPanelLinkButton(this, id_closed_trades, "Closed Trades", wxPoint(left,top), wxSize(width,height));
     link_buttons.push_back(btn_closed_trades);
 
     left += width;
-    width = 84;
+    width = this->FromDIP(84);
     TabPanelLinkButton* btn_transactions =
-    new TabPanelLinkButton(this, id_transactions, "Transactions",
-        this->FromDIP(wxPoint(left,top)), this->FromDIP(wxSize(width,height)));
+        new TabPanelLinkButton(this, id_transactions, "Transactions", wxPoint(left,top), wxSize(width,height));
     link_buttons.push_back(btn_transactions);
 
     left += width;
-    width = 84;
+    width = this->FromDIP(84);
     TabPanelLinkButton* btn_ticker_totals =
-    new TabPanelLinkButton(this, id_ticker_totals, "Ticker Totals",
-        this->FromDIP(wxPoint(left,top)), this->FromDIP(wxSize(width,height)));
+        new TabPanelLinkButton(this, id_ticker_totals, "Ticker Totals", wxPoint(left,top), wxSize(width,height));
     link_buttons.push_back(btn_ticker_totals);
 
     left += width;
-    width = 90;
+    width = this->FromDIP(90);
     TabPanelLinkButton* btn_journal_notes =
-    new TabPanelLinkButton(this, id_journal_notes, "Journal Notes",
-        this->FromDIP(wxPoint(left,top)), this->FromDIP(wxSize(width,height)));
+        new TabPanelLinkButton(this, id_journal_notes, "Journal Notes", wxPoint(left,top), wxSize(width,height));
     link_buttons.push_back(btn_journal_notes);
 
     left += width;
-    width = 76;
+    width = this->FromDIP(76);
     TabPanelLinkButton* btn_trade_plan =
-    new TabPanelLinkButton(this, id_trade_plan, "Trade Plan",
-        this->FromDIP(wxPoint(left,top)), this->FromDIP(wxSize(width,height)));
+        new TabPanelLinkButton(this, id_trade_plan, "Trade Plan", wxPoint(left,top), wxSize(width,height));
     link_buttons.push_back(btn_trade_plan);
 
     auto* sizer = new wxBoxSizer(wxHORIZONTAL);
