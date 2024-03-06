@@ -59,16 +59,15 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
         this->FromDIP(wxPoint(left,top)), this->FromDIP(wxSize(width,height)));
     link_buttons.push_back(btn_trade_plan);
 
-    // wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    // sizer->Add(btn_active_trades, 1, wxEXPAND);
-    // sizer->Add(btn_closed_trades, 1, wxEXPAND);
-    // sizer->Add(btn_transactions, 1, wxEXPAND);
-    // sizer->Add(btn_ticker_totals, 1, wxEXPAND);
-    // sizer->Add(btn_journal_notes, 1, wxEXPAND);
-    // sizer->Add(btn_trade_plan, 1, wxEXPAND);
+    auto* sizer = new wxBoxSizer(wxHORIZONTAL);
+    sizer->Add(btn_active_trades);
+    sizer->Add(btn_closed_trades);
+    sizer->Add(btn_transactions);
+    sizer->Add(btn_ticker_totals);
+    sizer->Add(btn_journal_notes);
+    sizer->Add(btn_trade_plan);
 
-    //this->SetSizerAndFit(sizer);
-    //this->SetSizer(sizer);
+    this->SetSizer(sizer);
 
 }
 

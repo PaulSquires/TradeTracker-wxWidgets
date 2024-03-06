@@ -35,8 +35,7 @@ MainWindow::MainWindow(const wxString &title, const wxPoint &pos, const wxSize &
 
     sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(splitter, 1, wxEXPAND);
-    //sizer->Add(tab_panel, 0, wxEXPAND);
-    sizer->Add(tab_panel, 0);
+    sizer->Add(tab_panel, 0, wxEXPAND);
 
     this->SetSizerAndFit(sizer);
 }
