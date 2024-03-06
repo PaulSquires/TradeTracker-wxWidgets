@@ -28,10 +28,11 @@ public:
     bool is_selected = false;
     bool is_hot = false;
 
-    wxColor back_color_normal = wxColor(0,0,0);
-    wxColor back_color_selected = wxColor(22,26,27);
-    wxColor text_color_normal = wxColor(157,165,180);
-    wxColor text_color_selected = wxColor(255,255,255);
+    wxColor color_back_normal = wxColor(0,0,0);
+    wxColor color_back_selected = wxColor(22,26,27);
+    wxColor color_text_normal = wxColor(157,165,180);
+    wxColor color_text_selected = wxColor(255,255,255);
+    wxColor color_selected_line = wxColor(72,151,13);
 
 private:
   void OnPaint(wxPaintEvent& e);

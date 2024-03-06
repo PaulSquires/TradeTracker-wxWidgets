@@ -151,19 +151,37 @@ void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
         size_t height = GetClientRect().GetHeight();
 
         if (this->is_hot || this->is_selected) {
-            gc->SetFont(*wxNORMAL_FONT, this->text_color_selected);
+            gc->SetFont(*wxNORMAL_FONT, this->color_text_selected);
         } else {
-            gc->SetFont(*wxNORMAL_FONT, text_color_normal);
+            gc->SetFont(*wxNORMAL_FONT, color_text_normal);
         }
 
         if (this->is_selected) {
-            gc->SetBrush(this->back_color_selected);
+            gc->SetBrush(this->color_back_selected);
         } else {
-            gc->SetBrush(this->back_color_normal);
+            gc->SetBrush(this->color_back_normal);
         }
 
         gc->DrawRectangle(0,0,width,height);
-        gc->DrawText(this->label_text, 0, 0);
+
+        wxCoord text_width;
+        wxCoord text_height;
+        dc.GetTextExtent(this->label_text, &text_width, &text_height);
+
+        wxCoord text_left = (width-text_width) / 2;
+        wxCoord text_top = (height-text_height) / 2;
+        gc->DrawText(this->label_text, text_left, text_top);
+
+        if (this->is_selected) {
+            wxPen pen{this->color_selected_line, FromDIP(2)};
+            gc->SetPen(pen);
+            wxGraphicsPath path = gc->CreatePath();
+            wxDouble line_left = text_left;
+            wxDouble line_top = height - FromDIP(6);
+            path.MoveToPoint(line_left, line_top);
+            path.AddLineToPoint(line_left+text_width, line_top);
+            gc->StrokePath(path);
+        }
 
         delete gc;
     }
