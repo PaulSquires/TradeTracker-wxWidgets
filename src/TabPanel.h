@@ -42,6 +42,22 @@ private:
 };
 
 
+class TabPanelVerticalLine : public wxPanel {
+public:
+    TabPanelVerticalLine( TabPanel* parent,
+      const wxPoint& pos = wxDefaultPosition,	const wxSize& size = wxDefaultSize);
+
+    MainWindow* main_window_ptr = nullptr;
+    TabPanel* tab_panel_ptr = nullptr;
+
+    wxColor color_back_normal = wxColor(0,0,0);
+    wxColor color_text_normal = wxColor(157,165,180);
+
+private:
+  void OnPaint(wxPaintEvent& e);
+};
+
+
 class TabPanel : public wxPanel {
 public:
     TabPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,

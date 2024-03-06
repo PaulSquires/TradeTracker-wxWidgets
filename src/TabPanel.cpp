@@ -19,6 +19,7 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     int width = 0;
     int height = this->FromDIP(54);
     int margin = 20;
+    int vertline_panel_width = this->FromDIP(7);
 
     wxString label = "Active Trades";
     width = GetTextExtent(label).x + margin;
@@ -27,6 +28,9 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     link_buttons.push_back(btn_active_trades);
 
     left += width;
+    new TabPanelVerticalLine(this, wxPoint(left,top), wxSize(vertline_panel_width,height));
+
+    left += vertline_panel_width;
     label = "Closed Trades";
     width = GetTextExtent(label).x + margin;
     TabPanelLinkButton* btn_closed_trades =
@@ -34,6 +38,9 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     link_buttons.push_back(btn_closed_trades);
 
     left += width;
+    new TabPanelVerticalLine(this, wxPoint(left,top), wxSize(vertline_panel_width,height));
+
+    left += vertline_panel_width;
     label = "Transactions";
     width = GetTextExtent(label).x + margin;
     TabPanelLinkButton* btn_transactions =
@@ -41,6 +48,9 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     link_buttons.push_back(btn_transactions);
 
     left += width;
+    new TabPanelVerticalLine(this, wxPoint(left,top), wxSize(vertline_panel_width,height));
+
+    left += vertline_panel_width;
     label = "Ticker Totals";
     width = GetTextExtent(label).x + margin;
     TabPanelLinkButton* btn_ticker_totals =
@@ -48,6 +58,9 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     link_buttons.push_back(btn_ticker_totals);
 
     left += width;
+    new TabPanelVerticalLine(this, wxPoint(left,top), wxSize(vertline_panel_width,height));
+
+    left += vertline_panel_width;
     label = "Journal Notes";
     width = GetTextExtent(label).x + margin;
     TabPanelLinkButton* btn_journal_notes =
@@ -55,10 +68,13 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     link_buttons.push_back(btn_journal_notes);
 
     left += width;
+    new TabPanelVerticalLine(this, wxPoint(left,top), wxSize(vertline_panel_width,height));
+
+    left += vertline_panel_width;
     label = "Trade Plan";
     width = GetTextExtent(label).x + margin;
     TabPanelLinkButton* btn_trade_plan =
-        new TabPanelLinkButton(this, id_trade_plan, label, wxPoint(left,top), wxSize(width,height));
+        new TabPanelLinkButton(this, id_trade_plan, label, wxPoint(left,top), wxSize(vertline_panel_width,height));
     link_buttons.push_back(btn_trade_plan);
 
     auto* sizer = new wxBoxSizer(wxHORIZONTAL);
@@ -149,8 +165,8 @@ void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
 
     if (gc) {
 
-        size_t width = GetClientRect().GetWidth();
-        size_t height = GetClientRect().GetHeight();
+        int width = GetClientRect().GetWidth();
+        int height = GetClientRect().GetHeight();
 
         if (this->is_hot || this->is_selected) {
             gc->SetFont(*wxNORMAL_FONT, this->color_text_selected);
@@ -169,8 +185,6 @@ void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
         wxCoord text_width;
         wxCoord text_height;
         dc.GetTextExtent(this->label_text, &text_width, &text_height);
-
-std::cout << this->label_text << ": " << width << " " << text_width << std::endl;
 
         wxCoord text_left = (width-text_width) / 2;
         wxCoord text_top = (height-text_height) / 2;
@@ -191,3 +205,41 @@ std::cout << this->label_text << ": " << width << " " << text_width << std::endl
     }
 }
 
+
+TabPanelVerticalLine::TabPanelVerticalLine(TabPanel* parent, const wxPoint& pos, const wxSize& size)
+    : wxPanel(parent, wxID_ANY, pos, size)
+{
+    main_window_ptr = parent->main_window_ptr;
+    tab_panel_ptr = (TabPanel*) parent;
+
+    this->SetBackgroundStyle(wxBG_STYLE_PAINT);
+
+	this->Bind(wxEVT_PAINT, &TabPanelVerticalLine::OnPaint, this);
+}
+
+
+void TabPanelVerticalLine::OnPaint(wxPaintEvent& e) {
+    wxAutoBufferedPaintDC dc(this);
+    dc.Clear();
+
+    wxGraphicsContext* gc = wxGraphicsContext::Create(dc);
+
+    if (gc) {
+        int width = GetClientRect().GetWidth();
+        int height = GetClientRect().GetHeight();
+        gc->SetBrush(this->color_back_normal);
+
+        gc->DrawRectangle(0,0,width,height);
+
+        wxPen pen{this->color_text_normal};
+        gc->SetPen(pen);
+        wxGraphicsPath path = gc->CreatePath();
+        wxDouble line_left = (width / 2);
+        wxDouble line_top = FromDIP(6);
+        path.MoveToPoint(line_left, line_top);
+        path.AddLineToPoint(line_left, line_top+FromDIP(22));
+        gc->StrokePath(path);
+
+        delete gc;
+    }
+}
