@@ -19,9 +19,6 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     int width = this->FromDIP(90);
     int height = this->FromDIP(36);
 
-std::cout << width << std::endl;
-std::cout << wxGetDisplayPPI << std::endl;
-
     TabPanelLinkButton* btn_active_trades =
         new TabPanelLinkButton(this, id_active_trades, "Active Trades", wxPoint(left,top), wxSize(width,height));
     link_buttons.push_back(btn_active_trades);
@@ -164,6 +161,8 @@ void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
         wxCoord text_width;
         wxCoord text_height;
         dc.GetTextExtent(this->label_text, &text_width, &text_height);
+
+std::cout << this->label_text << ": " << width << " " << text_width << std::endl;
 
         wxCoord text_left = (width-text_width) / 2;
         wxCoord text_top = (height-text_height) / 2;
