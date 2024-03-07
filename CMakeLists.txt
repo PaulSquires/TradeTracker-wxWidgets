@@ -46,12 +46,16 @@ if(APPLE)
     add_executable(TradeTracker MACOSX_BUNDLE ${SRCS})
 
     # Set a custom plist file for the app bundle - needed for Mac OS Retina display
-    set_target_properties(TradeTracker PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+    set_target_properties(TradeTracker PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/src/resource/Info.plist)
 else()
     # the WIN32 is needed for Windows in order for it to look for WinMain
     # instead of the main function. This is ignored on other systems,
     # so it works on all platforms
-    add_executable(TradeTracker WIN32 ${SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/TradeTracker.exe.manifest)
+    add_executable(
+        TradeTracker WIN32
+        ${SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/src/resource/TradeTracker.rc
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/resource/TradeTracker.exe.manifest
+        )
 endif()
 
 target_link_libraries(TradeTracker PRIVATE wxcore wxnet)

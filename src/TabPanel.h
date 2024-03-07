@@ -65,6 +65,7 @@ struct TabPanelLinkButtonStruct {
     TabPanelLinkButton* button_ptr = nullptr;
 };
 
+
 class TabPanel : public wxPanel {
 public:
     TabPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
