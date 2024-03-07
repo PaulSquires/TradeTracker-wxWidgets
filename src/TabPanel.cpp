@@ -30,32 +30,27 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     int margin = 20;
     int vertline_panel_width = this->FromDIP(7);
 
+    auto* sizer = new wxBoxSizer(wxHORIZONTAL);
+
     for (auto& [id, btn] : link_buttons) {
         width = GetTextExtent(btn.label_text).x + margin;
         btn.button_ptr = new TabPanelLinkButton(this, id, btn.label_text, wxPoint(left,0), wxSize(width,height));
+        sizer->Add(btn.button_ptr);
         left += width;
-        new TabPanelVerticalLine(this, wxPoint(left,0), wxSize(vertline_panel_width,height));
+        auto vertline_ptr = new TabPanelVerticalLine(this, wxPoint(left,0), wxSize(vertline_panel_width,height));
+        sizer->Add(vertline_ptr);
         left += vertline_panel_width;
     }
 
-
-    // auto* sizer = new wxBoxSizer(wxHORIZONTAL);
-    // sizer->Add(btn_active_trades);
-    // sizer->Add(btn_closed_trades);
-    // sizer->Add(btn_transactions);
-    // sizer->Add(btn_ticker_totals);
-    // sizer->Add(btn_journal_notes);
-    // sizer->Add(btn_trade_plan);
-
-    // this->SetSizer(sizer);
+    this->SetSizer(sizer);
 
 }
 
 
-void TabPanel::SetSelectedLinkButton(const wxWindowID id) {
+void TabPanel::SetSelectedLinkButton(const wxWindowID id_clicked) {
     for (auto& [id, btn] : this->link_buttons) {
         btn.button_ptr->is_selected = false;
-        if (btn.button_ptr->GetId() == id) btn.button_ptr->is_selected = true;
+        if (btn.button_ptr->GetId() == id_clicked) btn.button_ptr->is_selected = true;
         btn.button_ptr->Refresh();
     }
 }
