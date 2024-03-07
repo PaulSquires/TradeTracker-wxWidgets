@@ -84,7 +84,8 @@
         "forward_list": "cpp",
         "future": "cpp",
         "thread": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "xiosbase": "cpp"
     },
     "C_Cpp.default.compilerPath": "cl.exe"
 }

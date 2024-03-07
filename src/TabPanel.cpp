@@ -14,87 +14,49 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
 
     this->SetBackgroundColour(wxColor(0,0,0));
 
+    link_buttons = {
+        {id_active_trades, {"Active Trades", true,  main_window_ptr->active_trades_panel, nullptr}},
+        {id_closed_trades, {"Closed Trades", true,  main_window_ptr->closed_trades_panel, nullptr}},
+        {id_transactions,  {"Transactions",  true,  main_window_ptr->transactions_panel,  nullptr}},
+        {id_ticker_totals, {"Ticker Totals", false, main_window_ptr->ticker_totals_panel, nullptr}},
+        {id_journal_notes, {"Journal Notes", false, main_window_ptr->journal_notes_panel, nullptr}},
+        {id_trade_plan,    {"Trade Plan",    false, main_window_ptr->trade_plan_panel,    nullptr}}
+    };
+
+
     int left = this->FromDIP(10);
-    int top = 0;
     int width = 0;
     int height = this->FromDIP(54);
     int margin = 20;
     int vertline_panel_width = this->FromDIP(7);
 
-    wxString label = "Active Trades";
-    width = GetTextExtent(label).x + margin;
-    TabPanelLinkButton* btn_active_trades =
-        new TabPanelLinkButton(this, id_active_trades, label, wxPoint(left,top), wxSize(width,height));
-    link_buttons.push_back(btn_active_trades);
+    for (auto& [id, btn] : link_buttons) {
+        width = GetTextExtent(btn.label_text).x + margin;
+        btn.button_ptr = new TabPanelLinkButton(this, id, btn.label_text, wxPoint(left,0), wxSize(width,height));
+        left += width;
+        new TabPanelVerticalLine(this, wxPoint(left,0), wxSize(vertline_panel_width,height));
+        left += vertline_panel_width;
+    }
 
-    left += width;
-    new TabPanelVerticalLine(this, wxPoint(left,top), wxSize(vertline_panel_width,height));
 
-    left += vertline_panel_width;
-    label = "Closed Trades";
-    width = GetTextExtent(label).x + margin;
-    TabPanelLinkButton* btn_closed_trades =
-        new TabPanelLinkButton(this, id_closed_trades, label, wxPoint(left,top), wxSize(width,height));
-    link_buttons.push_back(btn_closed_trades);
+    // auto* sizer = new wxBoxSizer(wxHORIZONTAL);
+    // sizer->Add(btn_active_trades);
+    // sizer->Add(btn_closed_trades);
+    // sizer->Add(btn_transactions);
+    // sizer->Add(btn_ticker_totals);
+    // sizer->Add(btn_journal_notes);
+    // sizer->Add(btn_trade_plan);
 
-    left += width;
-    new TabPanelVerticalLine(this, wxPoint(left,top), wxSize(vertline_panel_width,height));
-
-    left += vertline_panel_width;
-    label = "Transactions";
-    width = GetTextExtent(label).x + margin;
-    TabPanelLinkButton* btn_transactions =
-        new TabPanelLinkButton(this, id_transactions, label, wxPoint(left,top), wxSize(width,height));
-    link_buttons.push_back(btn_transactions);
-
-    left += width;
-    new TabPanelVerticalLine(this, wxPoint(left,top), wxSize(vertline_panel_width,height));
-
-    left += vertline_panel_width;
-    label = "Ticker Totals";
-    width = GetTextExtent(label).x + margin;
-    TabPanelLinkButton* btn_ticker_totals =
-        new TabPanelLinkButton(this, id_ticker_totals, label, wxPoint(left,top), wxSize(width,height));
-    link_buttons.push_back(btn_ticker_totals);
-
-    left += width;
-    new TabPanelVerticalLine(this, wxPoint(left,top), wxSize(vertline_panel_width,height));
-
-    left += vertline_panel_width;
-    label = "Journal Notes";
-    width = GetTextExtent(label).x + margin;
-    TabPanelLinkButton* btn_journal_notes =
-        new TabPanelLinkButton(this, id_journal_notes, label, wxPoint(left,top), wxSize(width,height));
-    link_buttons.push_back(btn_journal_notes);
-
-    left += width;
-    new TabPanelVerticalLine(this, wxPoint(left,top), wxSize(vertline_panel_width,height));
-
-    left += vertline_panel_width;
-    label = "Trade Plan";
-    width = GetTextExtent(label).x + margin;
-    TabPanelLinkButton* btn_trade_plan =
-        new TabPanelLinkButton(this, id_trade_plan, label, wxPoint(left,top), wxSize(vertline_panel_width,height));
-    link_buttons.push_back(btn_trade_plan);
-
-    auto* sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(btn_active_trades);
-    sizer->Add(btn_closed_trades);
-    sizer->Add(btn_transactions);
-    sizer->Add(btn_ticker_totals);
-    sizer->Add(btn_journal_notes);
-    sizer->Add(btn_trade_plan);
-
-    this->SetSizer(sizer);
+    // this->SetSizer(sizer);
 
 }
 
 
-void TabPanel::SetSelectedLinkButton(wxWindowID id) {
-    for (auto item : this->link_buttons) {
-        item->is_selected = false;
-        if (item->GetId() == id) item->is_selected = true;
-        item->Refresh();
+void TabPanel::SetSelectedLinkButton(const wxWindowID id) {
+    for (auto& [id, btn] : this->link_buttons) {
+        btn.button_ptr->is_selected = false;
+        if (btn.button_ptr->GetId() == id) btn.button_ptr->is_selected = true;
+        btn.button_ptr->Refresh();
     }
 }
 
@@ -118,26 +80,9 @@ TabPanelLinkButton::TabPanelLinkButton(TabPanel* parent, wxWindowID id, const wx
 
 
 void TabPanelLinkButton::OnClick(wxMouseEvent& e) {
-    switch (e.GetId()) {
-        case id_active_trades:
-            main_window_ptr->SetLeftPanel(main_window_ptr->active_trades_panel);
-            break;
-        case id_closed_trades:
-            main_window_ptr->SetLeftPanel(main_window_ptr->closed_trades_panel);
-            break;
-        case id_transactions:
-            main_window_ptr->SetLeftPanel(main_window_ptr->transactions_panel);
-            break;
-        case id_journal_notes:
-            main_window_ptr->SetRightPanel(main_window_ptr->journal_notes_panel);
-            break;
-        case id_trade_plan:
-            main_window_ptr->SetRightPanel(main_window_ptr->trade_plan_panel);
-            break;
-        case id_ticker_totals:
-            main_window_ptr->SetRightPanel(main_window_ptr->ticker_totals_panel);
-            break;
-    }
+    auto& btn = this->tab_panel_ptr->link_buttons.at(e.GetId());
+    btn.is_left_panel ?
+        main_window_ptr->SetLeftPanel(btn.panel) : main_window_ptr->SetRightPanel(btn.panel);
     tab_panel_ptr->SetSelectedLinkButton(e.GetId());
     e.Skip();
 }

@@ -2,7 +2,7 @@
 #define SRC_TABPANEL_H
 
 #include <wx/wx.h>
-#include <vector>
+#include <map>
 #include "MainWindow.h"
 
 enum ButtonID {
@@ -58,6 +58,13 @@ private:
 };
 
 
+struct TabPanelLinkButtonStruct {
+    wxString label_text;
+    bool is_left_panel = true;;
+    wxPanel* panel = nullptr;
+    TabPanelLinkButton* button_ptr = nullptr;
+};
+
 class TabPanel : public wxPanel {
 public:
     TabPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
@@ -65,9 +72,10 @@ public:
 
     MainWindow* main_window_ptr = nullptr;
 
-    std::vector<TabPanelLinkButton*> link_buttons;
+    // wxWindow id is the key
+    std::map<int, TabPanelLinkButtonStruct> link_buttons;
 
-    void SetSelectedLinkButton(wxWindowID id);
+    void SetSelectedLinkButton(const wxWindowID id);
 
 };
 
