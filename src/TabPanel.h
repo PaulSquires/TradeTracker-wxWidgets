@@ -18,7 +18,7 @@ class TabPanel;
 
 class TabPanelLinkButton : public wxPanel {
 public:
-    TabPanelLinkButton( TabPanel* parent, wxWindowID id = wxID_ANY, const wxString& label = "",
+    explicit TabPanelLinkButton( TabPanel* parent, wxWindowID id = wxID_ANY, const wxString& label = "",
     const wxPoint& pos = wxDefaultPosition,	const wxSize& size = wxDefaultSize);
 
     MainWindow* main_window_ptr = nullptr;
@@ -44,7 +44,7 @@ private:
 
 class TabPanelVerticalLine : public wxPanel {
 public:
-    TabPanelVerticalLine( TabPanel* parent,
+    explicit TabPanelVerticalLine( TabPanel* parent,
       const wxPoint& pos = wxDefaultPosition,	const wxSize& size = wxDefaultSize);
 
     MainWindow* main_window_ptr = nullptr;
@@ -68,7 +68,7 @@ struct TabPanelLinkButtonStruct {
 
 class TabPanel : public wxPanel {
 public:
-    TabPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+    explicit TabPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr);
 
     MainWindow* main_window_ptr = nullptr;
@@ -76,7 +76,7 @@ public:
     // wxWindow id is the key
     std::map<int, TabPanelLinkButtonStruct> link_buttons;
 
-    void SetSelectedLinkButton(const wxWindowID id);
+    void SetSelectedLinkButton(wxWindowID id);
 
 };
 

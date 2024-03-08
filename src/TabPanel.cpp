@@ -47,7 +47,7 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
 }
 
 
-void TabPanel::SetSelectedLinkButton(const wxWindowID id_clicked) {
+void TabPanel::SetSelectedLinkButton(wxWindowID id_clicked) {
     for (auto& [id, btn] : this->link_buttons) {
         btn.button_ptr->is_selected = false;
         if (btn.button_ptr->GetId() == id_clicked) btn.button_ptr->is_selected = true;

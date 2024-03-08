@@ -32,7 +32,7 @@ MainWindow::MainWindow(const wxString &title, const wxPoint &pos, const wxSize &
     splitter->SetMinimumPaneSize(wxWindow::FromDIP(200));
     splitter->SetSashGravity(1);
     splitter->SplitVertically(current_left_panel, current_right_panel);
-
+    tab_panel->SetSelectedLinkButton(id_active_trades);
     sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(splitter, 1, wxEXPAND);
     sizer->Add(tab_panel, 0, wxEXPAND);
