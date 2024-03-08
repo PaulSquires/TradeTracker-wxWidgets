@@ -126,6 +126,7 @@ void TabPanelLinkButton::OnMouseLeave(wxMouseEvent& e) {
 
 void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
     wxAutoBufferedPaintDC dc(this);
+    this->PrepareDC(dc);
     dc.Clear();
 
     wxGraphicsContext* gc = wxGraphicsContext::Create(dc);
@@ -187,6 +188,7 @@ TabPanelVerticalLine::TabPanelVerticalLine(TabPanel* parent, const wxPoint& pos,
 
 void TabPanelVerticalLine::OnPaint(wxPaintEvent& e) {
     wxAutoBufferedPaintDC dc(this);
+    this->PrepareDC(dc);
     dc.Clear();
 
     wxGraphicsContext* gc = wxGraphicsContext::Create(dc);
