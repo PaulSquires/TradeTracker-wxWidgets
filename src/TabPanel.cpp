@@ -1,7 +1,34 @@
+/*
+
+MIT License
+
+Copyright(c) 2023-2024 Paul Squires
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files(the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and /or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions :
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
+
 #include <wx/wx.h>
 #include <wx/graphics.h>
 #include <wx/dcbuffer.h>
 
+#include "Colors.h"
 #include "TabPanel.h"
 #include "MainWindow.h"
 
@@ -12,7 +39,7 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
 {
     main_window_ptr = (MainWindow*) parent;
 
-    this->SetBackgroundColour(wxColor(0,0,0));
+    this->SetBackgroundColour(Colors_BackDarkBlack);
 
     link_buttons = {
         {id_active_trades, {"Active Trades", true,  main_window_ptr->active_trades_panel, nullptr}},
@@ -47,7 +74,7 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
 }
 
 
-void TabPanel::SetSelectedLinkButton(const wxWindowID id_clicked) {
+void TabPanel::SetSelectedLinkButton(wxWindowID id_clicked) {
     for (auto& [id, btn] : this->link_buttons) {
         btn.button_ptr->is_selected = false;
         if (btn.button_ptr->GetId() == id_clicked) btn.button_ptr->is_selected = true;
@@ -109,15 +136,15 @@ void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
         int height = GetClientRect().GetHeight();
 
         if (this->is_hot || this->is_selected) {
-            gc->SetFont(*wxNORMAL_FONT, this->color_text_selected);
+            gc->SetFont(*wxNORMAL_FONT, Colors_TextBrightWhite);
         } else {
-            gc->SetFont(*wxNORMAL_FONT, color_text_normal);
+            gc->SetFont(*wxNORMAL_FONT, Colors_TextMediumWhite);
         }
 
         if (this->is_selected) {
-            gc->SetBrush(this->color_back_selected);
+            gc->SetBrush(Colors_BackDarkGray);
         } else {
-            gc->SetBrush(this->color_back_normal);
+            gc->SetBrush(Colors_BackDarkBlack);
         }
 
         gc->DrawRectangle(0,0,width,height);
@@ -131,7 +158,7 @@ void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
         gc->DrawText(this->label_text, text_left, text_top);
 
         if (this->is_selected) {
-            wxPen pen{this->color_selected_line, FromDIP(2)};
+            wxPen pen{Colors_Green, FromDIP(2)};
             gc->SetPen(pen);
             wxGraphicsPath path = gc->CreatePath();
             wxDouble line_left = text_left;
@@ -167,11 +194,11 @@ void TabPanelVerticalLine::OnPaint(wxPaintEvent& e) {
     if (gc) {
         int width = GetClientRect().GetWidth();
         int height = GetClientRect().GetHeight();
-        gc->SetBrush(this->color_back_normal);
+        gc->SetBrush(Colors_BackDarkBlack);
 
         gc->DrawRectangle(0,0,width,height);
 
-        wxPen pen{this->color_text_normal};
+        wxPen pen{Colors_TextMediumWhite};
         gc->SetPen(pen);
         wxGraphicsPath path = gc->CreatePath();
         wxDouble line_left = (width / 2);
