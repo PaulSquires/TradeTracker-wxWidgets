@@ -1,9 +1,36 @@
-#ifndef SRC_TABPANEL_H
-#define SRC_TABPANEL_H
+/*
+
+MIT License
+
+Copyright(c) 2023-2024 Paul Squires
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files(the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and /or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions :
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
+
+#ifndef TABPANEL_H
+#define TABPANEL_H
 
 #include <wx/wx.h>
 #include <map>
 #include "MainWindow.h"
+
 
 enum ButtonID {
     id_active_trades = wxID_LAST + 1,
@@ -14,6 +41,7 @@ enum ButtonID {
     id_ticker_totals
 };
 
+class MainWindow;
 class TabPanel;
 
 class TabPanelLinkButton : public wxPanel {
@@ -27,12 +55,6 @@ public:
 
     bool is_selected = false;
     bool is_hot = false;
-
-    wxColor color_back_normal = wxColor(0,0,0);
-    wxColor color_back_selected = wxColor(22,26,27);
-    wxColor color_text_normal = wxColor(157,165,180);
-    wxColor color_text_selected = wxColor(255,255,255);
-    wxColor color_selected_line = wxColor(72,151,13);
 
 private:
   void OnPaint(wxPaintEvent& e);
@@ -49,9 +71,6 @@ public:
 
     MainWindow* main_window_ptr = nullptr;
     TabPanel* tab_panel_ptr = nullptr;
-
-    wxColor color_back_normal = wxColor(0,0,0);
-    wxColor color_text_normal = wxColor(157,165,180);
 
 private:
   void OnPaint(wxPaintEvent& e);
@@ -81,4 +100,4 @@ public:
 };
 
 
-#endif  /* SRC_TABPANEL_H */
+#endif //TABPANEL_H

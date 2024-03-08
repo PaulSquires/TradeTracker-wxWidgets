@@ -39,7 +39,8 @@ set(SRCS
     src/TickerTotals.h;
     src/TradePlan.cpp;
     src/TradePlan.h
-    )
+        src/Colors.h
+)
 
 if(APPLE)
     # create bundle on apple compiles
