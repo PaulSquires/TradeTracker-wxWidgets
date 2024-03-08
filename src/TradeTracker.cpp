@@ -1,6 +1,7 @@
 #include <wx/wx.h>
 
 #include "TradeTracker.h"
+#include "resource/mainicon.xpm"
 #include "MainWindow.h"
 
 wxIMPLEMENT_APP(TradeTracker);
