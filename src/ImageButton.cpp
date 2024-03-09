@@ -27,10 +27,10 @@ SOFTWARE.
 #include <wx/wx.h>
 #include <wx/graphics.h>
 #include <wx/dcbuffer.h>
+#include <wx/bmpbndl.h>
 
 #include "ImageButton.h"
 
-#include "wx/dcsvg.h"
 
 ImageButton::ImageButton(wxWindow* parent, wxWindowID id, const ImageButtonStruct& image,
                          const wxPoint& pos, const wxSize& size)
@@ -89,19 +89,15 @@ void ImageButton::OnPaint(wxPaintEvent& e) {
 
         gc->DrawRectangle(0,0,width,height);
 
-        // wxCoord text_width;
-        // wxCoord text_height;
+        //wxBitmapBundle bundle = wxBitmapBundle::FromSVGFile(this->image.image_name, this->image.image_size);
+        wxBitmapBundle bundle = wxBitmapBundle::FromSVG(
+            this->image.image_data.mb_str(), this->image.image_size);
 
-        // if (this->is_selected) {
-        //     wxPen pen{Colors_Green, FromDIP(2)};
-        //     gc->SetPen(pen);
-        //     wxGraphicsPath path = gc->CreatePath();
-        //     wxDouble line_left = text_left;
-        //     wxDouble line_top = height - FromDIP(6);
-        //     path.MoveToPoint(line_left, line_top);
-        //     path.AddLineToPoint(line_left+text_width, line_top);
-        //     gc->StrokePath(path);
-        // }
+        wxDouble left = (width-this->image.image_size.x) / 2;
+        wxDouble top = (height-this->image.image_size.y) / 2;
+
+        gc->DrawBitmap(bundle.GetBitmap(this->image.image_size),
+            left, top, this->image.image_size.x, this->image.image_size.y);
 
         delete gc;
     }

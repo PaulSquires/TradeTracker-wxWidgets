@@ -31,6 +31,7 @@ SOFTWARE.
 #include "Colors.h"
 
 struct ImageButtonStruct {
+    wxString image_data;
     wxString image_name = "";
     wxSize image_size = wxDefaultSize;
     wxColor color_back_normal = Colors_BackDarkBlack;
