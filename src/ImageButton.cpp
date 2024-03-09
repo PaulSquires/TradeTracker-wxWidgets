@@ -32,21 +32,13 @@ SOFTWARE.
 
 #include "wx/dcsvg.h"
 
-ImageButton::ImageButton(wxWindow* parent, wxWindowID id,
-                         const wxString& image, const wxSize& image_size,
-                         const wxColor& back_normal, const wxColor& back_hot,
-                         const wxColor& text_normal, const wxColor& text_hot,
+ImageButton::ImageButton(wxWindow* parent, wxWindowID id, const ImageButtonStruct& image,
                          const wxPoint& pos, const wxSize& size)
     : wxPanel(parent, id, pos, size)
 {
     this->SetBackgroundStyle(wxBG_STYLE_PAINT);
 
-    this->image_name = image;
-    this->color_back_normal = back_normal;
-    this->color_back_hot = back_hot;
-    this->color_text_normal = text_normal;
-    this->color_text_hot = text_hot;
-    this->image_size = image_size;
+    this->image = image;
 
 	this->Bind(wxEVT_PAINT, &ImageButton::OnPaint, this);
 	this->Bind(wxEVT_LEFT_DOWN, &ImageButton::OnClick, this);
@@ -84,9 +76,9 @@ void ImageButton::OnPaint(wxPaintEvent& e) {
 
     if (gc) {
         if (this->is_hot) {
-            gc->SetBrush(this->color_back_hot);
+            gc->SetBrush(this->image.color_back_hot);
         } else {
-            gc->SetBrush(this->color_back_normal);
+            gc->SetBrush(this->image.color_back_normal);
         }
 
         int width = GetClientRect().GetWidth();

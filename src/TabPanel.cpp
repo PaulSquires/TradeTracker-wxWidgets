@@ -57,34 +57,32 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     int top = this->FromDIP(5);
     int margin = 20;
     int vertline_panel_width = this->FromDIP(7);
-    int image_width = this->FromDIP(20);
-    int image_height = this->FromDIP(20);
-
-    auto* sizer = new wxBoxSizer(wxHORIZONTAL);
 
     int width = this->FromDIP(26);
     int height = this->FromDIP(26);
 
-    this->connect_button = new ImageButton(
-        this, wxID_ANY, "", wxSize(image_width,image_height),
-        Colors_BackDarkBlack, Colors_BackLightGray, Colors_TextLightWhite, Colors_TextBrightWhite,
-        wxPoint(left, top),	wxSize(image_width,image_height));
-        sizer->Add(this->connect_button);
+    ImageButtonStruct image;
+    image.image_name = "";
+    image.image_size = this->FromDIP(wxSize(20,20));
+    image.color_back_normal = Colors_BackDarkBlack;
+    image.color_back_hot = Colors_BackLightGray;
+    image.color_text_normal = Colors_TextLightWhite;
+    image.color_text_hot = Colors_TextBrightWhite;
+
+    auto* sizer = new wxBoxSizer(wxHORIZONTAL);
+
+    this->connect_button = new ImageButton(this, wxID_ANY, image, wxPoint(left,top), wxSize(width,height));
+    sizer->Add(this->connect_button);
     left += width;
 
-    this->reconcile_button = new ImageButton(
-        this, wxID_ANY, "", wxSize(image_width,image_height),
-        Colors_BackDarkBlack, Colors_BackLightGray, Colors_TextLightWhite, Colors_TextBrightWhite,
-        wxPoint(left, top),	wxSize(image_width,image_height));
-        sizer->Add(this->reconcile_button);
+    this->reconcile_button = new ImageButton(this, wxID_ANY, image, wxPoint(left,top), wxSize(width,height));
+    sizer->Add(this->reconcile_button);
     left += width;
 
-    this->settings_button = new ImageButton(
-        this, wxID_ANY, "", wxSize(image_width,image_height),
-        Colors_BackDarkBlack, Colors_BackLightGray, Colors_TextLightWhite, Colors_TextBrightWhite,
-        wxPoint(left, top),	wxSize(image_width,image_height));
-        sizer->Add(this->settings_button);
+    this->settings_button = new ImageButton(this, wxID_ANY, image, wxPoint(left,top), wxSize(width,height));
+    sizer->Add(this->settings_button);
     left += width;
+
 
     width = 0;
     height = this->FromDIP(54);
@@ -99,7 +97,6 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     }
 
     this->SetSizer(sizer);
-
 }
 
 void TabPanel::SetSelectedLinkButton(wxWindowID id_clicked) {

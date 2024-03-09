@@ -30,23 +30,24 @@ SOFTWARE.
 #include <wx/wx.h>
 #include "Colors.h"
 
+struct ImageButtonStruct {
+    wxString image_name = "";
+    wxSize image_size = wxDefaultSize;
+    wxColor color_back_normal = Colors_BackDarkBlack;
+    wxColor color_back_hot = Colors_BackDarkGray;
+    wxColor color_text_normal = Colors_TextLightWhite;
+    wxColor color_text_hot = Colors_TextBrightWhite;
+};
 
 class ImageButton : public wxPanel {
 public:
-    explicit ImageButton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& image = "",
-    const wxSize& image_size = wxDefaultSize,
-    const wxColor& back_normal = Colors_BackDarkBlack, const wxColor& back_hot = Colors_BackDarkGray,
-    const wxColor& text_normal = Colors_TextLightWhite, const wxColor& text_hot = Colors_TextBrightWhite,
-    const wxPoint& pos = wxDefaultPosition,	const wxSize& size = wxDefaultSize);
+    explicit ImageButton(
+        wxWindow* parent, wxWindowID id, const ImageButtonStruct& image, const wxPoint& pos, const wxSize& size);
 
-    wxString image_name;
-    wxColor color_back_normal;
-    wxColor color_back_hot;
-    wxColor color_text_normal;
-    wxColor color_text_hot;
-    wxSize image_size;
+    ImageButtonStruct image;
 
     bool is_hot = false;
+    bool is_selected = false;
 
 private:
   void OnPaint(wxPaintEvent& e);

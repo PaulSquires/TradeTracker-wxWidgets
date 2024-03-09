@@ -38,10 +38,10 @@ set(SRCS
     src/TickerTotals.cpp;
     src/TickerTotals.h;
     src/TradePlan.cpp;
-    src/TradePlan.h
-        src/Colors.h
-        src/ImageButton.cpp
-        src/ImageButton.h
+    src/TradePlan.h;
+    src/Colors.h;
+    src/ImageButton.cpp;
+    src/ImageButton.h;
 )
 
 if(APPLE)
