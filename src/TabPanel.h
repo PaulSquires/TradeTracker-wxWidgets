@@ -29,8 +29,8 @@ SOFTWARE.
 
 #include <wx/wx.h>
 #include <map>
-#include "MainWindow.h"
-#include "ImageButton.h"
+//#include "MainWindow.h"
+//#include "ImageButton.h"
 
 
 enum ButtonID {
@@ -42,16 +42,14 @@ enum ButtonID {
     id_ticker_totals
 };
 
-class MainWindow;
+//class MainWindow;
 class TabPanel;
 
 class TabPanelLinkButton : public wxPanel {
 public:
-    explicit TabPanelLinkButton( wxPanel* parent, wxWindowID id = wxID_ANY, const wxString& label = "",
+    explicit TabPanelLinkButton( TabPanel* parent, wxWindowID id = wxID_ANY, const wxString& label = "",
     const wxPoint& pos = wxDefaultPosition,	const wxSize& size = wxDefaultSize);
 
-    MainWindow* main_window_ptr = nullptr;
-    TabPanel* tab_panel_ptr = nullptr;
     wxString label_text;
 
     bool is_selected = false;
@@ -67,11 +65,8 @@ private:
 
 class TabPanelVerticalLine : public wxPanel {
 public:
-    explicit TabPanelVerticalLine( wxPanel* parent,
+    explicit TabPanelVerticalLine( TabPanel* parent,
       const wxPoint& pos = wxDefaultPosition,	const wxSize& size = wxDefaultSize);
-
-    MainWindow* main_window_ptr = nullptr;
-    TabPanel* tab_panel_ptr = nullptr;
 
 private:
   void OnPaint(wxPaintEvent& e);
@@ -81,8 +76,8 @@ private:
 struct TabPanelLinkButtonStruct {
     wxString label_text;
     bool is_left_panel = true;;
-    wxPanel* panel = nullptr;
-    TabPanelLinkButton* button_ptr = nullptr;
+    wxPanel* panel = nullptr;   // the panel to display in main_window splitter
+    TabPanelLinkButton* button = nullptr;
 };
 
 
@@ -91,13 +86,10 @@ public:
     explicit TabPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr);
 
-    MainWindow* main_window_ptr = nullptr;
-
     // wxWindow id is the key
     std::map<int, TabPanelLinkButtonStruct> link_buttons;
 
     void SetSelectedLinkButton(wxWindowID id);
-
 };
 
 

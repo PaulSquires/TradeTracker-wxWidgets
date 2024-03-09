@@ -35,13 +35,12 @@ SOFTWARE.
 #include "MainWindow.h"
 
 
-wxPanel* CreateImageButtonPanel(TabPanel* parent) {
-    auto panel = new wxPanel(parent);
-    panel->SetBackgroundColour(Colors_BackDarkBlack);
-
-    int left = 0;
+void CreateImageButtons(TabPanel* parent, wxBoxSizer* sizer) {
     int width = parent->FromDIP(26);
     int height = parent->FromDIP(26);
+    int top_padding = parent->FromDIP(5);
+    int left_spacer = parent->FromDIP(10);
+    int right_spacer = parent->FromDIP(5);
 
     ImageButtonStruct image;
     image.image_name = "";
@@ -51,58 +50,46 @@ wxPanel* CreateImageButtonPanel(TabPanel* parent) {
     image.color_text_normal = Colors_TextLightWhite;
     image.color_text_hot = Colors_TextBrightWhite;
 
-    auto* sizer = new wxBoxSizer(wxHORIZONTAL);
+    auto btn = new ImageButton(parent, wxID_ANY, image, wxPoint(0,0), wxSize(width, height));
+    sizer->InsertSpacer(0, left_spacer);
+    sizer->Add(btn, 0, wxTOP, top_padding);
+    sizer->AddSpacer(right_spacer);
 
-    auto btn = new ImageButton(panel, wxID_ANY, image, wxPoint(0,0), wxSize(width,height));
-    sizer->Add(btn);
-    left += width;
+    btn = new ImageButton(parent, wxID_ANY, image, wxPoint(0, 0), wxSize(width,height));
+    sizer->Add(btn, 0, wxTOP, top_padding);
+    sizer->AddSpacer(right_spacer);
 
-    btn = new ImageButton(panel, wxID_ANY, image, wxPoint(0, 0), wxSize(width,height));
-    sizer->Add(btn);
-    left += width;
-
-    btn = new ImageButton(panel, wxID_ANY, image, wxPoint(0,0), wxSize(width,height));
-    sizer->Add(btn);
-
-    panel->SetSizer(sizer);
-
-    return panel;
+    btn = new ImageButton(parent, wxID_ANY, image, wxPoint(0,0), wxSize(width,height));
+    sizer->Add(btn, 0, wxTOP, top_padding);
 }
 
 
-wxPanel* CreateLinksButtonPanel(TabPanel* parent) {
-    auto panel = new wxPanel(parent);
-    panel->SetBackgroundColour(Colors_BackDarkBlack);
-
+void CreateLinkButtons(TabPanel* parent, wxBoxSizer* sizer) {
+    auto main_window = (MainWindow*) parent->GetParent();
     parent->link_buttons = {
-        {id_active_trades, {"Active Trades", true,  parent->main_window_ptr->active_trades_panel, nullptr}},
-        {id_closed_trades, {"Closed Trades", true,  parent->main_window_ptr->closed_trades_panel, nullptr}},
-        {id_transactions,  {"Transactions",  true,  parent->main_window_ptr->transactions_panel,  nullptr}},
-        {id_ticker_totals, {"Ticker Totals", false, parent->main_window_ptr->ticker_totals_panel, nullptr}},
-        {id_journal_notes, {"Journal Notes", false, parent->main_window_ptr->journal_notes_panel, nullptr}},
-        {id_trade_plan,    {"Trade Plan",    false, parent->main_window_ptr->trade_plan_panel,    nullptr}}
+        {id_active_trades, {"Active Trades", true,  main_window->active_trades_panel, nullptr}},
+        {id_closed_trades, {"Closed Trades", true,  main_window->closed_trades_panel, nullptr}},
+        {id_transactions,  {"Transactions",  true,  main_window->transactions_panel,  nullptr}},
+        {id_ticker_totals, {"Ticker Totals", false, main_window->ticker_totals_panel, nullptr}},
+        {id_journal_notes, {"Journal Notes", false, main_window->journal_notes_panel, nullptr}},
+        {id_trade_plan,    {"Trade Plan",    false, main_window->trade_plan_panel,    nullptr}}
     };
 
-    int left = 0;
     int margin = 20;
     int height = parent->FromDIP(54);
     int vertline_panel_width = parent->FromDIP(7);
 
-    auto* sizer = new wxBoxSizer(wxHORIZONTAL);
+    int left_spacer = parent->FromDIP(12);
+    sizer->AddSpacer(left_spacer);
 
     for (auto& [id, btn] : parent->link_buttons) {
         int width = parent->GetTextExtent(btn.label_text).x + margin;
-        btn.button_ptr = new TabPanelLinkButton(panel, id, btn.label_text, wxPoint(left,0), wxSize(width,height));
-        sizer->Add(btn.button_ptr);
-        left += width;
-        auto vertline_ptr = new TabPanelVerticalLine(panel, wxPoint(left,0), wxSize(vertline_panel_width,height));
+        btn.button = new TabPanelLinkButton(parent, id, btn.label_text, wxPoint(0,0), wxSize(width,height));
+        sizer->Add(btn.button);
+        auto vertline_ptr = new TabPanelVerticalLine(parent, wxPoint(0,0), wxSize(vertline_panel_width,height));
         sizer->Add(vertline_ptr);
-        left += vertline_panel_width;
     }
 
-    panel->SetSizer(sizer);
-
-    return panel;
 }
 
 
@@ -110,38 +97,28 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
                    const wxSize& size, long style, const wxString& name)
     : wxPanel(parent, id, pos, size, style, name)
 {
-    main_window_ptr = (MainWindow*) parent;
-
     this->SetBackgroundColour(Colors_BackDarkBlack);
 
     auto* sizer = new wxBoxSizer(wxHORIZONTAL);
-
-    auto panel = CreateImageButtonPanel(this);
-    sizer->Add(panel);
-
-    panel = CreateLinksButtonPanel(this);
-    sizer->Add(panel);
-
+    CreateImageButtons(this, sizer);
+    CreateLinkButtons(this, sizer);
     this->SetSizer(sizer);
 }
 
 
 void TabPanel::SetSelectedLinkButton(wxWindowID id_clicked) {
     for (auto& [id, btn] : this->link_buttons) {
-        btn.button_ptr->is_selected = false;
-        if (btn.button_ptr->GetId() == id_clicked) btn.button_ptr->is_selected = true;
-        btn.button_ptr->Refresh();
+        btn.button->is_selected = false;
+        if (btn.button->GetId() == id_clicked) btn.button->is_selected = true;
+        btn.button->Refresh();
     }
 }
 
 
-TabPanelLinkButton::TabPanelLinkButton(wxPanel* parent, wxWindowID id, const wxString& label,
+TabPanelLinkButton::TabPanelLinkButton(TabPanel* parent, wxWindowID id, const wxString& label,
     const wxPoint& pos, const wxSize& size)
     : wxPanel(parent, id, pos, size)
 {
-    tab_panel_ptr = (TabPanel*) parent;
-    main_window_ptr = tab_panel_ptr->main_window_ptr;
-
     this->SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     label_text = label;
@@ -154,10 +131,13 @@ TabPanelLinkButton::TabPanelLinkButton(wxPanel* parent, wxWindowID id, const wxS
 
 
 void TabPanelLinkButton::OnClick(wxMouseEvent& e) {
-    auto& btn = this->tab_panel_ptr->link_buttons.at(e.GetId());
+    auto panel = (TabPanel*) this->GetParent();
+    auto main_window = (MainWindow*) panel->GetParent();
+
+    auto& btn = panel->link_buttons.at(e.GetId());
     btn.is_left_panel ?
-        main_window_ptr->SetLeftPanel(btn.panel) : main_window_ptr->SetRightPanel(btn.panel);
-    tab_panel_ptr->SetSelectedLinkButton(e.GetId());
+        main_window->SetLeftPanel(btn.panel) : main_window->SetRightPanel(btn.panel);
+    panel->SetSelectedLinkButton(e.GetId());
     e.Skip();
 }
 
@@ -184,7 +164,6 @@ void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
     wxGraphicsContext* gc = wxGraphicsContext::Create(dc);
 
     if (gc) {
-
         int width = GetClientRect().GetWidth();
         int height = GetClientRect().GetHeight();
 
@@ -211,7 +190,7 @@ void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
         gc->DrawText(this->label_text, text_left, text_top);
 
         if (this->is_selected) {
-            wxPen pen{Colors_Green, FromDIP(2)};
+            wxPen pen{Colors_Green, FromDIP(1)};
             gc->SetPen(pen);
             wxGraphicsPath path = gc->CreatePath();
             wxDouble line_left = text_left;
@@ -226,12 +205,9 @@ void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
 }
 
 
-TabPanelVerticalLine::TabPanelVerticalLine(wxPanel* parent, const wxPoint& pos, const wxSize& size)
+TabPanelVerticalLine::TabPanelVerticalLine(TabPanel* parent, const wxPoint& pos, const wxSize& size)
     : wxPanel(parent, wxID_ANY, pos, size)
 {
-    tab_panel_ptr = (TabPanel*) parent;
-    main_window_ptr = tab_panel_ptr->main_window_ptr;
-
     this->SetBackgroundStyle(wxBG_STYLE_PAINT);
 
 	this->Bind(wxEVT_PAINT, &TabPanelVerticalLine::OnPaint, this);
@@ -256,7 +232,7 @@ void TabPanelVerticalLine::OnPaint(wxPaintEvent& e) {
         gc->SetPen(pen);
         wxGraphicsPath path = gc->CreatePath();
         wxDouble line_left = (width / 2);
-        wxDouble line_top = FromDIP(6);
+        wxDouble line_top = FromDIP(7);
         path.MoveToPoint(line_left, line_top);
         path.AddLineToPoint(line_left, line_top+FromDIP(22));
         gc->StrokePath(path);

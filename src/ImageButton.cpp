@@ -75,14 +75,17 @@ void ImageButton::OnPaint(wxPaintEvent& e) {
     wxGraphicsContext* gc = wxGraphicsContext::Create(dc);
 
     if (gc) {
+        int width = GetClientRect().GetWidth();
+        int height = GetClientRect().GetHeight();
+
+        gc->SetBrush(this->image.color_back_normal);
+        gc->DrawRectangle(0,0,width,height);
+
         if (this->is_hot) {
             gc->SetBrush(this->image.color_back_hot);
         } else {
             gc->SetBrush(this->image.color_back_normal);
         }
-
-        int width = GetClientRect().GetWidth();
-        int height = GetClientRect().GetHeight();
 
         gc->DrawRectangle(0,0,width,height);
 
