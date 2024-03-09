@@ -14,5 +14,15 @@
     <mapping directory="$PROJECT_DIR$/build/_deps/wxwidgets-src/src/tiff" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/build/_deps/wxwidgets-src/src/zlib" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/wxwidgets-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/wxwidgets-src/3rdparty/catch" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/wxwidgets-src/3rdparty/nanosvg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/wxwidgets-src/3rdparty/pcre" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/wxwidgets-src/src/expat" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/wxwidgets-src/src/jpeg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/wxwidgets-src/src/png" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/wxwidgets-src/src/stc/lexilla" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/wxwidgets-src/src/stc/scintilla" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/wxwidgets-src/src/tiff" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/wxwidgets-src/src/zlib" vcs="Git" />
   </component>
 </project>

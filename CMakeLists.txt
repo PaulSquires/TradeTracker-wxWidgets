@@ -40,6 +40,8 @@ set(SRCS
     src/TradePlan.cpp;
     src/TradePlan.h
         src/Colors.h
+        src/ImageButton.cpp
+        src/ImageButton.h
 )
 
 if(APPLE)

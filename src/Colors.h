@@ -6,10 +6,10 @@ inline wxColor Colors_BackDarkBlack{0,0,0};
 inline wxColor Colors_BackDarkGray{22,26,27};
 inline wxColor Colors_BackMediumGray{51,51,51};
 inline wxColor Colors_BackLightGray{68,68,68};
-inline wxColor Colors_TextBrightWhite{255,255,255};
 inline wxColor Colors_TextDarkWhite{128,128,128};
 inline wxColor Colors_TextMediumWhite{157,165,180};
 inline wxColor Colors_TextLightWhite{212,212,212};
+inline wxColor Colors_TextBrightWhite{255,255,255};
 inline wxColor Colors_Green{72,151,13};
 
 // wxColor color_back_normal = wxColor(0,0,0);

@@ -30,6 +30,7 @@ SOFTWARE.
 #include <wx/wx.h>
 #include <map>
 #include "MainWindow.h"
+#include "ImageButton.h"
 
 
 enum ButtonID {
@@ -91,6 +92,10 @@ public:
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr);
 
     MainWindow* main_window_ptr = nullptr;
+
+    ImageButton* connect_button = nullptr;
+    ImageButton* reconcile_button = nullptr;
+    ImageButton* settings_button = nullptr;
 
     // wxWindow id is the key
     std::map<int, TabPanelLinkButtonStruct> link_buttons;

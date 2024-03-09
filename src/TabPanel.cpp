@@ -29,12 +29,14 @@ SOFTWARE.
 #include <wx/dcbuffer.h>
 
 #include "Colors.h"
+#include "ImageButton.h"
 #include "TabPanel.h"
 #include "MainWindow.h"
 
 
+
 TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
-    const wxSize& size, long style, const wxString& name)
+                   const wxSize& size, long style, const wxString& name)
     : wxPanel(parent, id, pos, size, style, name)
 {
     main_window_ptr = (MainWindow*) parent;
@@ -52,13 +54,40 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
 
 
     int left = this->FromDIP(10);
-    int width = 0;
-    int height = this->FromDIP(54);
+    int top = this->FromDIP(5);
     int margin = 20;
     int vertline_panel_width = this->FromDIP(7);
+    int image_width = this->FromDIP(20);
+    int image_height = this->FromDIP(20);
 
     auto* sizer = new wxBoxSizer(wxHORIZONTAL);
 
+    int width = this->FromDIP(26);
+    int height = this->FromDIP(26);
+
+    this->connect_button = new ImageButton(
+        this, wxID_ANY, "", wxSize(image_width,image_height),
+        Colors_BackDarkBlack, Colors_BackLightGray, Colors_TextLightWhite, Colors_TextBrightWhite,
+        wxPoint(left, top),	wxSize(image_width,image_height));
+        sizer->Add(this->connect_button);
+    left += width;
+
+    this->reconcile_button = new ImageButton(
+        this, wxID_ANY, "", wxSize(image_width,image_height),
+        Colors_BackDarkBlack, Colors_BackLightGray, Colors_TextLightWhite, Colors_TextBrightWhite,
+        wxPoint(left, top),	wxSize(image_width,image_height));
+        sizer->Add(this->reconcile_button);
+    left += width;
+
+    this->settings_button = new ImageButton(
+        this, wxID_ANY, "", wxSize(image_width,image_height),
+        Colors_BackDarkBlack, Colors_BackLightGray, Colors_TextLightWhite, Colors_TextBrightWhite,
+        wxPoint(left, top),	wxSize(image_width,image_height));
+        sizer->Add(this->settings_button);
+    left += width;
+
+    width = 0;
+    height = this->FromDIP(54);
     for (auto& [id, btn] : link_buttons) {
         width = GetTextExtent(btn.label_text).x + margin;
         btn.button_ptr = new TabPanelLinkButton(this, id, btn.label_text, wxPoint(left,0), wxSize(width,height));
@@ -72,7 +101,6 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     this->SetSizer(sizer);
 
 }
-
 
 void TabPanel::SetSelectedLinkButton(wxWindowID id_clicked) {
     for (auto& [id, btn] : this->link_buttons) {
