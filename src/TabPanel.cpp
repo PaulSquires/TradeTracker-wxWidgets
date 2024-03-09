@@ -27,11 +27,83 @@ SOFTWARE.
 #include <wx/wx.h>
 #include <wx/graphics.h>
 #include <wx/dcbuffer.h>
+#include <wx/gbsizer.h>
 
 #include "Colors.h"
 #include "ImageButton.h"
 #include "TabPanel.h"
 #include "MainWindow.h"
+
+
+wxPanel* CreateImageButtonPanel(TabPanel* parent) {
+    auto panel = new wxPanel(parent);
+    panel->SetBackgroundColour(Colors_BackDarkBlack);
+
+    int left = 0;
+    int width = parent->FromDIP(26);
+    int height = parent->FromDIP(26);
+
+    ImageButtonStruct image;
+    image.image_name = "";
+    image.image_size = parent->FromDIP(wxSize(20,20));
+    image.color_back_normal = Colors_BackDarkBlack;
+    image.color_back_hot = Colors_BackLightGray;
+    image.color_text_normal = Colors_TextLightWhite;
+    image.color_text_hot = Colors_TextBrightWhite;
+
+    auto* sizer = new wxBoxSizer(wxHORIZONTAL);
+
+    auto btn = new ImageButton(panel, wxID_ANY, image, wxPoint(0,0), wxSize(width,height));
+    sizer->Add(btn);
+    left += width;
+
+    btn = new ImageButton(panel, wxID_ANY, image, wxPoint(0, 0), wxSize(width,height));
+    sizer->Add(btn);
+    left += width;
+
+    btn = new ImageButton(panel, wxID_ANY, image, wxPoint(0,0), wxSize(width,height));
+    sizer->Add(btn);
+
+    panel->SetSizer(sizer);
+
+    return panel;
+}
+
+
+wxPanel* CreateLinksButtonPanel(TabPanel* parent) {
+    auto panel = new wxPanel(parent);
+    panel->SetBackgroundColour(Colors_BackDarkBlack);
+
+    parent->link_buttons = {
+        {id_active_trades, {"Active Trades", true,  parent->main_window_ptr->active_trades_panel, nullptr}},
+        {id_closed_trades, {"Closed Trades", true,  parent->main_window_ptr->closed_trades_panel, nullptr}},
+        {id_transactions,  {"Transactions",  true,  parent->main_window_ptr->transactions_panel,  nullptr}},
+        {id_ticker_totals, {"Ticker Totals", false, parent->main_window_ptr->ticker_totals_panel, nullptr}},
+        {id_journal_notes, {"Journal Notes", false, parent->main_window_ptr->journal_notes_panel, nullptr}},
+        {id_trade_plan,    {"Trade Plan",    false, parent->main_window_ptr->trade_plan_panel,    nullptr}}
+    };
+
+    int left = 0;
+    int margin = 20;
+    int height = parent->FromDIP(54);
+    int vertline_panel_width = parent->FromDIP(7);
+
+    auto* sizer = new wxBoxSizer(wxHORIZONTAL);
+
+    for (auto& [id, btn] : parent->link_buttons) {
+        int width = parent->GetTextExtent(btn.label_text).x + margin;
+        btn.button_ptr = new TabPanelLinkButton(panel, id, btn.label_text, wxPoint(left,0), wxSize(width,height));
+        sizer->Add(btn.button_ptr);
+        left += width;
+        auto vertline_ptr = new TabPanelVerticalLine(panel, wxPoint(left,0), wxSize(vertline_panel_width,height));
+        sizer->Add(vertline_ptr);
+        left += vertline_panel_width;
+    }
+
+    panel->SetSizer(sizer);
+
+    return panel;
+}
 
 
 TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
@@ -42,61 +114,17 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
 
     this->SetBackgroundColour(Colors_BackDarkBlack);
 
-    link_buttons = {
-        {id_active_trades, {"Active Trades", true,  main_window_ptr->active_trades_panel, nullptr}},
-        {id_closed_trades, {"Closed Trades", true,  main_window_ptr->closed_trades_panel, nullptr}},
-        {id_transactions,  {"Transactions",  true,  main_window_ptr->transactions_panel,  nullptr}},
-        {id_ticker_totals, {"Ticker Totals", false, main_window_ptr->ticker_totals_panel, nullptr}},
-        {id_journal_notes, {"Journal Notes", false, main_window_ptr->journal_notes_panel, nullptr}},
-        {id_trade_plan,    {"Trade Plan",    false, main_window_ptr->trade_plan_panel,    nullptr}}
-    };
-
-
-    int left = this->FromDIP(10);
-    int top = this->FromDIP(5);
-    int margin = 20;
-    int vertline_panel_width = this->FromDIP(7);
-
-    int width = this->FromDIP(26);
-    int height = this->FromDIP(26);
-
-    ImageButtonStruct image;
-    image.image_name = "";
-    image.image_size = this->FromDIP(wxSize(20,20));
-    image.color_back_normal = Colors_BackDarkBlack;
-    image.color_back_hot = Colors_BackLightGray;
-    image.color_text_normal = Colors_TextLightWhite;
-    image.color_text_hot = Colors_TextBrightWhite;
-
     auto* sizer = new wxBoxSizer(wxHORIZONTAL);
 
-    this->connect_button = new ImageButton(this, wxID_ANY, image, wxPoint(left,top), wxSize(width,height));
-    sizer->Add(this->connect_button);
-    left += width;
+    auto panel = CreateImageButtonPanel(this);
+    sizer->Add(panel);
 
-    this->reconcile_button = new ImageButton(this, wxID_ANY, image, wxPoint(left,top), wxSize(width,height));
-    sizer->Add(this->reconcile_button);
-    left += width;
-
-    this->settings_button = new ImageButton(this, wxID_ANY, image, wxPoint(left,top), wxSize(width,height));
-    sizer->Add(this->settings_button);
-    left += width;
-
-
-    width = 0;
-    height = this->FromDIP(54);
-    for (auto& [id, btn] : link_buttons) {
-        width = GetTextExtent(btn.label_text).x + margin;
-        btn.button_ptr = new TabPanelLinkButton(this, id, btn.label_text, wxPoint(left,0), wxSize(width,height));
-        sizer->Add(btn.button_ptr);
-        left += width;
-        auto vertline_ptr = new TabPanelVerticalLine(this, wxPoint(left,0), wxSize(vertline_panel_width,height));
-        sizer->Add(vertline_ptr);
-        left += vertline_panel_width;
-    }
+    panel = CreateLinksButtonPanel(this);
+    sizer->Add(panel);
 
     this->SetSizer(sizer);
 }
+
 
 void TabPanel::SetSelectedLinkButton(wxWindowID id_clicked) {
     for (auto& [id, btn] : this->link_buttons) {
@@ -107,12 +135,12 @@ void TabPanel::SetSelectedLinkButton(wxWindowID id_clicked) {
 }
 
 
-TabPanelLinkButton::TabPanelLinkButton(TabPanel* parent, wxWindowID id, const wxString& label,
+TabPanelLinkButton::TabPanelLinkButton(wxPanel* parent, wxWindowID id, const wxString& label,
     const wxPoint& pos, const wxSize& size)
     : wxPanel(parent, id, pos, size)
 {
-    main_window_ptr = parent->main_window_ptr;
     tab_panel_ptr = (TabPanel*) parent;
+    main_window_ptr = tab_panel_ptr->main_window_ptr;
 
     this->SetBackgroundStyle(wxBG_STYLE_PAINT);
 
@@ -198,11 +226,11 @@ void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
 }
 
 
-TabPanelVerticalLine::TabPanelVerticalLine(TabPanel* parent, const wxPoint& pos, const wxSize& size)
+TabPanelVerticalLine::TabPanelVerticalLine(wxPanel* parent, const wxPoint& pos, const wxSize& size)
     : wxPanel(parent, wxID_ANY, pos, size)
 {
-    main_window_ptr = parent->main_window_ptr;
     tab_panel_ptr = (TabPanel*) parent;
+    main_window_ptr = tab_panel_ptr->main_window_ptr;
 
     this->SetBackgroundStyle(wxBG_STYLE_PAINT);
 

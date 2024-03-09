@@ -47,7 +47,7 @@ class TabPanel;
 
 class TabPanelLinkButton : public wxPanel {
 public:
-    explicit TabPanelLinkButton( TabPanel* parent, wxWindowID id = wxID_ANY, const wxString& label = "",
+    explicit TabPanelLinkButton( wxPanel* parent, wxWindowID id = wxID_ANY, const wxString& label = "",
     const wxPoint& pos = wxDefaultPosition,	const wxSize& size = wxDefaultSize);
 
     MainWindow* main_window_ptr = nullptr;
@@ -67,7 +67,7 @@ private:
 
 class TabPanelVerticalLine : public wxPanel {
 public:
-    explicit TabPanelVerticalLine( TabPanel* parent,
+    explicit TabPanelVerticalLine( wxPanel* parent,
       const wxPoint& pos = wxDefaultPosition,	const wxSize& size = wxDefaultSize);
 
     MainWindow* main_window_ptr = nullptr;
@@ -92,10 +92,6 @@ public:
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr);
 
     MainWindow* main_window_ptr = nullptr;
-
-    ImageButton* connect_button = nullptr;
-    ImageButton* reconcile_button = nullptr;
-    ImageButton* settings_button = nullptr;
 
     // wxWindow id is the key
     std::map<int, TabPanelLinkButtonStruct> link_buttons;
