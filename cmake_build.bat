@@ -1,5 +1,8 @@
 @ECHO off
 
+REM This batch file must be in same folder as CMakeLists.txt
+
+
 REM *************************
 REM    CONFIGURE AND BUILD
 REM *************************
