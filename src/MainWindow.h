@@ -61,6 +61,10 @@ public:
 
     void SetLeftPanel(wxPanel* new_left_panel);
     void SetRightPanel(wxPanel* new_right_panel);
+
+private:
+    void OnClose(wxCloseEvent& e);
+
 };
 
 

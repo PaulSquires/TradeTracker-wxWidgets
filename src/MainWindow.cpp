@@ -58,7 +58,22 @@ MainWindow::MainWindow(const wxString &title, const wxPoint &pos, const wxSize &
     sizer->Add(tab_panel, 0, wxEXPAND);
 
     this->SetSizerAndFit(sizer);
+
+    this->Bind(wxEVT_CLOSE_WINDOW, &MainWindow::OnClose, this);
 }
+
+
+void MainWindow::OnClose(wxCloseEvent& event) {
+    // Hide the main window just prior to the destroy in order
+    // to avoid seeing a flash from the window being destroyed.
+    this->Hide();
+
+    // you may also do:  event.Skip();
+    // since the default event handler does call Destroy(), too
+    //Destroy();  
+    event.Skip();
+}
+
 
 void MainWindow::SetLeftPanel(wxPanel* new_left_panel) {
     splitter->ReplaceWindow(current_left_panel, new_left_panel);
@@ -66,6 +81,7 @@ void MainWindow::SetLeftPanel(wxPanel* new_left_panel) {
     new_left_panel->Show();
     current_left_panel = new_left_panel;
 }
+
 
 void MainWindow::SetRightPanel(wxPanel* new_right_panel) {
     splitter->ReplaceWindow(current_right_panel, new_right_panel);

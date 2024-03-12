@@ -46,7 +46,7 @@ void CreateImageButtons(TabPanel* parent, wxBoxSizer* sizer) {
     int right_spacer = parent->FromDIP(5);
 
     ImageButtonStruct image;
-    image.image_size = parent->FromDIP(wxSize(23,23));
+    image.image_size = parent->FromDIP(wxSize(20,20));
     image.color_back_normal = Colors_BackDarkBlack;
     image.color_back_hot = Colors_BackLightGray;
     image.color_text_normal = Colors_TextLightWhite;
