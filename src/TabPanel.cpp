@@ -46,13 +46,13 @@ void CreateImageButtons(TabPanel* parent, wxBoxSizer* sizer) {
     int right_spacer = parent->FromDIP(5);
 
     ImageButtonStruct image;
-    image.image_size = parent->FromDIP(wxSize(20,20));
+    image.image_size = parent->FromDIP(wxSize(23,23));
     image.color_back_normal = Colors_BackDarkBlack;
     image.color_back_hot = Colors_BackLightGray;
     image.color_text_normal = Colors_TextLightWhite;
     image.color_text_hot = Colors_TextBrightWhite;
 
-    image.image_data = connect_svg;
+    image.image_data = disconnect_svg;
     auto btn = new ImageButton(parent, wxID_ANY, image, wxPoint(0,0), wxSize(width, height));
     sizer->AddSpacer(left_spacer);
     sizer->Add(btn, 0, wxTOP, top_padding);
