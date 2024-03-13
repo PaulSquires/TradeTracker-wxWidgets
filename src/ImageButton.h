@@ -28,11 +28,13 @@ SOFTWARE.
 #define IMAGEBUTTON_H
 
 #include <wx/wx.h>
+#include <wx/tooltip.h>
 #include "Colors.h"
+
 
 struct ImageButtonStruct {
     wxString image_data;
-    wxString image_name = "";
+    wxString image_tooltip_text;
     wxSize image_size = wxDefaultSize;
     wxColor color_back_normal = Colors_BackDarkBlack;
     wxColor color_back_hot = Colors_BackDarkGray;

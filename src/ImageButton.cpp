@@ -40,6 +40,8 @@ ImageButton::ImageButton(wxWindow* parent, wxWindowID id, const ImageButtonStruc
 
     this->image = image;
 
+    this->SetToolTip(this->image.image_tooltip_text);
+
 	this->Bind(wxEVT_PAINT, &ImageButton::OnPaint, this);
 	this->Bind(wxEVT_LEFT_DOWN, &ImageButton::OnClick, this);
 	this->Bind(wxEVT_ENTER_WINDOW, &ImageButton::OnMouseEnter, this);

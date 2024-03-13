@@ -53,17 +53,20 @@ void CreateImageButtons(TabPanel* parent, wxBoxSizer* sizer) {
     image.color_text_hot = Colors_TextBrightWhite;
 
     image.image_data = disconnect_svg;
+    image.image_tooltip_text = "Click to Connect";
     auto btn = new ImageButton(parent, wxID_ANY, image, wxPoint(0,0), wxSize(width, height));
     sizer->AddSpacer(left_spacer);
     sizer->Add(btn, 0, wxTOP, top_padding);
     sizer->AddSpacer(right_spacer);
 
     image.image_data = reconcile_svg;
+    image.image_tooltip_text = "Reconcile";
     btn = new ImageButton(parent, wxID_ANY, image, wxPoint(0, 0), wxSize(width,height));
     sizer->Add(btn, 0, wxTOP, top_padding);
     sizer->AddSpacer(right_spacer);
 
     image.image_data = setup_svg;
+    image.image_tooltip_text = "Settings";
     btn = new ImageButton(parent, wxID_ANY, image, wxPoint(0,0), wxSize(width,height));
     sizer->Add(btn, 0, wxTOP, top_padding);
 }
