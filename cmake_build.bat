@@ -8,7 +8,7 @@ REM    CONFIGURE AND BUILD
 REM *************************
 CD %~dp0
 SET build_dir=build
-cmake -S. -B%build_dir%
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -S. -B%build_dir% 
 cmake --build %build_dir% -j
 IF %ERRORLEVEL% NEQ 0 (GOTO BUILD_FAILED) 
 
