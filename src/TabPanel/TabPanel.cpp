@@ -42,8 +42,8 @@ void CreateImageButtons(TabPanel* parent, wxBoxSizer* sizer) {
     int width = parent->FromDIP(26);
     int height = parent->FromDIP(26);
     int top_padding = parent->FromDIP(5);
-    int left_spacer = parent->FromDIP(10);
-    int right_spacer = parent->FromDIP(5);
+    int left_spacer = parent->FromDIP(12);
+    int right_spacer = parent->FromDIP(2);
 
     ImageButtonStruct image;
     image.image_size = parent->FromDIP(wxSize(20,20));

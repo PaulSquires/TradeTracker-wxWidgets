@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
 
 project(TradeTracker-wxWidgets LANGUAGES CXX)
 
@@ -20,28 +20,18 @@ FetchContent_MakeAvailable(wxWidgets)
 
 set(SRCS
     src/TradeTracker.cpp;
-    src/TradeTracker.h;
     src/MainWindow/MainWindow.cpp;
-    src/MainWindow/MainWindow.h;
     src/ActiveTrades/ActiveTrades.cpp;
-    src/ActiveTrades/ActiveTrades.h;
     src/ClosedTrades/ClosedTrades.cpp;
-    src/ClosedTrades/ClosedTrades.h;
     src/Transactions/Transactions.cpp;
-    src/Transactions/Transactions.h;
     src/TradeHistory/TradeHistory.cpp;
-    src/TradeHistory/TradeHistory.h;
     src/TabPanel/TabPanel.cpp;
-    src/TabPanel/TabPanel.h;
     src/JournalNotes/JournalNotes.cpp;
-    src/JournalNotes/JournalNotes.h;
     src/TickerTotals/TickerTotals.cpp;
-    src/TickerTotals/TickerTotals.h;
     src/TradePlan/TradePlan.cpp;
-    src/TradePlan/TradePlan.h;
-    src/Utility/Colors.h;
     src/ImageButton/ImageButton.cpp;
-    src/ImageButton/ImageButton.h;
+#    src/Database/database.cpp;
+#    src/Database/trade.cpp;
 )
 
 if(APPLE)
@@ -55,10 +45,11 @@ else()
     # the WIN32 is needed for Windows in order for it to look for WinMain
     # instead of the main function. This is ignored on other systems,
     # so it works on all platforms
+    # Default manifest can be suppressed with the following:
     add_executable(
         TradeTracker WIN32
         ${SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/src/Resources/TradeTracker.rc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/Resources/TradeTracker.exe.manifest
+        # ${CMAKE_CURRENT_SOURCE_DIR}/src/Resources/TradeTracker.exe.manifest
         )
     target_include_directories(TradeTracker PRIVATE src)
 endif()
