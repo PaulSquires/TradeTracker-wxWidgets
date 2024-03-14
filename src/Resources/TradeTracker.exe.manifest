@@ -31,7 +31,7 @@
        </compatibility>
 
       <!-- Trustinfo section -->
-      <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
+      <trustInfo xmlns="urn:schemas-microsoft-com:asm.v1">
          <security>
             <requestedPrivileges>
                <requestedExecutionLevel
