@@ -49,10 +49,23 @@ else()
     add_executable(
         TradeTracker WIN32
         ${SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/src/Resources/TradeTracker.rc
-        # ${CMAKE_CURRENT_SOURCE_DIR}/src/Resources/TradeTracker.exe.manifest
+        #${CMAKE_CURRENT_SOURCE_DIR}/src/Resources/TradeTracker.exe.manifest
         )
     target_include_directories(TradeTracker PRIVATE src)
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND MSVC_VERSION AND NOT MSVC)
+    target_link_options(
+    TradeTracker PRIVATE "LINKER:/MANIFEST:EMBED"  
+    "LINKER:/MANIFESTINPUT:${CMAKE_CURRENT_SOURCE_DIR}/src/Resources/TradeTracker.exe.manifest")
+endif ()
+
+
 endif()
+
+#+elseif(APPLE)
+#     set_target_properties(${PROJECT_NAME} PROPERTIES
+#         RESOURCE "../../src/osx/carbon/wxmac.icns"
+#         MACOSX_BUNDLE_ICON_FILE wxmac.icns
 
 target_link_libraries(TradeTracker PRIVATE wxcore wxnet)
 
