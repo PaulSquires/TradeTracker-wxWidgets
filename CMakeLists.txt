@@ -21,44 +21,47 @@ FetchContent_MakeAvailable(wxWidgets)
 set(SRCS
     src/TradeTracker.cpp;
     src/TradeTracker.h;
-    src/MainWindow.cpp;
-    src/MainWindow.h;
-    src/ActiveTrades.cpp;
-    src/ActiveTrades.h;
-    src/ClosedTrades.cpp;
-    src/ClosedTrades.h;
-    src/Transactions.cpp;
-    src/Transactions.h;
-    src/TradeHistory.cpp;
-    src/TradeHistory.h;
-    src/TabPanel.cpp;
-    src/TabPanel.h;
-    src/JournalNotes.cpp;
-    src/JournalNotes.h;
-    src/TickerTotals.cpp;
-    src/TickerTotals.h;
-    src/TradePlan.cpp;
-    src/TradePlan.h;
-    src/Colors.h;
-    src/ImageButton.cpp;
-    src/ImageButton.h;
+    src/MainWindow/MainWindow.cpp;
+    src/MainWindow/MainWindow.h;
+    src/ActiveTrades/ActiveTrades.cpp;
+    src/ActiveTrades/ActiveTrades.h;
+    src/ClosedTrades/ClosedTrades.cpp;
+    src/ClosedTrades/ClosedTrades.h;
+    src/Transactions/Transactions.cpp;
+    src/Transactions/Transactions.h;
+    src/TradeHistory/TradeHistory.cpp;
+    src/TradeHistory/TradeHistory.h;
+    src/TabPanel/TabPanel.cpp;
+    src/TabPanel/TabPanel.h;
+    src/JournalNotes/JournalNotes.cpp;
+    src/JournalNotes/JournalNotes.h;
+    src/TickerTotals/TickerTotals.cpp;
+    src/TickerTotals/TickerTotals.h;
+    src/TradePlan/TradePlan.cpp;
+    src/TradePlan/TradePlan.h;
+    src/Utility/Colors.h;
+    src/ImageButton/ImageButton.cpp;
+    src/ImageButton/ImageButton.h;
 )
 
 if(APPLE)
     # create bundle on apple compiles
     add_executable(TradeTracker MACOSX_BUNDLE ${SRCS})
+    target_include_directories(TradeTracker PRIVATE src)
 
     # Set a custom plist file for the app bundle - needed for Mac OS Retina display
-    set_target_properties(TradeTracker PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/src/resource/Info.plist)
+    set_target_properties(TradeTracker PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/src/Resources/Info.plist)
 else()
     # the WIN32 is needed for Windows in order for it to look for WinMain
     # instead of the main function. This is ignored on other systems,
     # so it works on all platforms
     add_executable(
         TradeTracker WIN32
-        ${SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/src/resource/TradeTracker.rc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/resource/TradeTracker.exe.manifest
+        ${SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/src/Resources/TradeTracker.rc
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Resources/TradeTracker.exe.manifest
         )
+    target_include_directories(TradeTracker PRIVATE src)
 endif()
 
 target_link_libraries(TradeTracker PRIVATE wxcore wxnet)
+

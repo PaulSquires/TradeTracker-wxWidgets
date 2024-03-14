@@ -28,7 +28,7 @@ SOFTWARE.
 #define TRADETRACKER_H
 
 #include <wx/wx.h>
-#include "MainWindow.h"
+#include "MainWindow/MainWindow.h"
 
 class TradeTracker : public wxApp {
 public:

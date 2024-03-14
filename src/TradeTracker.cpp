@@ -27,7 +27,7 @@ SOFTWARE.
 #include <wx/wx.h>
 
 #include "TradeTracker.h"
-#include "MainWindow.h"
+#include "MainWindow/MainWindow.h"
 
 wxIMPLEMENT_APP(TradeTracker);
 
