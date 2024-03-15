@@ -24,12 +24,12 @@ SOFTWARE.
 
 */
 
-#ifndef TABPANEL_H
-#define TABPANEL_H
+#ifndef DATABASE_H
+#define DATABASE_H
 
 #include <wx/wx.h>
-//#include "Utilities/AfxWin.h"
-#include "trade.h"
+
+//#include "trade.h"
 
 
 class CDatabase {
@@ -67,4 +67,4 @@ private:
 extern CDatabase db;
 
 
-#endif TABPANEL_H
+#endif DATABASE_H

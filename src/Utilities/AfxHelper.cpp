@@ -24,12 +24,14 @@ SOFTWARE.
 
 */
 
+#include <wx/wx.h>
+
 #include <versionhelpers.h>
 #include <winver.h>
 #include <cwctype>
 #include <shlobj.h>
 
-//#include "Config/Config.h"
+#include "Config/Config.h"
 #include "AfxHelper.h"
 
 
@@ -37,8 +39,8 @@ SOFTWARE.
 // Clean a numeric string from European to American format so that regular
 // library functions can operate on them.
 //
-std::wstring AfxClean(const std::wstring& text) {
-    std::wstring temp = text;
+wxString AfxClean(const wxString& text) {
+    wxString temp = text;
     if (config.GetNumberFormatType() == NumberFormatType::European) {
         // convert commas to periods
         temp = AfxReplace(temp, L",", L".");
@@ -50,7 +52,7 @@ std::wstring AfxClean(const std::wstring& text) {
 //
 // Create a nested folder structure if it does not already exist.
 //
-bool AfxCreateNestedFolder(const std::wstring& folderPath) {
+bool AfxCreateNestedFolder(const wxString& folderPath) {
     if (CreateDirectory(folderPath.c_str(), nullptr) || ERROR_ALREADY_EXISTS == GetLastError()) {
         std::wcout << L"Folder created or already exists: " << folderPath << std::endl;
         return true;
@@ -65,7 +67,7 @@ bool AfxCreateNestedFolder(const std::wstring& folderPath) {
 //
 // Retrieve the Windows system Program Files folder name
 //
-std::wstring AfxGetProgramFilesFolder() {
+wxString AfxGetProgramFilesFolder() {
     wchar_t* knownFolderPath = nullptr;
 
     // Get the path of the Program Files folder
@@ -73,7 +75,7 @@ std::wstring AfxGetProgramFilesFolder() {
 
     if (SUCCEEDED(result)) {
         // Compare the provided folder path with the Program Files folder path
-        std::wstring folder_name(knownFolderPath);
+        wxString folder_name(knownFolderPath);
 
         // Free the allocated memory for the known folder path
         CoTaskMemFree(knownFolderPath);
@@ -90,7 +92,7 @@ std::wstring AfxGetProgramFilesFolder() {
 //
 // Retrieve the Windows system Local AppData folder name
 //
-std::wstring AfxGetLocalAppDataFolder() {
+wxString AfxGetLocalAppDataFolder() {
     wchar_t* knownFolderPath = nullptr;
 
     // Get the path of the Program Files folder
@@ -98,7 +100,7 @@ std::wstring AfxGetLocalAppDataFolder() {
 
     if (SUCCEEDED(result)) {
         // Compare the provided folder path with the Program Files folder path
-        std::wstring folder_name(knownFolderPath);
+        wxString folder_name(knownFolderPath);
 
         // Free the allocated memory for the known folder path
         CoTaskMemFree(knownFolderPath);
@@ -115,9 +117,9 @@ std::wstring AfxGetLocalAppDataFolder() {
 //
 // Execute a command and get the results. (Only standard output)
 //
-std::wstring AfxExecCmd(const std::wstring& cmd) {
+wxString AfxExecCmd(const wxString& cmd) {
     // [in] command to execute 
-    std::wstring strResult;
+    wxString strResult;
     HANDLE hPipeRead, hPipeWrite;
 
     SECURITY_ATTRIBUTES saAttr = { sizeof(SECURITY_ATTRIBUTES) };
@@ -346,9 +348,9 @@ void AfxCenterWindow(HWND hwnd, HWND hwndParent) {
 // Returns the path of the program which is currently executing.
 // The path name will not contain a trailing backslash.
 // ========================================================================================
-std::wstring AfxGetExePath() {
+wxString AfxGetExePath() {
     // The following retrieves the full path *and* exe name and extension.
-    std::wstring buffer(MAX_PATH, NULL);
+    wxString buffer(MAX_PATH, NULL);
     GetModuleFileName(NULL, (LPWSTR)buffer.c_str(), MAX_PATH);
 
     // Remove everything after the last trailing backslash
@@ -360,7 +362,7 @@ std::wstring AfxGetExePath() {
 // ========================================================================================
 // Convert wstring to integer catching any exceptions
 // ========================================================================================
-int AfxValInteger(const std::wstring& st)  {
+int AfxValInteger(const wxString& st)  {
     try {
         size_t pos;
         int result = std::stoi(st, &pos);
@@ -377,7 +379,7 @@ int AfxValInteger(const std::wstring& st)  {
 // ========================================================================================
 // Convert wstring to double catching any exceptions
 // ========================================================================================
-double AfxValDouble(const std::wstring& st) {
+double AfxValDouble(const wxString& st) {
     try {
         size_t pos;
         double result = std::stod(st, &pos);
@@ -395,10 +397,10 @@ double AfxValDouble(const std::wstring& st) {
 // Insert embedded hyphen "-" into a date string.
 // e.g.  20230728 would be returned as 2023-07-28
 // ========================================================================================
-std::wstring AfxInsertDateHyphens(const std::wstring& date_string) {
+wxString AfxInsertDateHyphens(const wxString& date_string) {
     if (date_string.length() != 8) return L"";
 
-    std::wstring new_date = date_string;
+    wxString new_date = date_string;
     // YYYYMMDD
     // 01234567
 
@@ -436,8 +438,8 @@ std::string AfxInsertDateHyphens(const std::string& date_string) {
 // Remove any embedded hyphen "-" from a date string.
 // e.g.  2023-07-28 would be returned as 20230728
 // ========================================================================================
-std::wstring AfxRemoveDateHyphens(const std::wstring& date_string) {
-    std::wstring new_date = date_string;
+wxString AfxRemoveDateHyphens(const wxString& date_string) {
+    wxString new_date = date_string;
     new_date.erase(remove(new_date.begin(), new_date.end(), L'-'), new_date.end());
     return new_date;
 }
@@ -504,7 +506,7 @@ int AfxDateWeekday(int day, int month, int year) {
 // ========================================================================================
 // Return the days in month from an ISO specified date.
 // ========================================================================================
-int AfxDaysInMonthISODate(const std::wstring& date_text) {
+int AfxDaysInMonthISODate(const wxString& date_text) {
     // YYYY-MM-DD
     // 0123456789
     if (date_text.length() != 10) return 0;
@@ -517,7 +519,7 @@ int AfxDaysInMonthISODate(const std::wstring& date_text) {
 // ========================================================================================
 // Adds the specified number of days to the incoming date and returns the new date.
 // ========================================================================================
-std::wstring AfxDateAddDays(const std::wstring& date_text, int num_days_to_add) {
+wxString AfxDateAddDays(const wxString& date_text, int num_days_to_add) {
     // YYYY-MM-DD
     // 0123456789
     if (date_text.length() != 10) return L"";
@@ -543,7 +545,7 @@ std::wstring AfxDateAddDays(const std::wstring& date_text, int num_days_to_add) 
 
     FileTimeToSystemTime(&ft, &st);
 
-    std::wstring buffer(260, NULL);
+    wxString buffer(260, NULL);
     int bytes_written = GetDateFormat(LOCALE_USER_DEFAULT, NULL, &st, L"yyyy-MM-dd", (LPWSTR)buffer.c_str(), 260);
     return buffer.substr(0, bytes_written - 1); // remove terminating null
 }
@@ -552,7 +554,7 @@ std::wstring AfxDateAddDays(const std::wstring& date_text, int num_days_to_add) 
 // ========================================================================================
 // Return the number of days between two dates (YYYY-MM-DD)
 // ========================================================================================
-int AfxDaysBetween(const std::wstring& date1, const std::wstring& date2) {
+int AfxDaysBetween(const wxString& date1, const wxString& date2) {
     if (date1.length() != 10) return 0;
     if (date2.length() != 10) return 0;
     static const ULONGLONG FT_SECOND = ((ULONGLONG)10000000);
@@ -601,8 +603,8 @@ int AfxDaysBetween(const std::wstring& date1, const std::wstring& date2) {
 // ========================================================================================
 // Returns the current date in ISO format (YYYY-MM-DD)
 // ========================================================================================
-std::wstring AfxCurrentDate() {
-    std::wstring buffer(260, NULL);
+wxString AfxCurrentDate() {
+    wxString buffer(260, NULL);
     int bytes_written = GetDateFormat(LOCALE_USER_DEFAULT, NULL, NULL, L"yyyy-MM-dd", (LPWSTR)buffer.c_str(), 260);
     return buffer.substr(0, bytes_written - 1); // remove terminating null
 }
@@ -611,7 +613,7 @@ std::wstring AfxCurrentDate() {
 // ========================================================================================
 // Returns the year from a date in ISO format (YYYY-MM-DD)
 // ========================================================================================
-int AfxGetYear(const std::wstring& date_text) {
+int AfxGetYear(const wxString& date_text) {
     // YYYY-MM-DD
     // 0123456789
     if (date_text.length() != 10) return 0;
@@ -622,7 +624,7 @@ int AfxGetYear(const std::wstring& date_text) {
 // ========================================================================================
 // Returns the month from a date in ISO format (YYYY-MM-DD)
 // ========================================================================================
-int AfxGetMonth(const std::wstring& date_text) {
+int AfxGetMonth(const wxString& date_text) {
     // YYYY-MM-DD
     // 0123456789
     if (date_text.length() != 10) return 0;
@@ -633,7 +635,7 @@ int AfxGetMonth(const std::wstring& date_text) {
 // ========================================================================================
 // Returns the day from a date in ISO format (YYYY-MM-DD)
 // ========================================================================================
-int AfxGetDay(const std::wstring& date_text) {
+int AfxGetDay(const wxString& date_text) {
     // YYYY-MM-DD
     // 0123456789
     if (date_text.length() != 10) return 0;
@@ -685,7 +687,7 @@ int AfxLocalDayOfWeek() {
 // ========================================================================================
 // Returns the UNIX (Epoch) time given the incoming ISO date (YYYY-MM-DD).
 // ========================================================================================
-unsigned int AfxUnixTime(const std::wstring& date_text) {
+unsigned int AfxUnixTime(const wxString& date_text) {
     // YYYY-MM-DD
     // 0123456789
     if (date_text.length() != 10) return 0;
@@ -710,16 +712,16 @@ unsigned int AfxUnixTime(const std::wstring& date_text) {
 // Returns the Futures Contract date MMMDD from a date in ISO format (YYYY-MM-DD)
 // This is used for display purposes on the Trade Management screen.
 // ========================================================================================
-std::wstring AfxFormatFuturesDate(const std::wstring& date_text) {
+wxString AfxFormatFuturesDate(const wxString& date_text) {
     if (date_text.length() == 0) return L"";
     SYSTEMTIME st{};
     st.wYear = (WORD)std::stoi(date_text.substr(0, 4));
     st.wMonth = (WORD)std::stoi(date_text.substr(5, 2));
     st.wDay = (WORD)std::stoi(date_text.substr(8, 2));
 
-    std::wstring buffer(260, NULL);
+    wxString buffer(260, NULL);
     int bytes_written = GetDateFormat(LOCALE_USER_DEFAULT, NULL, &st, L"MMMdd", (LPWSTR)buffer.c_str(), 260);
-    std::wstring text = buffer.substr(0, bytes_written - 1); // remove terminating null
+    wxString text = buffer.substr(0, bytes_written - 1); // remove terminating null
     return AfxUpper(text);
 }
 
@@ -728,7 +730,7 @@ std::wstring AfxFormatFuturesDate(const std::wstring& date_text) {
 // Returns the Futures Contract date YYYYMM from a date in ISO format (YYYY-MM-DD)
 // This is used for retrieveing market data. (uses ansi strings rather than unicode).
 // ========================================================================================
-std::string AfxFormatFuturesDateMarketData(const std::wstring& date_text) {
+std::string AfxFormatFuturesDateMarketData(const wxString& date_text) {
     if (date_text.length() == 0) return "";
     // Date enters as YYYY-MM-DD so we simply need to remove the hyphens    
     std::string new_date = unicode2ansi(date_text);
@@ -740,7 +742,7 @@ std::string AfxFormatFuturesDateMarketData(const std::wstring& date_text) {
 // ========================================================================================
 // Returns the short format day based on the specified date in ISO format (YYYY-MM-DD)
 // ========================================================================================
-std::wstring AfxGetShortDayName(const std::wstring& date_text) {
+wxString AfxGetShortDayName(const wxString& date_text) {
     if (date_text.length() == 0) return L"";
     // YYYY-MM-DD
     // 0123456789
@@ -750,7 +752,7 @@ std::wstring AfxGetShortDayName(const std::wstring& date_text) {
     st.wMonth = (WORD)std::stoi(date_text.substr(5, 2));
     st.wDay = (WORD)std::stoi(date_text.substr(8, 2));
 
-    std::wstring buffer(260, NULL);
+    wxString buffer(260, NULL);
     int bytes_written = GetDateFormat(LOCALE_USER_DEFAULT, NULL, &st, L"ddd", (LPWSTR)buffer.c_str(), 260);
     return buffer.substr(0, bytes_written - 1); // remove terminating null
 }
@@ -759,7 +761,7 @@ std::wstring AfxGetShortDayName(const std::wstring& date_text) {
 // ========================================================================================
 // Returns the long format day based on the specified date in ISO format (YYYY-MM-DD)
 // ========================================================================================
-std::wstring AfxGetLongDayName(const std::wstring& date_text) {
+wxString AfxGetLongDayName(const wxString& date_text) {
     if (date_text.length() == 0) return L"";
     // YYYY-MM-DD
     // 0123456789
@@ -769,7 +771,7 @@ std::wstring AfxGetLongDayName(const std::wstring& date_text) {
     st.wMonth = (WORD)std::stoi(date_text.substr(5, 2));
     st.wDay = (WORD)std::stoi(date_text.substr(8, 2));
 
-    std::wstring buffer(260, NULL);
+    wxString buffer(260, NULL);
     int bytes_written = GetDateFormat(LOCALE_USER_DEFAULT, NULL, &st, L"dddd", (LPWSTR)buffer.c_str(), 260);
     return buffer.substr(0, bytes_written - 1); // remove terminating null
 }
@@ -778,7 +780,7 @@ std::wstring AfxGetLongDayName(const std::wstring& date_text) {
 // ========================================================================================
 // Returns the short format month based on the specified date in ISO format (YYYY-MM-DD)
 // ========================================================================================
-std::wstring AfxGetShortMonthName(const std::wstring& date_text) {
+wxString AfxGetShortMonthName(const wxString& date_text) {
     if (date_text.length() == 0) return L"";
     // YYYY-MM-DD
     // 0123456789
@@ -788,7 +790,7 @@ std::wstring AfxGetShortMonthName(const std::wstring& date_text) {
     st.wMonth = (WORD)std::stoi(date_text.substr(5, 2));
     st.wDay = (WORD)std::stoi(date_text.substr(8, 2));
 
-    std::wstring buffer(260, NULL);
+    wxString buffer(260, NULL);
     int bytes_written = GetDateFormat(LOCALE_USER_DEFAULT, NULL, &st, L"MMM", (LPWSTR)buffer.c_str(), 260);
     return buffer.substr(0, bytes_written - 1); // remove terminating null
 }
@@ -797,7 +799,7 @@ std::wstring AfxGetShortMonthName(const std::wstring& date_text) {
 // ========================================================================================
 // Returns the long format month based on the specified date in ISO format (YYYY-MM-DD)
 // ========================================================================================
-std::wstring AfxGetLongMonthName(const std::wstring& date_text) {
+wxString AfxGetLongMonthName(const wxString& date_text) {
     if (date_text.length() == 0) return L"";
     // YYYY-MM-DD
     // 0123456789
@@ -807,7 +809,7 @@ std::wstring AfxGetLongMonthName(const std::wstring& date_text) {
     st.wMonth = (WORD)std::stoi(date_text.substr(5, 2));
     st.wDay = (WORD)std::stoi(date_text.substr(8, 2));
 
-    std::wstring buffer(260, NULL);
+    wxString buffer(260, NULL);
     int bytes_written = GetDateFormat(LOCALE_USER_DEFAULT, NULL, &st, L"MMMM", (LPWSTR)buffer.c_str(), 260);
     return buffer.substr(0, bytes_written - 1); // remove terminating null
 }
@@ -817,7 +819,7 @@ std::wstring AfxGetLongMonthName(const std::wstring& date_text) {
 // Returns the short date MMM DD from a date in ISO format (YYYY-MM-DD)
 // We use this when dealing with Option expiration dates to display.
 // ========================================================================================
-std::wstring AfxShortDate(const std::wstring& date_text) {
+wxString AfxShortDate(const wxString& date_text) {
     if (date_text.length() == 0) return L"";
 
     SYSTEMTIME st{};
@@ -825,7 +827,7 @@ std::wstring AfxShortDate(const std::wstring& date_text) {
     st.wMonth = (WORD)std::stoi(date_text.substr(5, 2));
     st.wDay = (WORD)std::stoi(date_text.substr(8, 2));
 
-    std::wstring buffer(260, NULL);
+    wxString buffer(260, NULL);
     int bytes_written = GetDateFormat(LOCALE_USER_DEFAULT, NULL, &st, L"MMM dd", (LPWSTR)buffer.c_str(), 260);
     return buffer.substr(0, bytes_written - 1); // remove terminating null
 }
@@ -834,7 +836,7 @@ std::wstring AfxShortDate(const std::wstring& date_text) {
 // ========================================================================================
 // Returns the long date MMM DD, yyyy from a date in ISO format (YYYY-MM-DD)
 // ========================================================================================
-std::wstring AfxLongDate(const std::wstring& date_text) {
+wxString AfxLongDate(const wxString& date_text) {
     if (date_text.length() == 0) return L"";
 
     SYSTEMTIME st{};
@@ -842,7 +844,7 @@ std::wstring AfxLongDate(const std::wstring& date_text) {
     st.wMonth = (WORD)std::stoi(date_text.substr(5, 2));
     st.wDay = (WORD)std::stoi(date_text.substr(8, 2));
 
-    std::wstring buffer(260, NULL);
+    wxString buffer(260, NULL);
     int bytes_written = GetDateFormat(LOCALE_USER_DEFAULT, NULL, &st, L"MMM dd, yyyy", (LPWSTR)buffer.c_str(), 260);
     return buffer.substr(0, bytes_written - 1); // remove terminating null
 }
@@ -851,12 +853,12 @@ std::wstring AfxLongDate(const std::wstring& date_text) {
 // ========================================================================================
 // Returns the date in ISO format (YYYY-MM-DD) based on incoming year, month, day.
 // ========================================================================================
-std::wstring AfxMakeISODate(int year, int month, int day) {
+wxString AfxMakeISODate(int year, int month, int day) {
     SYSTEMTIME st{};
     st.wYear = (WORD)year;
     st.wMonth = (WORD)month;
     st.wDay = (WORD)day;
-    std::wstring buffer(260, NULL);
+    wxString buffer(260, NULL);
     int bytes_written = GetDateFormat(LOCALE_USER_DEFAULT, NULL, &st, L"yyyy-MM-dd", (LPWSTR)buffer.c_str(), 260);
     return buffer.substr(0, bytes_written - 1); // remove terminating null
 }
@@ -865,7 +867,7 @@ std::wstring AfxMakeISODate(int year, int month, int day) {
 // ========================================================================================
 // Convert an wide Unicode string to ANSI string
 // ========================================================================================
-std::string unicode2ansi(const std::wstring& wstr) {
+std::string unicode2ansi(const wxString& wstr) {
     // Size, in bytes, including any terminating null character
     int size_needed = WideCharToMultiByte(CP_ACP, 0, &wstr[0], -1, NULL, 0, NULL, NULL);
     std::string strTo(size_needed, 0);
@@ -878,9 +880,9 @@ std::string unicode2ansi(const std::wstring& wstr) {
 // ========================================================================================
 // Convert an ANSI string to a wide Unicode String
 // ========================================================================================
-std::wstring ansi2unicode(const std::string& str) {
+wxString ansi2unicode(const std::string& str) {
     int size_needed = MultiByteToWideChar(CP_ACP, 0, &str[0], (int)str.size(), NULL, 0);
-    std::wstring wstrTo(size_needed, 0);
+    wxString wstrTo(size_needed, 0);
     MultiByteToWideChar(CP_ACP, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
     return wstrTo;
 }
@@ -891,9 +893,9 @@ std::wstring ansi2unicode(const std::string& str) {
 // Decimal places = 2 unless specified otherwise.
 // Negative values will be encloses in parenthesis.
 // ========================================================================================
-std::wstring AfxMoney(double value, bool use_minus_sign, int num_decimal_places) {
-    static std::wstring decimal_sep = L".";
-    static std::wstring thousand_sep = L",";
+wxString AfxMoney(double value, bool use_minus_sign, int num_decimal_places) {
+    static wxString decimal_sep = L".";
+    static wxString thousand_sep = L",";
 
     static NUMBERFMTW num{};
     num.NumDigits = num_decimal_places;
@@ -914,8 +916,8 @@ std::wstring AfxMoney(double value, bool use_minus_sign, int num_decimal_places)
     if (use_minus_sign)
         num.NegativeOrder = 1;   // Negative sign, number; for example, -1.1
 
-    std::wstring money(std::to_wstring(value));
-    std::wstring buffer(256, 0);
+    wxString money(std::to_wstring(value));
+    wxString buffer(256, 0);
     int j = GetNumberFormatEx(LOCALE_NAME_USER_DEFAULT, 0, money.c_str(), &num, (LPWSTR)buffer.c_str(), 256);
 
     money = buffer.substr(0, j - 1);
@@ -944,7 +946,7 @@ bool AfxStringCompareI(const std::string& s1, const std::string& s2) {
     std::equal (s1.begin(), s1.end(), s2.begin(), caseInsCharCompareN));
 }
 
-bool AfxWStringCompareI(const std::wstring& s1, const std::wstring& s2) {
+bool AfxWStringCompareI(const wxString& s1, const wxString& s2) {
     return ((s1.size() == s2.size()) &&
     std::equal(s1.begin(), s1.end(), s2.begin(), caseInsCharCompareW));
 }
@@ -953,11 +955,11 @@ bool AfxWStringCompareI(const std::wstring& s1, const std::wstring& s2) {
 // ========================================================================================
 // Function to split the string to words in a vector separated by the delimiter
 // ========================================================================================
-std::vector<std::wstring> AfxSplit(const std::wstring& input, wchar_t delimiter) 
+std::vector<wxString> AfxSplit(const wxString& input, wchar_t delimiter) 
 {
     std::wistringstream stream(input);
-    std::wstring token;
-    std::vector<std::wstring> result;
+    wxString token;
+    std::vector<wxString> result;
 
     while (std::getline(stream, token, delimiter)) {
         result.push_back(token);
@@ -995,7 +997,7 @@ std::vector<std::wstring> AfxSplit(const std::wstring& input, wchar_t delimiter)
 //   the CreateFile function with CREATE_NEW (which fails if the file exists) or OPEN_EXISTING
 //   (which fails if the file does not exist).
 // ========================================================================================
-bool AfxFileExists(const std::wstring& wszFileSpec) {
+bool AfxFileExists(const wxString& wszFileSpec) {
     WIN32_FIND_DATAW fd{};
     if (wszFileSpec.c_str() == NULL) return false;
 
@@ -1009,19 +1011,19 @@ bool AfxFileExists(const std::wstring& wszFileSpec) {
 // ========================================================================================
 // Remove all leading whitespace characters from a string
 // ========================================================================================
-std::wstring AfxLTrim(const std::wstring& input) {
+wxString AfxLTrim(const wxString& input) {
     // Find the position of the first non-whitespace character
     auto firstNonWhitespace = std::find_if_not(input.begin(), input.end(), std::iswspace);
 
     // Create a new string starting from the first non-whitespace character
-    return std::wstring(firstNonWhitespace, input.end());
+    return wxString(firstNonWhitespace, input.end());
 }
 
 
 // ========================================================================================
 // Remove all trailing whitespace characters from a string
 // ========================================================================================
-std::wstring AfxRTrim(const std::wstring& input) {
+wxString AfxRTrim(const wxString& input) {
     if (input.empty()) {
         return input;  // Nothing to remove if the string is empty
     }
@@ -1029,7 +1031,7 @@ std::wstring AfxRTrim(const std::wstring& input) {
     // Find the position of the last non-whitespace character
     auto lastNonWhitespace = input.find_last_not_of(L" \t\r\n");
 
-    if (lastNonWhitespace == std::wstring::npos) {
+    if (lastNonWhitespace == wxString::npos) {
         // The string contains only whitespaces; return an empty string
         return L"";
     }
@@ -1042,12 +1044,12 @@ std::wstring AfxRTrim(const std::wstring& input) {
 // ========================================================================================
 // Remove all leading and trailing whitespace characters from a string
 // ========================================================================================
-std::wstring AfxTrim(const std::wstring& input) {
+wxString AfxTrim(const wxString& input) {
     // Find the first non-whitespace character
     size_t startPos = input.find_first_not_of(L" \t\n\r");
 
     // If the string is all whitespace, return an empty string
-    if (startPos == std::wstring::npos) {
+    if (startPos == wxString::npos) {
         return L"";
     }
 
@@ -1062,11 +1064,11 @@ std::wstring AfxTrim(const std::wstring& input) {
 // ========================================================================================
 // Right align string in of string of size width
 // ========================================================================================
-std::wstring AfxRSet(const std::wstring& text, int width) {
+wxString AfxRSet(const wxString& text, int width) {
     if (text.length() > width) return text;
     size_t num_chars = width - text.length();
     if (num_chars <= 0) return text;
-    std::wstring spaces_string(num_chars, L' ');
+    wxString spaces_string(num_chars, L' ');
     return spaces_string + text;
 }
 std::string AfxRSet(const std::string& text, int width) {
@@ -1076,11 +1078,11 @@ std::string AfxRSet(const std::string& text, int width) {
 // ========================================================================================
 // Left align string in of string of size width
 // ========================================================================================
-std::wstring AfxLSet(const std::wstring& text, int width) {
+wxString AfxLSet(const wxString& text, int width) {
     if (text.length() > width) return text;
     size_t num_chars = width - text.length();
     if (num_chars <= 0) return text;
-    std::wstring spaces_string(num_chars, L' ');
+    wxString spaces_string(num_chars, L' ');
     return text + spaces_string;
 }
 
@@ -1088,13 +1090,13 @@ std::wstring AfxLSet(const std::wstring& text, int width) {
 // ========================================================================================
 // Replace one char/string another char/string. Return a copy.
 // ========================================================================================
-std::wstring AfxReplace(const std::wstring& str, const std::wstring& from, const std::wstring& to) {
-    std::wstring text_string = str;
+wxString AfxReplace(const wxString& str, const wxString& from, const wxString& to) {
+    wxString text_string = str;
     if (str.empty()) return text_string;
     if (from.empty()) return text_string;
     size_t start_pos = 0;
     const size_t to_length = to.length();
-    while ((start_pos = text_string.find(from, start_pos)) != std::wstring::npos) {
+    while ((start_pos = text_string.find(from, start_pos)) != wxString::npos) {
         text_string.replace(start_pos, from.length(), to);
         start_pos += to_length;     // In case 'to' contains 'from', like replacing 'x' with 'yx'
     }
@@ -1105,8 +1107,8 @@ std::wstring AfxReplace(const std::wstring& str, const std::wstring& from, const
 // ========================================================================================
 // Remove char/string from string. Return a copy.
 // ========================================================================================
-std::wstring AfxRemove(const std::wstring& text, const std::wstring& repl) {
-    std::wstring text_string = text;
+wxString AfxRemove(const wxString& text, const wxString& repl) {
+    wxString text_string = text;
     std::string::size_type i = text_string.find(repl);
     while (i != std::string::npos) {
         text_string.erase(i, repl.length());
@@ -1119,16 +1121,16 @@ std::wstring AfxRemove(const std::wstring& text, const std::wstring& repl) {
 // ========================================================================================
 // Convert a string to uppercase or lowercase. 
 // ========================================================================================
-std::wstring AfxUpper(const std::wstring& text) {
+wxString AfxUpper(const wxString& text) {
     // using transform() function and ::toupper in STL
-    std::wstring s = text;
+    wxString s = text;
     std::transform(s.begin(), s.end(), s.begin(), ::toupper);
     return s;
 }
 
-std::wstring AfxLower(const std::wstring& text) {
+wxString AfxLower(const wxString& text) {
     // using transform() function and ::tolower in STL
-    std::wstring s = text;
+    wxString s = text;
     std::transform(s.begin(), s.end(), s.begin(), ::tolower);
     return s;
 }

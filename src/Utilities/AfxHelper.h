@@ -27,6 +27,8 @@ SOFTWARE.
 #ifndef AFXHELPER_H
 #define AFXHELPER_H
 
+#include <wx/wx.h>
+
 #include <Windows.h>
 #include <commctrl.h>
 #include <string>
