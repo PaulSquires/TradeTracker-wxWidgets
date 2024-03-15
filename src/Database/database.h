@@ -33,6 +33,14 @@ SOFTWARE.
 
 
 class CDatabase {
+private:
+	wxString dbFilename;;
+	wxString dbTradePlan;
+	wxString dbJournalNotes;
+
+	wxString journal_notes_text = "";
+	wxString trade_plan_text = "";
+
 public:
 	wxString GetJournalNotesText();
 	void SetJournalNotesText(const wxString& text);
@@ -55,14 +63,6 @@ public:
 	bool SaveDatabase();
 
 	CDatabase();
-
-private:
-	wxString dbFilename;;
-	wxString dbTradePlan;
-	wxString dbJournalNotes;
-
-	wxString journal_notes_text = "";
-	wxString trade_plan_text = "";
 
 };
 

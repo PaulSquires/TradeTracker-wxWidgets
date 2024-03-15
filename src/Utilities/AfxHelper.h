@@ -29,6 +29,21 @@ SOFTWARE.
 
 #include <wx/wx.h>
 
+std::vector<wxString> AfxSplit(const wxString& input, wchar_t delimiter);
+wxString AfxLTrim(const wxString& s);
+wxString AfxReplace(const wxString& str, const wxString& from, const wxString& to);
+
+int AfxValInteger(const wxString& st);
+double AfxValDouble(const wxString& st);
+
+
+wxString AfxInsertDateHyphens(const wxString& date_string);
+
+wxString AfxGetExePath();
+
+
+#if 0
+
 #include <Windows.h>
 #include <commctrl.h>
 #include <string>
@@ -36,7 +51,6 @@ SOFTWARE.
 
 wxString AfxClean(const wxString& text);
 
-wxString AfxGetExePath();
 bool AfxCreateNestedFolder(const wxString& folderPath);
 wxString AfxGetProgramFilesFolder();
 wxString AfxGetLocalAppDataFolder();
@@ -45,13 +59,9 @@ wxString AfxExecCmd(const wxString& cmd);
 void AfxCenterWindow(HWND hwnd = NULL, HWND hwndParent = NULL);
 void AfxCenterWindowMonitorAware(HWND hwnd = NULL, HWND hwndParent = NULL);
 
-int AfxValInteger(const wxString& st);
-double AfxValDouble(const wxString& st);
 
 wxString AfxCurrentDate();
-wxString AfxInsertDateHyphens(const wxString& date_string);
 std::string AfxInsertDateHyphens(const std::string& date_string);
-wxString AfxRemoveDateHyphens(const wxString& date_string);
 bool AfxIsLeapYear(int year);
 int AfxDaysInMonth(int month, int year);
 int AfxDaysInMonthISODate(const wxString& date_text);
@@ -82,11 +92,8 @@ wxString ansi2unicode(const std::string& str);
 wxString AfxMoney(double value, bool use_minus_sign = true, int num_decimal_places = 2);
 bool AfxStringCompareI(const std::string& s1, const std::string& s2);
 bool AfxWStringCompareI(const wxString& s1, const wxString& s2);
-std::vector<wxString> AfxSplit(const wxString& input, wchar_t delimiter);
 bool AfxFileExists(const wxString& wszFileSpec);
-wxString AfxReplace(const wxString& str, const wxString& from, const wxString& to);
 wxString AfxRemove(const wxString& text, const wxString& repl);
-wxString AfxLTrim(const wxString& s);
 wxString AfxRTrim(const wxString& s);
 wxString AfxTrim(const wxString& s);
 wxString AfxUpper(const wxString& text);
@@ -95,6 +102,7 @@ wxString AfxRSet(const wxString& text, int width);
 std::string AfxRSet(const std::string& text, int width);
 wxString AfxLSet(const wxString& text, int width);
 
+#endif
 
 #endif //AFXHELPER_H
 

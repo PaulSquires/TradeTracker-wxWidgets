@@ -27,128 +27,17 @@ SOFTWARE.
 #include <wx/wx.h>
 #include <wx/file.h>
 #include <wx/textfile.h>
-#include "wx/string.h"
-#include "wx/arrstr.h"
 
 #include <vector>
 #include <unordered_map>
 
 
 // #include "CustomMessageBox/CustomMessageBox.h"
-// #include "Utilities/AfxHelper.h"
 // #include "Config/Config.h"
+#include "Utilities/AfxHelper.h"
 
 #include "trade.h"
 #include "database.h"
-
-
-// ========================================================================================
-// Remove all leading whitespace characters from a string
-// ========================================================================================
-wxString AfxLTrim(const wxString& input) {
-    wxString result = input;
-    return result.Trim(false);   // left side only (true = right side (default))
-}
-
-
-// ========================================================================================
-// Function to split the string to words in a vector separated by the delimiter
-// ========================================================================================
-std::vector<wxString> AfxSplit(const wxString& input, wchar_t delimiter) 
-{
-    wxArrayString result = wxSplit(input, delimiter);
-    return result;
-}
-
-
-// ========================================================================================
-// Convert wstring to integer catching any exceptions
-// ========================================================================================
-int AfxValInteger(const wxString& st)  {
-    int result = 0;
-    if (!st.ToInt(&result)) result = 0;
-    return result;
-}
-
-
-// ========================================================================================
-// Convert wstring to double catching any exceptions
-// ========================================================================================
-double AfxValDouble(const wxString& st) {
-    double result = 0;
-    if (!st.ToDouble(&result)) result = 0;
-    return result;
-}
-
-
-// ========================================================================================
-// Insert embedded hyphen "-" into a date string.
-// e.g.  20230728 would be returned as 2023-07-28
-// ========================================================================================
-wxString AfxInsertDateHyphens(const wxString& date_string) {
-    if (date_string.length() != 8) return "";
-
-    wxString new_date = date_string;
-    // YYYYMMDD
-    // 01234567
-
-    new_date.insert(4, "-");
-    // YYYY-MMDD
-    // 012345678
-
-    new_date.insert(7, "-");
-    // YYYY-MM-DD
-    // 0123456789
-
-    return new_date;
-}
-
-
-// ========================================================================================
-// Replace one char/string another char/string. Return a copy.
-// ========================================================================================
-wxString AfxReplace(const wxString& str, const wxString& from, const wxString& to) {
-    wxString text_string = str;
-    if (str.empty()) return text_string;
-    if (from.empty()) return text_string;
-    text_string.Replace(from, to, true);
-    return text_string;
-}
-
-
-
-// ========================================================================================
-// Returns the path of the program which is currently executing.
-// The path name will not contain a trailing backslash.
-// ========================================================================================
-#ifdef _WIN32
-#include <Windows.h>
-#elif defined(__linux__) || defined(__APPLE__)
-#include <unistd.h>
-#include <limits.h>
-#endif
-
-wxString AfxGetExePath() {
-    wxString path;
-#ifdef _WIN32
-    // The following retrieves the full path *and* exe name and extension.
-    std::wstring buffer(MAX_PATH, NULL);
-    GetModuleFileName(NULL, (LPWSTR)buffer.c_str(), MAX_PATH);
-    // Remove everything after the last trailing backslash
-    std::size_t found = buffer.find_last_of(L"/\\");
-    path = buffer.substr(0, found);
-#elif defined(__linux__) || defined(__APPLE__)
-    char buffer[PATH_MAX];
-    ssize_t count = readlink("/proc/self/exe", buffer, sizeof(buffer));
-    if (count != -1) {
-        path.assign(buffer, count);
-        std::size_t found = buffer.find_last_of("/\\");
-        path = buffer.substr(0, found);
-    }
-#endif
-    return path;
-}
-
 
 
 
@@ -161,8 +50,8 @@ std::vector<std::shared_ptr<Trade>> trades;
 
 CDatabase::CDatabase() {
     dbFilename = AfxGetExePath() + "/tt-database.db";
-    //dbTradePlan = AfxGetExePath() + "/tt-tradeplan.txt";
-    //dbJournalNotes = AfxGetExePath() + "/tt-journalnotes.txt";
+    dbTradePlan = AfxGetExePath() + "/tt-tradeplan.txt";
+    dbJournalNotes = AfxGetExePath() + "/tt-journalnotes.txt";
 }
 
 
@@ -448,10 +337,6 @@ bool CDatabase::LoadDatabase() {
     wxTextFile db(dbFilename);
     if (!db.Exists()) db.Create();
 
-
-std::cout << dbFilename << std::endl;
-
-
     db.Open(dbFilename);
 
     if (!db.IsOpened()) 
@@ -472,8 +357,6 @@ std::cout << dbFilename << std::endl;
 
     for (size_t i = 0; i < line_count; i++) {
         line = db.GetLine(i);
-
-std::cout << line << std::endl;
 
         if (line.length() == 0) continue;
 

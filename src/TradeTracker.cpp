@@ -67,10 +67,10 @@ wxIMPLEMENT_APP(TradeTracker);
 bool TradeTracker::OnInit()
 {
 
-// Create console terminal for GUI application in order to print out debug messages
-AllocConsole();
-// Redirect stderr/stdout/stdin to new console
-BindStdHandlesToConsole();
+    // Create console terminal for GUI application in order to print out debug messages
+    AllocConsole();
+    // Redirect stderr/stdout/stdin to new console
+    BindStdHandlesToConsole();
 
     db.LoadDatabase();
 
