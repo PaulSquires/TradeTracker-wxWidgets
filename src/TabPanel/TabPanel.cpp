@@ -28,7 +28,7 @@ SOFTWARE.
 #include <wx/graphics.h>
 #include <wx/dcbuffer.h>
 
-#include "Utility/Colors.h"
+#include "Utilities/Colors.h"
 #include "ImageButton/ImageButton.h"
 #include "MainWindow/MainWindow.h"
 #include "TabPanel.h"

@@ -24,54 +24,47 @@ SOFTWARE.
 
 */
 
-#pragma once
+#ifndef TABPANEL_H
+#define TABPANEL_H
 
-#include "Utilities/AfxWin.h"
-#include "Database/trade.h"
+#include <wx/wx.h>
+//#include "Utilities/AfxWin.h"
+#include "trade.h"
 
 
 class CDatabase {
-private:
-	std::wstring dbFilename_new = L"\\tt-database.db";
-	std::wstring dbTradePlan_new = L"\\tt-tradeplan.txt";
-	std::wstring dbJournalNotes_new = L"\\tt-journalnotes.txt";
-
-	const std::wstring dbFilename_old = AfxGetExePath() + L"\\IB-Tracker-database.db";
-	const std::wstring dbJournalNotes_old = AfxGetExePath() + L"\\IB-Tracker-journalnotes.txt";
-	const std::wstring dbTradePlan_old = AfxGetExePath() + L"\\IB-Tracker-tradeplan.txt";
-
-	std::wstring dbFilename;
-	
-	std::wstring dbJournalNotes;
-	std::wstring dbTradePlan;
-
-	std::wstring journal_notes_text = L"";
-	std::wstring trade_plan_text = L"";
-
-	bool Version4UpgradeDatabase();
-	bool Version4UpgradeJournalNotes();
-	bool Version4UpgradeTradePlan();
-
 public:
-	std::wstring GetJournalNotesText();
-	void SetJournalNotesText(const std::wstring& text);
+	wxString GetJournalNotesText();
+	void SetJournalNotesText(const wxString& text);
 
-	std::wstring GetTradePlanText();
-	void SetTradePlanText(const std::wstring& text);
+	wxString GetTradePlanText();
+	void SetTradePlanText(const wxString& text);
 
-	std::wstring PutCallToString(const PutCall e);
-	PutCall StringToPutCall(const std::wstring& text);
+	wxString PutCallToString(const PutCall e);
+	PutCall StringToPutCall(const wxString& text);
 
-	Underlying StringToUnderlying(const std::wstring& underlying);
-	std::wstring UnderlyingToString(const Underlying e);
+	Underlying StringToUnderlying(const wxString& underlying);
+	wxString UnderlyingToString(const Underlying e);
 
-	Action StringToAction(const std::wstring& action);
-	Action StringDescriptionToAction(const std::wstring& action);
-	std::wstring ActionToString(const Action e);
-	std::wstring ActionToStringDescription(const Action e);
+	Action StringToAction(const wxString& action);
+	Action StringDescriptionToAction(const wxString& action);
+	wxString ActionToString(const Action e);
+	wxString ActionToStringDescription(const Action e);
 
 	bool LoadDatabase();
 	bool SaveDatabase();
+
+private:
+	wxString dbFilename = "tt-database.db";
+	wxString dbTradePlan = "tt-tradeplan.txt";
+	wxString dbJournalNotes = "tt-journalnotes.txt";
+
+	wxString journal_notes_text = "";
+	wxString trade_plan_text = "";
+
 };
 
 extern CDatabase db;
+
+
+#endif TABPANEL_H

@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <wx/wx.h>
 #include <wx/tooltip.h>
-#include "Utility/Colors.h"
+#include "Utilities/Colors.h"
 
 
 struct ImageButtonStruct {

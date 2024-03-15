@@ -39,76 +39,26 @@ SOFTWARE.
 std::vector<std::shared_ptr<Trade>> trades;
 
 
-bool CDatabase::Version4UpgradeDatabase() {
-    std::wstring dbFilename_filename = config.GetDataFilesFolder() + dbFilename_new;
-
-    // If version 4 filenames already exist then we would have already upgraded the
-    // files previously,
-    if (AfxFileExists(dbFilename_filename) || !AfxFileExists(dbFilename_old)) {
-        dbFilename = dbFilename_filename;
-        return false;
-    }
-    else {
-        // Old files will be renamed after they are first loaded into memory.
-        dbFilename = dbFilename_old;
-        return true;
-    }
+wxString CDatabase::PutCallToString(const PutCall e) {
+    if (e == PutCall::Put) return "P";
+    if (e == PutCall::Call) return "C";
+    return "";
 }
 
 
-bool CDatabase::Version4UpgradeJournalNotes() {
-    std::wstring dbJournalNotes_filename = config.GetDataFilesFolder() + dbJournalNotes_new;
-
-    // If version 4 filenames already exist then we would have already upgraded the
-    // files previously,
-    if (AfxFileExists(dbJournalNotes_filename) || !AfxFileExists(dbJournalNotes_old)) {
-        dbJournalNotes = dbJournalNotes_filename;
-        return false;
-    }
-    else {
-        // Old files will be renamed after they are first loaded into memory.
-        dbJournalNotes = dbJournalNotes_old;
-        return true;
-    }
-}
-
-bool CDatabase::Version4UpgradeTradePlan() {
-    std::wstring dbTradePlan_filename = config.GetDataFilesFolder() + dbTradePlan_new;
-
-    // If version 4 filenames already exist then we would have already upgraded the
-    // files previously,
-    if (AfxFileExists(dbTradePlan_filename) || !AfxFileExists(dbTradePlan_old)) {
-        dbTradePlan = dbTradePlan_filename;
-        return false;
-    }
-    else {
-        // Old files will be renamed after they are first loaded into memory.
-        dbTradePlan = dbTradePlan_old;
-        return true;
-    }
-}
-
-
-std::wstring CDatabase::PutCallToString(const PutCall e) {
-    if (e == PutCall::Put) return L"P";
-    if (e == PutCall::Call) return L"C";
-    return L"";
-}
-
-
-PutCall CDatabase::StringToPutCall(const std::wstring& text) {
-    if (text == L"P") return PutCall::Put;
-    if (text == L"C") return PutCall::Call;
+PutCall CDatabase::StringToPutCall(const wxString& text) {
+    if (text == "P") return PutCall::Put;
+    if (text == "C") return PutCall::Call;
     if (text.length() == 0) return PutCall::Nothing;
     return PutCall::Nothing;
 }
 
 
-Underlying CDatabase::StringToUnderlying(const std::wstring& text) {
-    static const std::unordered_map<std::wstring, Underlying> map = {
-        {L"0", Underlying::Options}, {L"1", Underlying::Shares}, 
-        {L"2", Underlying::Futures}, {L"3", Underlying::Dividend},
-        {L"4", Underlying::Other}
+Underlying CDatabase::StringToUnderlying(const wxString& text) {
+    static const std::unordered_map<wxString, Underlying> map = {
+        {"0", Underlying::Options}, {"1", Underlying::Shares}, 
+        {"2", Underlying::Futures}, {"3", Underlying::Dividend},
+        {"4", Underlying::Other}
     };
 
     if (text.length() == 0) return Underlying::Nothing;
@@ -119,16 +69,16 @@ Underlying CDatabase::StringToUnderlying(const std::wstring& text) {
 }
 
 
-std::wstring CDatabase::UnderlyingToString(const Underlying e) {
+wxString CDatabase::UnderlyingToString(const Underlying e) {
     return std::to_wstring((int)e);
 }
 
 
-Action CDatabase::StringDescriptionToAction(const std::wstring& text) {
-    static const std::unordered_map<std::wstring, Action> map = {
-        {L"STO", Action::STO}, {L"BTO", Action::BTO}, 
-        {L"STC", Action::STC}, {L"BTC", Action::BTC},
-        {L"", Action::Nothing}
+Action CDatabase::StringDescriptionToAction(const wxString& text) {
+    static const std::unordered_map<wxString, Action> map = {
+        {"STO", Action::STO}, {"BTO", Action::BTO}, 
+        {"STC", Action::STC}, {"BTC", Action::BTC},
+        {"", Action::Nothing}
     };
 
     if (text.length() == 0) return Action::Nothing;
@@ -138,11 +88,11 @@ Action CDatabase::StringDescriptionToAction(const std::wstring& text) {
     return (it != map.end()) ? it->second : Action::Nothing;
 }
 
-Action CDatabase::StringToAction(const std::wstring& text) {
-    static const std::unordered_map<std::wstring, Action> map = {
-        {L"0", Action::STO}, {L"1", Action::BTO}, 
-        {L"2", Action::STC}, {L"3", Action::BTC},
-        {L"", Action::Nothing}
+Action CDatabase::StringToAction(const wxString& text) {
+    static const std::unordered_map<wxString, Action> map = {
+        {"0", Action::STO}, {"1", Action::BTO}, 
+        {"2", Action::STC}, {"3", Action::BTC},
+        {"", Action::Nothing}
     };
 
     if (text.length() == 0) return Action::Nothing;
@@ -153,18 +103,18 @@ Action CDatabase::StringToAction(const std::wstring& text) {
 }
 
 
-std::wstring CDatabase::ActionToString(const Action e) {
+wxString CDatabase::ActionToString(const Action e) {
     return std::to_wstring((int)e);
 }
 
-std::wstring CDatabase::ActionToStringDescription(const Action e) {
+wxString CDatabase::ActionToStringDescription(const Action e) {
     switch (e) {
-    case Action::STO: return L"STO";
-    case Action::BTO: return L"BTO";
-    case Action::STC: return L"STC";
-    case Action::BTC: return L"BTC";
-    case Action::Nothing : return L"";
-    default: return L"";
+    case Action::STO: return "STO";
+    case Action::BTO: return "BTO";
+    case Action::STC: return "STC";
+    case Action::BTC: return "BTC";
+    case Action::Nothing : return "";
+    default: return "";
     } 
 }
 
@@ -172,9 +122,7 @@ std::wstring CDatabase::ActionToStringDescription(const Action e) {
 // ========================================================================================
 // Get the JournalNotes text.
 // ========================================================================================
-std::wstring CDatabase::GetJournalNotesText() {
-    bool upgrade_to_version4 = Version4UpgradeJournalNotes();
-
+wxString CDatabase::GetJournalNotesText() {
     static bool is_journal_notes_loaded = false;
 
     if (!is_journal_notes_loaded) {
@@ -191,13 +139,6 @@ std::wstring CDatabase::GetJournalNotesText() {
         }
     }
 
-    if (upgrade_to_version4) {
-        dbJournalNotes = config.GetDataFilesFolder() + dbJournalNotes_new;
-        SetJournalNotesText(journal_notes_text);
-        // Delete the older version file
-        DeleteFile(dbJournalNotes_old.c_str());
-    }
-
     return journal_notes_text;
 }
 
@@ -205,7 +146,7 @@ std::wstring CDatabase::GetJournalNotesText() {
 // ========================================================================================
 // Set and save the JournalNotes text.
 // ========================================================================================
-void CDatabase::SetJournalNotesText(const std::wstring& text) {
+void CDatabase::SetJournalNotesText(const wxString& text) {
     std::wofstream db;
 
     db.open(dbJournalNotes, std::ios::out | std::ios::trunc);
@@ -213,8 +154,8 @@ void CDatabase::SetJournalNotesText(const std::wstring& text) {
     if (!db.is_open()) {
         CustomMessageBox.Show(
             NULL,
-            L"Could not save Journal Notes text to file",
-            L"Warning",
+            "Could not save Journal Notes text to file",
+            "Warning",
             MB_ICONWARNING
         );
         return;
@@ -230,7 +171,7 @@ void CDatabase::SetJournalNotesText(const std::wstring& text) {
 // ========================================================================================
 // Get the TradePlan text.
 // ========================================================================================
-std::wstring CDatabase::GetTradePlanText() {
+wxString CDatabase::GetTradePlanText() {
     bool upgrade_to_version4 = Version4UpgradeTradePlan();
 
     static bool is_trade_plan_loaded = false;
@@ -249,13 +190,6 @@ std::wstring CDatabase::GetTradePlanText() {
         }
     }
 
-    if (upgrade_to_version4) {
-        dbTradePlan = config.GetDataFilesFolder() + dbTradePlan_new;
-        SetTradePlanText(trade_plan_text);
-        // Delete the older version file
-        DeleteFile(dbTradePlan_old.c_str());
-    }
-
     return trade_plan_text;
 }
 
@@ -263,7 +197,7 @@ std::wstring CDatabase::GetTradePlanText() {
 // ========================================================================================
 // Set and save the TradePlan text.
 // ========================================================================================
-void CDatabase::SetTradePlanText(const std::wstring& text) {
+void CDatabase::SetTradePlanText(const wxString& text) {
     std::wofstream db;
 
     db.open(dbTradePlan, std::ios::out | std::ios::trunc);
@@ -271,8 +205,8 @@ void CDatabase::SetTradePlanText(const std::wstring& text) {
     if (!db.is_open()) {
         CustomMessageBox.Show(
             NULL,
-            L"Could not save Trade Plan text to file",
-            L"Warning",
+            "Could not save Trade Plan text to file",
+            "Warning",
             MB_ICONWARNING
         );
         return;
@@ -293,8 +227,8 @@ bool CDatabase::SaveDatabase() {
     if (!db.is_open()) {
         CustomMessageBox.Show(
             NULL,
-            L"Could not save trades database",
-            L"Warning",
+            "Could not save trades database",
+            "Warning",
             MB_ICONWARNING
         );
         return false;
@@ -318,7 +252,7 @@ bool CDatabase::SaveDatabase() {
         prev_trade_was_open = trade->is_open;
 
         db << "T|"
-            << std::wstring(trade->is_open ? L"1|" : L"0|")
+            << wxString(trade->is_open ? L"1|" : L"0|")
             << trade->nextleg_id << "|"
             << trade->ticker_symbol << "|"
             << trade->ticker_name << "|"
@@ -328,9 +262,9 @@ bool CDatabase::SaveDatabase() {
             << AfxReplace(trade->notes, L"\r\n", L"~~") 
             << "\n";
 
-        static std::wstring p0 = L"";
-        static std::wstring p2 = L"  ";
-        static std::wstring p4 = L"    ";
+        static wxString p0 = L"";
+        static wxString p2 = L"  ";
+        static wxString p4 = L"    ";
 
         for (const auto& trans : trade->transactions) {
             db << (trade->is_open ? p2 : p0) << "X|" 
@@ -366,27 +300,25 @@ bool CDatabase::SaveDatabase() {
 }
 
 
-inline static std::wstring try_catch_wstring(const std::vector<std::wstring>& st, const int idx) {
+inline static wxString try_catch_wstring(const std::vector<wxString>& st, const int idx) {
     if (idx >= st.size() || idx < 0) return L"";
     return st.at(idx);
 }
 
 
-inline static int try_catch_int(const std::vector<std::wstring>& st, const int idx) {
-    std::wstring text = try_catch_wstring(st, idx);
+inline static int try_catch_int(const std::vector<wxString>& st, const int idx) {
+    wxString text = try_catch_wstring(st, idx);
     return AfxValInteger(text);
 }
 
 
-inline static double try_catch_double(const std::vector<std::wstring>& st, const int idx) {
-    std::wstring text = try_catch_wstring(st, idx);
+inline static double try_catch_double(const std::vector<wxString>& st, const int idx) {
+    wxString text = try_catch_wstring(st, idx);
     return AfxValDouble(text);
 }
 
 
 bool CDatabase::LoadDatabase() {
-    bool upgrade_to_version4 = Version4UpgradeDatabase();
-
     trades.clear();
     trades.reserve(5000);         // reserve space for 5000 trades
 
@@ -397,18 +329,18 @@ bool CDatabase::LoadDatabase() {
     if (!db.is_open()) 
         return false;
 
-    std::wstring databaseVersion;
+    wxString databaseVersion;
 
     std::shared_ptr<Trade> trade;
     std::shared_ptr<Transaction> trans;
     std::shared_ptr<Leg> leg; 
 
-    std::wstring line;
-    std::wstring text;
-    std::wstring date_text;
-    std::wstring expiry_date;
+    wxString line;
+    wxString text;
+    wxString date_text;
+    wxString expiry_date;
     
-    std::vector<std::wstring> st;
+    std::vector<wxString> st;
 
     while (!db.eof()) {
         std::getline(db, line);
@@ -416,21 +348,21 @@ bool CDatabase::LoadDatabase() {
         if (line.length() == 0) continue;
 
         // If this is a Comment line then simply iterate to next line.
-        if (line.compare(1, 3, L"// ") == 0) continue;
+        if (line.compare(1, 3, "// ") == 0) continue;
 
         // Trim leading white space
         line = AfxLTrim(line);
 
         // Tokenize the line into a vector based on the pipe delimiter
-        st = AfxSplit(line, L'|');
+        st = AfxSplit(line, '|');
 
         if (st.empty()) continue;
 
         // Check for Trades, Trans, and Legs
 
-        if (try_catch_wstring(st, 0) == L"T") {
+        if (try_catch_wstring(st, 0) == "T") {
             trade = std::make_shared<Trade>();
-            trade->is_open       = (try_catch_wstring(st, 1) == L"0") ? false : true;
+            trade->is_open       = (try_catch_wstring(st, 1) == "0") ? false : true;
             trade->nextleg_id    = try_catch_int(st, 2);
             trade->ticker_symbol = try_catch_wstring(st, 3);
             trade->ticker_name   = try_catch_wstring(st, 4);
@@ -439,13 +371,13 @@ bool CDatabase::LoadDatabase() {
             trade->category      = try_catch_int(st, 6);
             trade->trade_bp      = try_catch_double(st, 7);
             text                 = try_catch_wstring(st, 8);
-            trade->notes         = AfxReplace(text, L"~~", L"\r\n");
+            trade->notes         = AfxReplace(text, "~~", "\r\n");
             
             trades.emplace_back(trade);
             continue;
         }
 
-        if (try_catch_wstring(st, 0) == L"X") {
+        if (try_catch_wstring(st, 0) == "X") {
             trans = std::make_shared<Transaction>();
             date_text            = try_catch_wstring(st, 1);
             trans->trans_date    = AfxInsertDateHyphens(date_text);
@@ -471,7 +403,7 @@ bool CDatabase::LoadDatabase() {
             continue;
         }
 
-        if (try_catch_wstring(st, 0) == L"L") {
+        if (try_catch_wstring(st, 0) == "L") {
             leg = std::make_shared<Leg>();
             leg->leg_id              = try_catch_int(st, 1);
             leg->leg_back_pointer_id = try_catch_int(st, 2);
@@ -516,18 +448,6 @@ bool CDatabase::LoadDatabase() {
         // Calculate the full trade ACB and also the Shares ACB depending on what costing
         // method has been chosen.
         trade->CalculateAdjustedCostBase();
-    }
-
-    if (upgrade_to_version4) {
-        std::cout << "Upgrade database to version 4" << std::endl;
-        dbFilename = config.GetDataFilesFolder() + dbFilename_new;
-        SaveDatabase();
-        // Delete the older version file
-        DeleteFile(dbFilename_old.c_str());
-        // Also load the TradePlan and JournalNotes so that they can be converted
-        // now rather than waiting for the user to click on their tabs.
-        GetJournalNotesText();
-        GetTradePlanText();
     }
 
     return true;

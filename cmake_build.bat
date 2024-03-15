@@ -9,7 +9,8 @@ REM *************************
 CD %~dp0
 SET build_dir=build
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -S. -B%build_dir% -GNinja
-cmake --build %build_dir% -j
+
+IF "%~2"=="RELEASE" (cmake --build %build_dir% -j) ELSE (cmake --build %build_dir% -j --config Release)
 IF %ERRORLEVEL% NEQ 0 (GOTO BUILD_FAILED) 
 
 

@@ -30,8 +30,8 @@ set(SRCS
     src/TickerTotals/TickerTotals.cpp;
     src/TradePlan/TradePlan.cpp;
     src/ImageButton/ImageButton.cpp;
-#    src/Database/database.cpp;
-#    src/Database/trade.cpp;
+    src/Database/database.cpp;
+    src/Database/trade.cpp;
 )
 
 if(APPLE)

@@ -24,7 +24,10 @@ SOFTWARE.
 
 */
 
-#pragma once
+#ifndef TRADE_H
+#define TRADE_H
+
+#include <wx/wx.h>
 
 //  The hierarchy of the data is:
 //      Trade
@@ -82,8 +85,8 @@ public:
     int          leg_back_pointer_id = 0;  // If transaction is CLOSE, EXPIRE, ROLL this points back to leg where quantity modified
     int          original_quantity = 0;
     int          open_quantity = 0;
-    std::wstring expiry_date   = L"";
-    std::wstring strike_price  = L"";
+    wxString     expiry_date   = "";
+    wxString     strike_price  = "";
     PutCall      put_call      = PutCall::Nothing;
     Action       action        = Action::Nothing;          // STO,BTO,STC,BTC
     Underlying   underlying    = Underlying::Nothing;      // OPTIONS, STOCKS, FUTURES, DIVIDEND, OTHER
@@ -91,9 +94,9 @@ public:
 
     double calculated_leg_cost = 0;        // refer to CalculateLegCosting(). Alternative for position_cost.
 
-    double position_cost = 0;              // ACB as calculated CalculateLegCosting()
-    double market_value = 0;               // real time data receive via updatePortfolio
-    double percentage = 0;                 // real time data receive via updatePortfolio
+    double position_cost  = 0;             // ACB as calculated CalculateLegCosting()
+    double market_value   = 0;             // real time data receive via updatePortfolio
+    double percentage     = 0;             // real time data receive via updatePortfolio
     double unrealized_pnl = 0;             // real time data receive via updatePortfolio
 
     double position_cost_tws = 0;          // position cost received from incoming IB/TWS data
@@ -105,8 +108,8 @@ public:
 class Transaction {
 public:
     Underlying    underlying  = Underlying::Nothing;      // OPTIONS,STOCKS,FUTURES,DIVIDEND
-    std::wstring  description = L"";      // Iron Condor, Strangle, Roll, Expired, Closed, Exercised, etc
-    std::wstring  trans_date  = L"";      // YYYY-MM-DD
+    wxString      description = "";                       // Iron Condor, Strangle, Roll, Expired, Closed, Exercised, etc
+    wxString      trans_date  = "";                       // YYYY-MM-DD
     int           quantity    = 0;
     double        price       = 0;
     double        multiplier  = 0;
@@ -115,7 +118,7 @@ public:
     double        share_average_cost = 0;
     Action        share_action = Action::BTO;
 
-    std::vector<std::shared_ptr<Leg>> legs;            // pointer list for all legs in the transaction
+    std::vector<std::shared_ptr<Leg>> legs;            //  pointer list for all legs in the transaction
 };
 
 
@@ -130,28 +133,28 @@ public:
 
 class Trade {
 public:
-    bool          is_open       = true;    // false if all legs are closed
+    bool          is_open   = true;                // false if all legs are closed
     bool          ticker_data_requested = false;   // ticker data already requested
-    TickerId      ticker_id     = -1;
-    std::wstring  ticker_symbol = L"";
-    std::wstring  ticker_name   = L"";
-    std::wstring  future_expiry = L"";     // YYYYMM of Futures contract expiry
-    std::wstring  notes         = L"";     
-    int           category      = 0;       // Category number
-    int           nextleg_id    = 0;       // Incrementing counter that gets unique ID for legs being generated in TransDetail.    
+    TickerId      ticker_id = -1;
+    wxString      ticker_symbol = "";
+    wxString      ticker_name   = "";
+    wxString      future_expiry = "";        // YYYYMM of Futures contract expiry
+    wxString      notes         = "";     
+    int           category      = 0;         // Category number
+    int           nextleg_id    = 0;         // Incrementing counter that gets unique ID for legs being generated in TransDetail.    
 
-    int           aggregate_shares = 0;    // Calculated from all transactions roll-up
-    int           aggregate_futures = 0;   // Calculated from all transactions roll-up
-    double        acb_total     = 0;       // adjusted cost base of entire trade (shares + non-shares items)
-    double        acb_shares    = 0;       // adjusted cost base for shares/futures (may include/exclude costs like dividends)
-    double        acb_non_shares = 0;      // all non-shares items (dividends, options, etc)
-    double        total_share_profit = 0;  // total shares/futures profit/loss (total income less total average costs for all shares transactions in the trade)
-    double        trade_bp      = 0;       // Buying Power for the entire trade 
-    double        multiplier    = 0;       // Retrieved from Transaction and needed for updatePortfolio real time calculations
+    int           aggregate_shares   = 0;    // Calculated from all transactions roll-up
+    int           aggregate_futures  = 0;    // Calculated from all transactions roll-up
+    double        acb_total          = 0;    // adjusted cost base of entire trade (shares + non-shares items)
+    double        acb_shares         = 0;    // adjusted cost base for shares/futures (may include/exclude costs like dividends)
+    double        acb_non_shares     = 0;    // all non-shares items (dividends, options, etc)
+    double        total_share_profit = 0;    // total shares/futures profit/loss (total income less total average costs for all shares transactions in the trade)
+    double        trade_bp           = 0;    // Buying Power for the entire trade 
+    double        multiplier         = 0;    // Retrieved from Transaction and needed for updatePortfolio real time calculations
 
     double        ticker_last_price  = 0;
     double        ticker_close_price = 0;
-    int           ticker_decimals    = 2;  // upated via data from Config. 
+    int           ticker_decimals    = 2;    // upated via data from Config. 
 
     // Vector holding all the data related to how shares/futures are allocated during a buy/sell. This
     // vector is created during the CalculateAdjustedCostBase method. We use this vector when displaying
@@ -168,21 +171,21 @@ public:
     // so that the Active Trades lists gets visually updated immediately after a new Trade or close trade.
     // The ticker data would not be updated until a new price occurs so we simply display the most recent price
     // rather than blank text.
-    std::wstring itm_text = L"";
+    wxString itm_text = "";
     DWORD itm_color = COLOR_WHITELIGHT;
 
-    std::wstring ticker_column_1;
-    std::wstring ticker_column_2;
-    std::wstring ticker_column_3;
+    wxString ticker_column_1;
+    wxString ticker_column_2;
+    wxString ticker_column_3;
     
     DWORD ticker_column_1_clr{};
     DWORD ticker_column_2_clr{};
     DWORD ticker_column_3_clr{};
 
     // Dates used to calculate ROI on TradeBP.
-    std::wstring  bp_start_date = L"99999999";            // YYYYMMDD  First transaction date
-    std::wstring  bp_end_date = L"00000000";              // YYYYMMDD  Last trans expiry date or trade close date if earlier) 
-    std::wstring  oldest_trade_trans_date = L"00000000";  // If Trade is closed then this trans will be the BPendDate
+    wxString  bp_start_date = L"99999999";            // YYYYMMDD  First transaction date
+    wxString  bp_end_date = L"00000000";              // YYYYMMDD  Last trans expiry date or trade close date if earlier) 
+    wxString  oldest_trade_trans_date = L"00000000";  // If Trade is closed then this trans will be the BPendDate
 
     std::vector<std::shared_ptr<Transaction>> transactions;     // pointer list for all transactions in the trade
     std::vector<std::shared_ptr<Leg>> open_legs;                // sorted list of open legs for this trade
@@ -196,4 +199,5 @@ public:
 // pointer list for all trades (initially loaded from database)
 extern std::vector<std::shared_ptr<Trade>> trades;
 
+#endif //TRADE_H
 
