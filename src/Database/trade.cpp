@@ -24,10 +24,10 @@ SOFTWARE.
 
 */
 
-#include "pch.h"
+#include <wx/wx.h>
 
-#include "Utilities/AfxWin.h"
-#include "Config/Config.h"
+//#include "Utilities/AfxHelper.h"
+//#include "Config/Config.h"
 
 #include "trade.h"
 
@@ -45,10 +45,10 @@ void Trade::CalculateTotalSharesProfit() {
             int quantity = abs(share.open_quantity);
             double price = share.trans->price;
 
-            if (config.IsFuturesTicker(ticker_symbol)) {
-                double multiplier = AfxValDouble(config.GetMultiplier(ticker_symbol));
-                price *= multiplier;
-            }
+            // if (config.IsFuturesTicker(ticker_symbol)) {
+            //     double multiplier = AfxValDouble(config.GetMultiplier(ticker_symbol));
+            //     price *= multiplier;
+            // }
 
             double diff = 0;
             if (share.leg_action == Action::STC) diff = (price + share.average_cost);
@@ -111,6 +111,8 @@ void Trade::AddSharesHistory(std::shared_ptr<Transaction> trans, Action leg_acti
 
 
 void Trade::CalculateAdjustedCostBase() {
+
+#if 0
 
     // Reset the shares_allocation vector that is used for displaying data in TradeHistory
     shares_history.clear();
@@ -273,6 +275,8 @@ void Trade::CalculateAdjustedCostBase() {
 
         return;
     }
+
+#endif
 }
 
 
@@ -281,6 +285,8 @@ void Trade::CreateOpenLegsVector() {
     // collection of open legs in order to have Puts before Calls. There could be
     // multiple Transactions in this trade and therefore Puts and Calls would not
     // already be a suitable display order.
+
+#if 0
 
     open_legs.clear();
     this->aggregate_shares = 0;
@@ -329,6 +335,8 @@ void Trade::CreateOpenLegsVector() {
             }
             return false;
         });
+
+#endif
 }
 
 

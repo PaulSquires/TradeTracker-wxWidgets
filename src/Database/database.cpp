@@ -25,13 +25,101 @@ SOFTWARE.
 */
 
 #include <wx/wx.h>
+#include <wx/file.h>
+#include <wx/textfile.h>
+#include "wx/arrstr.h"
+
+#include <vector>
+#include <unordered_map>
+//#include <string>
+
 
 // #include "CustomMessageBox/CustomMessageBox.h"
-// #include "Utilities/AfxWin.h"
+// #include "Utilities/AfxHelper.h"
 // #include "Config/Config.h"
 
 #include "trade.h"
 #include "database.h"
+
+
+// ========================================================================================
+// Remove all leading whitespace characters from a string
+// ========================================================================================
+wxString AfxLTrim(const wxString& input) {
+    wxString result = input;
+    return result.Trim(false);   // left side only (true = right side (default))
+}
+
+
+// ========================================================================================
+// Function to split the string to words in a vector separated by the delimiter
+// ========================================================================================
+std::vector<wxString> AfxSplit(const wxString& input, wchar_t delimiter) 
+{
+    wxArrayString result = wxSplit(input, delimiter);
+    return result;
+}
+
+
+// ========================================================================================
+// Convert wstring to integer catching any exceptions
+// ========================================================================================
+int AfxValInteger(const wxString& st)  {
+    int result = 0;
+    if (!st.ToInt(&result)) result = 0;
+    return result;
+}
+
+
+// ========================================================================================
+// Convert wstring to double catching any exceptions
+// ========================================================================================
+double AfxValDouble(const wxString& st) {
+    double result = 0;
+    if (!st.ToDouble(&result)) result = 0;
+    return result;
+}
+
+
+// ========================================================================================
+// Insert embedded hyphen "-" into a date string.
+// e.g.  20230728 would be returned as 2023-07-28
+// ========================================================================================
+wxString AfxInsertDateHyphens(const wxString& date_string) {
+    if (date_string.length() != 8) return "";
+
+    wxString new_date = date_string;
+    // YYYYMMDD
+    // 01234567
+
+    new_date.insert(4, "-");
+    // YYYY-MMDD
+    // 012345678
+
+    new_date.insert(7, "-");
+    // YYYY-MM-DD
+    // 0123456789
+
+    return new_date;
+}
+
+
+// ========================================================================================
+// Replace one char/string another char/string. Return a copy.
+// ========================================================================================
+wxString AfxReplace(const wxString& str, const wxString& from, const wxString& to) {
+    wxString text_string = str;
+    if (str.empty()) return text_string;
+    if (from.empty()) return text_string;
+    text_string.Replace(from, to, true);
+    return text_string;
+}
+
+
+
+
+
+
 
 
 // Pointer list for all trades (initially loaded from database)
@@ -126,20 +214,17 @@ wxString CDatabase::GetJournalNotesText() {
     static bool is_journal_notes_loaded = false;
 
     if (!is_journal_notes_loaded) {
-        std::wifstream db;
+        wxFile db;
+        db.Open(dbJournalNotes);
 
-        db.open(dbJournalNotes, std::ios::in);
-
-        if (db.is_open()) {
-            std::wostringstream ss;
-            ss << db.rdbuf();
-            journal_notes_text = ss.str();
-
+        if (db.IsOpened()) {
+            db.ReadAll(&this->journal_notes_text);
             is_journal_notes_loaded = true;
         }
+        db.Close();
     }
 
-    return journal_notes_text;
+    return this->journal_notes_text;
 }
 
 
@@ -147,24 +232,23 @@ wxString CDatabase::GetJournalNotesText() {
 // Set and save the JournalNotes text.
 // ========================================================================================
 void CDatabase::SetJournalNotesText(const wxString& text) {
-    std::wofstream db;
+    wxFile db;
+    db.Open(dbJournalNotes);
 
-    db.open(dbJournalNotes, std::ios::out | std::ios::trunc);
-
-    if (!db.is_open()) {
-        CustomMessageBox.Show(
-            NULL,
-            "Could not save Journal Notes text to file",
-            "Warning",
-            MB_ICONWARNING
-        );
+    if (!db.IsOpened()) {
+        // CustomMessageBox.Show(
+        //     NULL,
+        //     "Could not save Journal Notes text to file",
+        //     "Warning",
+        //     MB_ICONWARNING
+        // );
         return;
     }
 
-    db << text;
-    db.close();
+    db.Write(text);
+    db.Close();
 
-    journal_notes_text = text;
+    this->journal_notes_text = text;
 }
 
 
@@ -172,25 +256,20 @@ void CDatabase::SetJournalNotesText(const wxString& text) {
 // Get the TradePlan text.
 // ========================================================================================
 wxString CDatabase::GetTradePlanText() {
-    bool upgrade_to_version4 = Version4UpgradeTradePlan();
-
     static bool is_trade_plan_loaded = false;
 
     if (!is_trade_plan_loaded) {
-        std::wifstream db;
+        wxFile db;
+        db.Open(dbTradePlan);
 
-        db.open(dbTradePlan, std::ios::in);
-
-        if (db.is_open()) {
-            std::wostringstream ss;
-            ss << db.rdbuf();
-            trade_plan_text = ss.str();
-
+        if (db.IsOpened()) {
+            db.ReadAll(&this->trade_plan_text);
             is_trade_plan_loaded = true;
         }
+        db.Close();
     }
 
-    return trade_plan_text;
+    return this->trade_plan_text;
 }
 
 
@@ -198,110 +277,115 @@ wxString CDatabase::GetTradePlanText() {
 // Set and save the TradePlan text.
 // ========================================================================================
 void CDatabase::SetTradePlanText(const wxString& text) {
-    std::wofstream db;
+    wxFile db;
 
-    db.open(dbTradePlan, std::ios::out | std::ios::trunc);
+    db.Open(dbTradePlan);
 
-    if (!db.is_open()) {
-        CustomMessageBox.Show(
-            NULL,
-            "Could not save Trade Plan text to file",
-            "Warning",
-            MB_ICONWARNING
-        );
+    if (!db.IsOpened()) {
+        // CustomMessageBox.Show(
+        //     NULL,
+        //     "Could not save Trade Plan text to file",
+        //     "Warning",
+        //     MB_ICONWARNING
+        //);
         return;
     }
 
-    db << text;
-    db.close();
+    db.Write(text);
+    db.Close();
 
-    trade_plan_text = text;
+    this->trade_plan_text = text;
 }
 
 
 bool CDatabase::SaveDatabase() {
-    std::wofstream db;
+    wxFile db;
+    if (!db.Exists(dbFilename)) db.Create(dbFilename);
 
-    db.open(dbFilename, std::ios::out | std::ios::trunc);
+    db.Open(dbFilename);
 
-    if (!db.is_open()) {
-        CustomMessageBox.Show(
-            NULL,
-            "Could not save trades database",
-            "Warning",
-            MB_ICONWARNING
-        );
+    if (!db.IsOpened()) {
+        // CustomMessageBox.Show(
+        //     NULL,
+        //     "Could not save trades database",
+        //     "Warning",
+        //     MB_ICONWARNING
+        // );
         return false;
     }
 
-    db  << "// TRADE          T|isOpen|nextleg_id|TickerSymbol|TickerName|FutureExpiry|Category|TradeBP|Notes\n"
-        << "// TRANS          X|transDate|description|underlying|quantity|price|multiplier|fees|total|SharesAction\n"
-        << "// LEG            L|leg_id|leg_back_pointer_id|original_quantity|open_quantity|expiry_date|strike_price|PutCall|action|underlying\n"
-        << "// isOpen:        0:false, 1:true\n"
-        << "// FutureExpiry:  YYYYMMDD (do not insert hyphens)\n"
-        << "// Category:      0,1,2,3,4, etc (integer value)\n"
-        << "// underlying:    0:OPTIONS, 1:SHARES, 2:FUTURES, 3:DIVIDEND, 4:OTHER\n"
-        << "// action:        0:STO, 1:BTO, 2:STC, 3:BTC\n"
-        << "// Dates are all in YYYYMMDD format with no embedded separators.\n";
+    wxString text;
+
+    text << "// TRADE          T|isOpen|nextleg_id|TickerSymbol|TickerName|FutureExpiry|Category|TradeBP|Notes\n"
+         << "// TRANS          X|transDate|description|underlying|quantity|price|multiplier|fees|total|SharesAction\n"
+         << "// LEG            L|leg_id|leg_back_pointer_id|original_quantity|open_quantity|expiry_date|strike_price|PutCall|action|underlying\n"
+         << "// isOpen:        0:false, 1:true\n"
+         << "// FutureExpiry:  YYYYMMDD (do not insert hyphens)\n"
+         << "// Category:      0,1,2,3,4, etc (integer value)\n"
+         << "// underlying:    0:OPTIONS, 1:SHARES, 2:FUTURES, 3:DIVIDEND, 4:OTHER\n"
+         << "// action:        0:STO, 1:BTO, 2:STC, 3:BTC\n"
+         << "// Dates are all in YYYYMMDD format with no embedded separators.\n";
 
     bool prev_trade_was_open = false;
 
     for (const auto& trade : trades) {
         // Insert a blank line if the trade is open in order to give some visual breathing room
-        if (trade->is_open || prev_trade_was_open) db << "\n";
+        if (trade->is_open || prev_trade_was_open) text << "\n";
         prev_trade_was_open = trade->is_open;
 
-        db << "T|"
-            << wxString(trade->is_open ? L"1|" : L"0|")
-            << trade->nextleg_id << "|"
-            << trade->ticker_symbol << "|"
-            << trade->ticker_name << "|"
-            << AfxRemoveDateHyphens(trade->future_expiry) << "|"
-            << trade->category << "|"
-            << std::fixed << std::setprecision(0) << trade->trade_bp  << "|"
-            << AfxReplace(trade->notes, L"\r\n", L"~~") 
-            << "\n";
+        text << "T|"
+             << wxString(trade->is_open ? "1|" : "0|")
+             << trade->nextleg_id << "|"
+             << trade->ticker_symbol << "|"
+             << trade->ticker_name << "|"
+             << AfxReplace(trade->future_expiry, "-", "") << "|"
+             << trade->category << "|"
+             << wxString::Format("%.0f", trade->trade_bp)  << "|"
+             << AfxReplace(trade->notes, "\r\n", "~~") 
+             << "\n";
 
-        static wxString p0 = L"";
-        static wxString p2 = L"  ";
-        static wxString p4 = L"    ";
+        static wxString p0 = "";
+        static wxString p2 = "  ";
+        static wxString p4 = "    ";
 
         for (const auto& trans : trade->transactions) {
-            db << (trade->is_open ? p2 : p0) << "X|" 
-                << AfxRemoveDateHyphens(trans->trans_date) << "|"
-                << trans->description << "|"
-                << UnderlyingToString(trans->underlying) << "|"
-                << trans->quantity << "|"
-                << std::fixed << std::setprecision(4) << trans->price << "|"
-                << std::fixed << std::setprecision(4) << trans->multiplier << "|"
-                << std::fixed << std::setprecision(4) << trans->fees << "|"
-                << std::fixed << std::setprecision(4) << trans->total << "|"
-                << ActionToString(trans->share_action)
-                << "\n";
+            text << (trade->is_open ? p2 : p0) << "X|" 
+                 << AfxReplace(trans->trans_date, "-", "") << "|"
+                 << trans->description << "|"
+                 << UnderlyingToString(trans->underlying) << "|"
+                 << trans->quantity << "|"
+                 << wxString::Format("%.4f", trans->price) << "|"
+                 << wxString::Format("%.4f", trans->multiplier) << "|"
+                 << wxString::Format("%.4f", trans->fees) << "|"
+                 << wxString::Format("%.4f", trans->total) << "|"
+                 << ActionToString(trans->share_action)
+                 << "\n";
 
             for (const auto& leg : trans->legs) {
-                 db << (trade->is_open ? p4 : p0) << "L|"
-                    << leg->leg_id << "|"
-                    << leg->leg_back_pointer_id << "|"
-                    << leg->original_quantity << "|"
-                    << leg->open_quantity << "|"
-                    << AfxRemoveDateHyphens(leg->expiry_date) << "|"
-                    << leg->strike_price << "|"
-                    << PutCallToString(leg->put_call) << "|"
-                    << ActionToString(leg->action) << "|"
-                    << UnderlyingToString(leg->underlying)
-                    << "\n";
+                 text << (trade->is_open ? p4 : p0) << "L|"
+                      << leg->leg_id << "|"
+                      << leg->leg_back_pointer_id << "|"
+                      << leg->original_quantity << "|"
+                      << leg->open_quantity << "|"
+                      << AfxReplace(leg->expiry_date, "-", "") << "|"
+                      << leg->strike_price << "|"
+                      << PutCallToString(leg->put_call) << "|"
+                      << ActionToString(leg->action) << "|"
+                      << UnderlyingToString(leg->underlying)
+                      << "\n";
             }
         }
     }
-    db.close();
+
+    db.Write(text);
+    db.Close();
 
     return true;
 }
 
 
 inline static wxString try_catch_wstring(const std::vector<wxString>& st, const int idx) {
-    if (idx >= st.size() || idx < 0) return L"";
+    if (idx >= st.size() || idx < 0) return "";
     return st.at(idx);
 }
 
@@ -322,14 +406,13 @@ bool CDatabase::LoadDatabase() {
     trades.clear();
     trades.reserve(5000);         // reserve space for 5000 trades
 
-    std::wifstream db;
+    wxTextFile db(dbFilename);
+    if (!db.Exists()) db.Create();
 
-    db.open(dbFilename, std::ios::in);
+    db.Open(dbFilename);
 
-    if (!db.is_open()) 
+    if (!db.IsOpened()) 
         return false;
-
-    wxString databaseVersion;
 
     std::shared_ptr<Trade> trade;
     std::shared_ptr<Transaction> trans;
@@ -342,8 +425,12 @@ bool CDatabase::LoadDatabase() {
     
     std::vector<wxString> st;
 
-    while (!db.eof()) {
-        std::getline(db, line);
+    size_t line_count = db.GetLineCount();
+
+    for (size_t i = 0; i < line_count; i++) {
+        line = db.GetLine(i);
+
+std::cout << line << std::endl;
 
         if (line.length() == 0) continue;
 
@@ -428,7 +515,7 @@ bool CDatabase::LoadDatabase() {
         }
     }
 
-    db.close();
+    db.Close();
 
 
     // Now that the trades have been constructed, create the open position vector based

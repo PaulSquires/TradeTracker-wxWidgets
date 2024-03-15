@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <wx/wx.h>
 
-//#include "trade.h"
+#include "trade.h"
 
 
 class CDatabase {
@@ -67,4 +67,4 @@ private:
 extern CDatabase db;
 
 
-#endif DATABASE_H
+#endif //DATABASE_H

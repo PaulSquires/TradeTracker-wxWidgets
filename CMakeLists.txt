@@ -32,6 +32,7 @@ set(SRCS
     src/ImageButton/ImageButton.cpp;
     src/Database/database.cpp;
     src/Database/trade.cpp;
+   # src/Config/Config.cpp
 )
 
 if(APPLE)

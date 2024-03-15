@@ -27,12 +27,16 @@ SOFTWARE.
 #include <wx/wx.h>
 
 #include "TradeTracker.h"
+#include "Database/database.h"
 #include "MainWindow/MainWindow.h"
 
 wxIMPLEMENT_APP(TradeTracker);
 
 bool TradeTracker::OnInit()
 {
+
+    db.LoadDatabase();
+
     MainFrame = new MainWindow("TradeTracker-wxWidgets", wxDefaultPosition, wxDefaultSize);
 
 #ifdef wxHAS_IMAGE_RESOURCES

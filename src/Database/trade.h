@@ -28,6 +28,8 @@ SOFTWARE.
 #define TRADE_H
 
 #include <wx/wx.h>
+#include <vector>
+
 
 //  The hierarchy of the data is:
 //      Trade
@@ -38,7 +40,7 @@ SOFTWARE.
 //  between them by iterating the vector and testing the isOpen() boolean method.
 //
 
-#include "Utilities/Colors.h"
+//#include "Utilities/Colors.h"
 
 
 typedef long TickerId;
@@ -172,7 +174,7 @@ public:
     // The ticker data would not be updated until a new price occurs so we simply display the most recent price
     // rather than blank text.
     wxString itm_text = "";
-    DWORD itm_color = COLOR_WHITELIGHT;
+//    DWORD itm_color = COLOR_WHITELIGHT;
 
     wxString ticker_column_1;
     wxString ticker_column_2;

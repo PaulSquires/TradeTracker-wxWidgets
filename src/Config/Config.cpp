@@ -24,9 +24,9 @@ SOFTWARE.
 
 */
 
-#include "pch.h"
+#include <wx/wx.h>
 
-#include "Utilities/AfxWin.h"
+#include "Utilities/AfxHelper.h"
 
 #include "CustomMessageBox/CustomMessageBox.h"
 #include "TextBoxDialog/TextBoxDialog.h"
@@ -53,33 +53,6 @@ std::wstring CConfig::GetDataFilesFolder() {
     }
 
     return data_files_folder;
-}
-
-void CConfig::Version4UpgradeExe() {
-    exe_new = AfxGetExePath() + exe_new;
-
-    // Delete pre-Version4 exe
-    if (AfxFileExists(exe_new) && AfxFileExists(exe_old)) {
-        DeleteFile(exe_old.c_str());
-    }
-}
-
-bool CConfig::Version4UpgradeConfig() {
-    std::wstring dbConfig_filename = GetDataFilesFolder() + dbConfig_new;
-
-    // If version 4 filenames already exist then we would have already upgraded the
-    // files previously,
-    if (AfxFileExists(dbConfig_filename) || !AfxFileExists(dbConfig_old)) {
-        dbConfig = dbConfig_filename;
-        return false;
-    }
-    else {
-        // Old files will be renamed after they are first loaded into memory.
-        if (AfxFileExists(dbConfig_old)) {
-            dbConfig = dbConfig_old;
-        }
-        return true;
-    }
 }
 
 
@@ -429,9 +402,6 @@ bool CConfig::SaveConfig() {
 // Load the Config values from file.
 // ========================================================================================
 bool CConfig::LoadConfig() {
-    Version4UpgradeExe();
-
-    bool upgrade_to_version4 = Version4UpgradeConfig();
 
     // If the Config does not exist then create a new one.
     if (!AfxFileExists(dbConfig)) {
@@ -456,7 +426,7 @@ bool CConfig::LoadConfig() {
         if (line.length() == 0) continue;
 
         // If this is a Comment line then simply iterate to next line.
-        if (line.compare(1, 3, L"// ") == 0) continue;
+        if (line.compare(1, 3, "// ") == 0) continue;
 
         // Tokenize the line into a vector based on the pipe delimiter
         std::vector<std::wstring> st = AfxSplit(line, L'|');
