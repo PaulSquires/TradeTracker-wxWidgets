@@ -27,11 +27,11 @@ SOFTWARE.
 #include <wx/wx.h>
 #include <wx/file.h>
 #include <wx/textfile.h>
+#include "wx/string.h"
 #include "wx/arrstr.h"
 
 #include <vector>
 #include <unordered_map>
-//#include <string>
 
 
 // #include "CustomMessageBox/CustomMessageBox.h"
@@ -117,6 +117,38 @@ wxString AfxReplace(const wxString& str, const wxString& from, const wxString& t
 
 
 
+// ========================================================================================
+// Returns the path of the program which is currently executing.
+// The path name will not contain a trailing backslash.
+// ========================================================================================
+#ifdef _WIN32
+#include <Windows.h>
+#elif defined(__linux__) || defined(__APPLE__)
+#include <unistd.h>
+#include <limits.h>
+#endif
+
+wxString AfxGetExePath() {
+    wxString path;
+#ifdef _WIN32
+    // The following retrieves the full path *and* exe name and extension.
+    std::wstring buffer(MAX_PATH, NULL);
+    GetModuleFileName(NULL, (LPWSTR)buffer.c_str(), MAX_PATH);
+    // Remove everything after the last trailing backslash
+    std::size_t found = buffer.find_last_of(L"/\\");
+    path = buffer.substr(0, found);
+#elif defined(__linux__) || defined(__APPLE__)
+    char buffer[PATH_MAX];
+    ssize_t count = readlink("/proc/self/exe", buffer, sizeof(buffer));
+    if (count != -1) {
+        path.assign(buffer, count);
+        std::size_t found = buffer.find_last_of("/\\");
+        path = buffer.substr(0, found);
+    }
+#endif
+    return path;
+}
+
 
 
 
@@ -125,6 +157,13 @@ wxString AfxReplace(const wxString& str, const wxString& from, const wxString& t
 // Pointer list for all trades (initially loaded from database)
 // This variable is accessed via extern in other files that require it.
 std::vector<std::shared_ptr<Trade>> trades;
+
+
+CDatabase::CDatabase() {
+    dbFilename = AfxGetExePath() + "/tt-database.db";
+    //dbTradePlan = AfxGetExePath() + "/tt-tradeplan.txt";
+    //dbJournalNotes = AfxGetExePath() + "/tt-journalnotes.txt";
+}
 
 
 wxString CDatabase::PutCallToString(const PutCall e) {
@@ -408,6 +447,10 @@ bool CDatabase::LoadDatabase() {
 
     wxTextFile db(dbFilename);
     if (!db.Exists()) db.Create();
+
+
+std::cout << dbFilename << std::endl;
+
 
     db.Open(dbFilename);
 

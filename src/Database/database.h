@@ -54,10 +54,12 @@ public:
 	bool LoadDatabase();
 	bool SaveDatabase();
 
+	CDatabase();
+
 private:
-	wxString dbFilename = "tt-database.db";
-	wxString dbTradePlan = "tt-tradeplan.txt";
-	wxString dbJournalNotes = "tt-journalnotes.txt";
+	wxString dbFilename;;
+	wxString dbTradePlan;
+	wxString dbJournalNotes;
 
 	wxString journal_notes_text = "";
 	wxString trade_plan_text = "";

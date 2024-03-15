@@ -30,12 +30,50 @@ SOFTWARE.
 #include "Database/database.h"
 #include "MainWindow/MainWindow.h"
 
+CDatabase db;
+
+
+void BindStdHandlesToConsole() {
+    // Redirect the CRT standard input, output, and error handles to the console
+    std::ignore = freopen("CONIN$", "r", stdin);
+    std::ignore = freopen("CONOUT$", "w", stderr);
+    std::ignore = freopen("CONOUT$", "w", stdout);
+
+    // Note that there is no CONERR$ file
+    HANDLE hStdout = CreateFile(L"CONOUT$", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
+        NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    HANDLE hStdin = CreateFile(L"CONIN$", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
+        NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+    SetStdHandle(STD_OUTPUT_HANDLE, hStdout);
+    SetStdHandle(STD_ERROR_HANDLE, hStdout);
+    SetStdHandle(STD_INPUT_HANDLE, hStdin);
+
+    //Clear the error state for each of the C++ standard stream objects. 
+    std::wclog.clear();
+    std::clog.clear();
+    std::wcout.clear();
+    std::cout.clear();
+    std::wcerr.clear();
+    std::cerr.clear();
+    std::wcin.clear();
+    std::cin.clear();
+}
+
+
+
 wxIMPLEMENT_APP(TradeTracker);
 
 bool TradeTracker::OnInit()
 {
 
+// Create console terminal for GUI application in order to print out debug messages
+AllocConsole();
+// Redirect stderr/stdout/stdin to new console
+BindStdHandlesToConsole();
+
     db.LoadDatabase();
+
 
     MainFrame = new MainWindow("TradeTracker-wxWidgets", wxDefaultPosition, wxDefaultSize);
 
