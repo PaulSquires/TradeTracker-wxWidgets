@@ -39,7 +39,10 @@ enum ButtonID {
     id_transactions,
     id_journal_notes,
     id_trade_plan,
-    id_ticker_totals
+    id_ticker_totals,
+    id_connect,
+    id_reconcile,
+    id_settings
 };
 
 //class MainWindow;
@@ -90,6 +93,10 @@ public:
     std::map<int, TabPanelLinkButtonStruct> link_buttons;
 
     void SetSelectedLinkButton(wxWindowID id);
+
+private:
+    void OnClick(wxMouseEvent& e);
+
 };
 
 

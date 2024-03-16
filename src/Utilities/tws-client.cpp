@@ -429,7 +429,7 @@ bool tws_Disconnect() {
     client.Disconnect();
     tws_EndMonitorThread();
 
-    return (tws_IsConnected(), false, true);
+    return (tws_IsConnected() ? false : true);
 }
 
 

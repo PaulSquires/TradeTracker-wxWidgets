@@ -27,7 +27,6 @@ SOFTWARE.
 #include <wx/wx.h>
 #include <wx/splitter.h>
 
-#include "Utilities/tws-client.h"
 #include "MainWindow.h"
 
 
@@ -39,14 +38,14 @@ MainWindow::MainWindow(const wxString &title, const wxPoint &pos, const wxSize &
 
     active_trades_panel = new ActiveTrades(splitter);
     closed_trades_panel = new ClosedTrades(splitter);
-    transactions_panel = new Transactions(splitter);
+    transactions_panel  = new Transactions(splitter);
     trade_history_panel = new TradeHistory(splitter);
     ticker_totals_panel = new TickerTotals(splitter);
     journal_notes_panel = new JournalNotes(splitter);
-    trade_plan_panel = new TradePlan(splitter);
-    tab_panel = new TabPanel(this, wxID_ANY, wxDefaultPosition, wxWindow::FromDIP(wxSize(500,36)));
+    trade_plan_panel    = new TradePlan(splitter);
+    tab_panel           = new TabPanel(this, wxID_ANY, wxDefaultPosition, wxWindow::FromDIP(wxSize(500,36)));
 
-    current_left_panel = active_trades_panel;
+    current_left_panel  = active_trades_panel;
     current_right_panel = trade_history_panel;
 
     splitter->SetMinimumPaneSize(wxWindow::FromDIP(200));

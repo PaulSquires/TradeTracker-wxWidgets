@@ -54,20 +54,20 @@ void CreateImageButtons(TabPanel* parent, wxBoxSizer* sizer) {
 
     image.image_data = disconnect_svg;
     image.image_tooltip_text = "Click to Connect";
-    auto btn = new ImageButton(parent, wxID_ANY, image, wxPoint(0,0), wxSize(width, height));
+    auto btn = new ImageButton(parent, id_connect, image, wxPoint(0,0), wxSize(width, height));
     sizer->AddSpacer(left_spacer);
     sizer->Add(btn, 0, wxTOP, top_padding);
     sizer->AddSpacer(right_spacer);
 
     image.image_data = reconcile_svg;
     image.image_tooltip_text = "Reconcile";
-    btn = new ImageButton(parent, wxID_ANY, image, wxPoint(0, 0), wxSize(width,height));
+    btn = new ImageButton(parent, id_reconcile, image, wxPoint(0, 0), wxSize(width,height));
     sizer->Add(btn, 0, wxTOP, top_padding);
     sizer->AddSpacer(right_spacer);
 
     image.image_data = setup_svg;
     image.image_tooltip_text = "Settings";
-    btn = new ImageButton(parent, wxID_ANY, image, wxPoint(0,0), wxSize(width,height));
+    btn = new ImageButton(parent, id_settings, image, wxPoint(0,0), wxSize(width,height));
     sizer->Add(btn, 0, wxTOP, top_padding);
 }
 
@@ -111,6 +111,27 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     CreateImageButtons(this, sizer);
     CreateLinkButtons(this, sizer);
     this->SetSizer(sizer);
+
+    this->Bind(wxEVT_LEFT_DOWN, &TabPanel::OnClick, this);
+}
+
+
+void TabPanel::OnClick(wxMouseEvent& e) {
+    std::cout << e.GetId() << std::endl;
+
+    switch (e.GetId()) {
+    case id_connect:
+    std::cout << "Connect" << std::endl;
+        break;
+    case id_reconcile:
+    std::cout << "Reconcile" << std::endl;
+        break;
+    case id_settings:
+    std::cout << "Settings" << std::endl;
+        break;
+    }
+
+    e.Skip();
 }
 
 

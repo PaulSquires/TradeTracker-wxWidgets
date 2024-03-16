@@ -30,6 +30,7 @@ SOFTWARE.
 #include <wx/bmpbndl.h>
 
 #include "ImageButton.h"
+#include "TabPanel/TabPanel.h"
 
 
 ImageButton::ImageButton(wxWindow* parent, wxWindowID id, const ImageButtonStruct& image,
@@ -50,6 +51,21 @@ ImageButton::ImageButton(wxWindow* parent, wxWindowID id, const ImageButtonStruc
 
 
 void ImageButton::OnClick(wxMouseEvent& e) {
+    
+    // std::cout << e.GetId() << std::endl;
+
+    // switch (e.GetId()) {
+    // case id_connect:
+    // std::cout << "Connect" << std::endl;
+    //     break;
+    // case id_reconcile:
+    // std::cout << "Reconcile" << std::endl;
+    //     break;
+    // case id_settings:
+    // std::cout << "Settings" << std::endl;
+    //     break;
+    // }
+
     e.Skip();
 }
 

@@ -56,6 +56,11 @@ else()
     # instead of the main function. This is ignored on other systems,
     # so it works on all platforms
     # Default manifest can be suppressed with the following:
+if(MSVC)
+endif()
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)
+
     add_executable(
         TradeTracker WIN32
         ${SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/src/Resources/TradeTracker.rc

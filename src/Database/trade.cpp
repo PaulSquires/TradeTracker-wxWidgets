@@ -71,17 +71,22 @@ void Trade::SetTradeOpenStatus() {
     for (const auto& trans : transactions) {
         for (const auto& leg : trans->legs) {
             switch (leg->underlying) {
-            case Underlying::Options:
-                if (leg->isOpen()) {
-                    // A leg is open so therefore the Trade must stay open
-                    this->is_open = true;
-                    return;
-                }
-                break;
-            case Underlying::Shares:
-            case Underlying::Futures:
-               aggregate += leg->open_quantity;
-               do_quantity_check = true;
+                case Underlying::Options:
+                    if (leg->isOpen()) {
+                        // A leg is open so therefore the Trade must stay open
+                        this->is_open = true;
+                        return;
+                    }
+                    break;
+                case Underlying::Shares:
+                case Underlying::Futures:
+                   aggregate += leg->open_quantity;
+                   do_quantity_check = true;
+                   break;
+                case Underlying::Dividend:
+                case Underlying::Other:
+                case Underlying::Nothing:
+                    break;
             }
         }
     }
