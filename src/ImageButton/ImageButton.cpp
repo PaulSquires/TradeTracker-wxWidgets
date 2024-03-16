@@ -33,6 +33,7 @@ SOFTWARE.
 #include "TabPanel/TabPanel.h"
 
 
+
 ImageButton::ImageButton(wxWindow* parent, wxWindowID id, const ImageButtonStruct& image,
                          const wxPoint& pos, const wxSize& size)
     : wxPanel(parent, id, pos, size)
@@ -51,21 +52,8 @@ ImageButton::ImageButton(wxWindow* parent, wxWindowID id, const ImageButtonStruc
 
 
 void ImageButton::OnClick(wxMouseEvent& e) {
-    
-    // std::cout << e.GetId() << std::endl;
-
-    // switch (e.GetId()) {
-    // case id_connect:
-    // std::cout << "Connect" << std::endl;
-    //     break;
-    // case id_reconcile:
-    // std::cout << "Reconcile" << std::endl;
-    //     break;
-    // case id_settings:
-    // std::cout << "Settings" << std::endl;
-    //     break;
-    // }
-
+    TabPanel tab_panel = (TabPanel)this->GetParent();
+    tab_panel.OnImageButtonClick(e);
     e.Skip();
 }
 

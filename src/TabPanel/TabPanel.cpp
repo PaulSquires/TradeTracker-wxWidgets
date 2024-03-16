@@ -111,12 +111,10 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     CreateImageButtons(this, sizer);
     CreateLinkButtons(this, sizer);
     this->SetSizer(sizer);
-
-    this->Bind(wxEVT_LEFT_DOWN, &TabPanel::OnClick, this);
 }
 
 
-void TabPanel::OnClick(wxMouseEvent& e) {
+void TabPanel::OnImageButtonClick(wxMouseEvent& e) {
     std::cout << e.GetId() << std::endl;
 
     switch (e.GetId()) {

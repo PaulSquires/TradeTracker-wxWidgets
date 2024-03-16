@@ -93,10 +93,7 @@ public:
     std::map<int, TabPanelLinkButtonStruct> link_buttons;
 
     void SetSelectedLinkButton(wxWindowID id);
-
-private:
-    void OnClick(wxMouseEvent& e);
-
+    void OnImageButtonClick(wxMouseEvent& e);
 };
 
 
