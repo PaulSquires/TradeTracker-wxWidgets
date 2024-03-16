@@ -29,8 +29,6 @@ SOFTWARE.
 
 #include <wx/wx.h>
 #include <map>
-//#include "MainWindow.h"
-//#include "ImageButton.h"
 
 
 enum ButtonID {
@@ -93,7 +91,7 @@ public:
     std::map<int, TabPanelLinkButtonStruct> link_buttons;
 
     void SetSelectedLinkButton(wxWindowID id);
-    void OnImageButtonClick(wxMouseEvent& e);
+    static void OnImageButtonClick(wxMouseEvent& e);
 };
 
 

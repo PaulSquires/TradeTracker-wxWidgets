@@ -36,6 +36,7 @@ struct ImageButtonStruct {
     wxString image_data;
     wxString image_tooltip_text;
     wxSize image_size = wxDefaultSize;
+    void (*onClickPtr)(wxMouseEvent& e) = nullptr;    // onClick function handler
     wxColor color_back_normal = Colors_BackDarkBlack;
     wxColor color_back_hot = Colors_BackDarkGray;
     wxColor color_text_normal = Colors_TextLightWhite;

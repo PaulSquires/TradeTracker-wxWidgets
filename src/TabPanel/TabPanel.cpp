@@ -51,6 +51,7 @@ void CreateImageButtons(TabPanel* parent, wxBoxSizer* sizer) {
     image.color_back_hot = Colors_BackLightGray;
     image.color_text_normal = Colors_TextLightWhite;
     image.color_text_hot = Colors_TextBrightWhite;
+    image.onClickPtr = parent->OnImageButtonClick;
 
     image.image_data = disconnect_svg;
     image.image_tooltip_text = "Click to Connect";
@@ -206,14 +207,14 @@ void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
             gc->SetBrush(Colors_BackDarkBlack);
         }
 
-        gc->DrawRectangle(0,0,width,height);
+        gc->DrawRectangle(0, 0, width, height);
 
         wxCoord text_width;
         wxCoord text_height;
         dc.GetTextExtent(this->label_text, &text_width, &text_height);
 
-        wxCoord text_left = (width-text_width) / 2;
-        wxCoord text_top = (height-text_height) / 2;
+        wxCoord text_left = (width - text_width) / 2;
+        wxCoord text_top = (height - text_height) / 2;
         gc->DrawText(this->label_text, text_left, text_top);
 
         if (this->is_selected) {
@@ -223,7 +224,7 @@ void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
             wxDouble line_left = text_left;
             wxDouble line_top = height - FromDIP(6);
             path.MoveToPoint(line_left, line_top);
-            path.AddLineToPoint(line_left+text_width, line_top);
+            path.AddLineToPoint(line_left + text_width, line_top);
             gc->StrokePath(path);
         }
 
@@ -236,7 +237,6 @@ TabPanelVerticalLine::TabPanelVerticalLine(TabPanel* parent, const wxPoint& pos,
     : wxPanel(parent, wxID_ANY, pos, size)
 {
     this->SetBackgroundStyle(wxBG_STYLE_PAINT);
-
 	this->Bind(wxEVT_PAINT, &TabPanelVerticalLine::OnPaint, this);
 }
 
@@ -253,15 +253,15 @@ void TabPanelVerticalLine::OnPaint(wxPaintEvent& e) {
         int height = GetClientRect().GetHeight();
         gc->SetBrush(Colors_BackDarkBlack);
 
-        gc->DrawRectangle(0,0,width,height);
+        gc->DrawRectangle(0, 0, width, height);
 
         wxPen pen{Colors_TextMediumWhite};
         gc->SetPen(pen);
         wxGraphicsPath path = gc->CreatePath();
-        wxDouble line_left = (width / 2);
+        wxDouble line_left = ((double)width / 2);
         wxDouble line_top = FromDIP(7);
         path.MoveToPoint(line_left, line_top);
-        path.AddLineToPoint(line_left, line_top+FromDIP(22));
+        path.AddLineToPoint(line_left, line_top + FromDIP(22));
         gc->StrokePath(path);
 
         delete gc;

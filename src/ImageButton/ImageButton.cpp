@@ -30,8 +30,6 @@ SOFTWARE.
 #include <wx/bmpbndl.h>
 
 #include "ImageButton.h"
-#include "TabPanel/TabPanel.h"
-
 
 
 ImageButton::ImageButton(wxWindow* parent, wxWindowID id, const ImageButtonStruct& image,
@@ -39,10 +37,9 @@ ImageButton::ImageButton(wxWindow* parent, wxWindowID id, const ImageButtonStruc
     : wxPanel(parent, id, pos, size)
 {
     this->SetBackgroundStyle(wxBG_STYLE_PAINT);
+    this->SetToolTip(this->image.image_tooltip_text);
 
     this->image = image;
-
-    this->SetToolTip(this->image.image_tooltip_text);
 
 	this->Bind(wxEVT_PAINT, &ImageButton::OnPaint, this);
 	this->Bind(wxEVT_LEFT_DOWN, &ImageButton::OnClick, this);
@@ -52,8 +49,7 @@ ImageButton::ImageButton(wxWindow* parent, wxWindowID id, const ImageButtonStruc
 
 
 void ImageButton::OnClick(wxMouseEvent& e) {
-    TabPanel tab_panel = (TabPanel)this->GetParent();
-    tab_panel.OnImageButtonClick(e);
+    this->image.onClickPtr(e);
     e.Skip();
 }
 
@@ -99,8 +95,8 @@ void ImageButton::OnPaint(wxPaintEvent& e) {
         wxBitmapBundle bundle = wxBitmapBundle::FromSVG(
             this->image.image_data.mb_str(), this->image.image_size);
 
-        wxDouble left = (width-this->image.image_size.x) / 2;
-        wxDouble top = (height-this->image.image_size.y) / 2;
+        wxDouble left = (double)(width-this->image.image_size.x) / 2;
+        wxDouble top = (double)(height-this->image.image_size.y) / 2;
 
         gc->DrawBitmap(bundle.GetBitmap(this->image.image_size),
             left, top, this->image.image_size.x, this->image.image_size.y);
