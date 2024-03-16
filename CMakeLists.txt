@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
 
-project(TradeTracker-wxWidgets LANGUAGES CXX)
+project(TradeTracker-wxWidgets LANGUAGES CXX C)
 
 include(FetchContent)
 
@@ -18,6 +18,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(wxWidgets)
 
+AUX_SOURCE_DIRECTORY(src/tws-api/ TWSAPISOURCES) 
+
 set(SRCS
     src/TradeTracker.cpp;
     src/MainWindow/MainWindow.cpp;
@@ -33,7 +35,13 @@ set(SRCS
     src/Database/database.cpp;
     src/Database/trade.cpp;
     src/Utilities/AfxHelper.cpp;
+    src/Utilities/tws-client.cpp;
    # src/Config/Config.cpp
+    ${TWSAPISOURCES};
+    src/tws-api/IntelDecimal/IntelDecimal.cpp;
+    src/tws-api/IntelDecimal/bid_decimal_data.c;
+    src/tws-api/IntelDecimal/bid64_string.c;
+    src/tws-api/IntelDecimal/bid128_2_str_tables.c;
 )
 
 if(APPLE)
