@@ -25,8 +25,10 @@ SOFTWARE.
 */
 
 #include <wx/wx.h>
+#include <wx/listbox.h>
 
 #include "ActiveTrades.h"
+
 
 ActiveTrades::ActiveTrades(wxWindow* parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, long style, const wxString& name)
@@ -34,19 +36,7 @@ ActiveTrades::ActiveTrades(wxWindow* parent, wxWindowID id, const wxPoint& pos,
 {
     this->SetBackgroundColour(wxColor(200,100,100));
 
-    this->listbox = new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+    this->listbox = new wxListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxLB_EXTENDED);
         
-        // Add first column       
-        wxListItem col0;
-        col0.SetId(0);
-        col0.SetText("Foo");
-        col0.SetWidth(50);
-        this->listbox->InsertColumn(0, col0);
-        
-        // Add second column
-        wxListItem col1;
-        col1.SetId(1);
-        col1.SetText("Name");
-        this->listbox->InsertColumn(1, col1);
 
 }
