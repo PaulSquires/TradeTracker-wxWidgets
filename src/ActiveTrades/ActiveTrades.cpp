@@ -33,5 +33,20 @@ ActiveTrades::ActiveTrades(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     : wxPanel(parent, id, pos, size, style, name)
 {
     this->SetBackgroundColour(wxColor(200,100,100));
-    new wxStaticText(this, wxID_ANY, "ActiveTrades");
+
+    this->listbox = new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+        
+        // Add first column       
+        wxListItem col0;
+        col0.SetId(0);
+        col0.SetText("Foo");
+        col0.SetWidth(50);
+        this->listbox->InsertColumn(0, col0);
+        
+        // Add second column
+        wxListItem col1;
+        col1.SetId(1);
+        col1.SetText("Name");
+        this->listbox->InsertColumn(1, col1);
+
 }

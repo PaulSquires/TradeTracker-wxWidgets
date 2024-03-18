@@ -37,9 +37,9 @@ ImageButton::ImageButton(wxWindow* parent, wxWindowID id, const ImageButtonStruc
     : wxPanel(parent, id, pos, size)
 {
     this->SetBackgroundStyle(wxBG_STYLE_PAINT);
-    this->SetToolTip(this->image.image_tooltip_text);
 
     this->image = image;
+    this->SetToolTip(this->image.image_tooltip_text);
 
 	this->Bind(wxEVT_PAINT, &ImageButton::OnPaint, this);
 	this->Bind(wxEVT_LEFT_DOWN, &ImageButton::OnClick, this);

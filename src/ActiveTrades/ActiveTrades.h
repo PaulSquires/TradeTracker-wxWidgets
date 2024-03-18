@@ -28,11 +28,15 @@ SOFTWARE.
 #define ACTIVETRADES_H
 
 #include <wx/wx.h>
+#include <wx/listctrl.h>
+
 
 class ActiveTrades : public wxPanel {
 public:
     explicit ActiveTrades( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr );
+
+	wxListCtrl* listbox = nullptr;
 
 };
 
