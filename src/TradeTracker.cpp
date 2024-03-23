@@ -75,7 +75,7 @@ bool TradeTracker::OnInit()
     db.LoadDatabase();
 
 
-    MainFrame = new MainWindow("TradeTracker-wxWidgets", wxDefaultPosition, wxDefaultSize);
+    MainFrame = new CMainWindow("TradeTracker-wxWidgets", wxDefaultPosition, wxDefaultSize);
 
 #ifdef wxHAS_IMAGE_RESOURCES
     MainFrame->SetIcon(wxIcon("mainicon"));

@@ -44,11 +44,11 @@ enum ButtonID {
 };
 
 //class MainWindow;
-class TabPanel;
+class CTabPanel;
 
-class TabPanelLinkButton : public wxPanel {
+class CTabPanelLinkButton : public wxPanel {
 public:
-    explicit TabPanelLinkButton( TabPanel* parent, wxWindowID id = wxID_ANY, const wxString& label = "",
+    explicit CTabPanelLinkButton( CTabPanel* parent, wxWindowID id = wxID_ANY, const wxString& label = "",
     const wxPoint& pos = wxDefaultPosition,	const wxSize& size = wxDefaultSize);
 
     wxString label_text;
@@ -64,9 +64,9 @@ private:
 };
 
 
-class TabPanelVerticalLine : public wxPanel {
+class CTabPanelVerticalLine : public wxPanel {
 public:
-    explicit TabPanelVerticalLine( TabPanel* parent,
+    explicit CTabPanelVerticalLine( CTabPanel* parent,
       const wxPoint& pos = wxDefaultPosition,	const wxSize& size = wxDefaultSize);
 
 private:
@@ -78,13 +78,13 @@ struct TabPanelLinkButtonStruct {
     wxString label_text;
     bool is_left_panel = true;;
     wxPanel* panel = nullptr;   // the panel to display in main_window splitter
-    TabPanelLinkButton* button = nullptr;
+    CTabPanelLinkButton* button = nullptr;
 };
 
 
-class TabPanel : public wxPanel {
+class CTabPanel : public wxPanel {
 public:
-    explicit TabPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+    explicit CTabPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr);
 
     // wxWindow id is the key

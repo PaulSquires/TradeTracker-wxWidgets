@@ -29,9 +29,9 @@ SOFTWARE.
 
 #include <wx/wx.h>
 
-class TradePlan : public wxPanel {
+class CTradePlan : public wxPanel {
 public:
-    explicit TradePlan( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+    explicit CTradePlan( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr );
 
 };

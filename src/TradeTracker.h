@@ -34,7 +34,7 @@ class TradeTracker : public wxApp {
 public:
     bool OnInit() override;
 
-    MainWindow* MainFrame = nullptr;
+    CMainWindow* MainFrame = nullptr;
 };
 
 

@@ -29,9 +29,9 @@ SOFTWARE.
 
 #include <wx/wx.h>
 
-class Transactions : public wxPanel {
+class CTransactions : public wxPanel {
 public:
-    explicit Transactions( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+    explicit CTransactions( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr );
 
 };

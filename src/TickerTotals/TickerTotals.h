@@ -29,9 +29,9 @@ SOFTWARE.
 
 #include <wx/wx.h>
 
-class TickerTotals : public wxPanel {
+class CTickerTotals : public wxPanel {
 public:
-    explicit TickerTotals( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+    explicit CTickerTotals( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr );
 
 };

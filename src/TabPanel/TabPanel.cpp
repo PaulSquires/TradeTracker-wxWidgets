@@ -38,7 +38,7 @@ SOFTWARE.
 #include "Resources/SetupSVG.data"
 
 
-void CreateImageButtons(TabPanel* parent, wxBoxSizer* sizer) {
+void CreateImageButtons(CTabPanel* parent, wxBoxSizer* sizer) {
     int width = parent->FromDIP(26);
     int height = parent->FromDIP(26);
     int top_padding = parent->FromDIP(5);
@@ -73,8 +73,8 @@ void CreateImageButtons(TabPanel* parent, wxBoxSizer* sizer) {
 }
 
 
-void CreateLinkButtons(TabPanel* parent, wxBoxSizer* sizer) {
-    auto main_window = (MainWindow*) parent->GetParent();
+void CreateLinkButtons(CTabPanel* parent, wxBoxSizer* sizer) {
+    auto main_window = (CMainWindow*) parent->GetParent();
     parent->link_buttons = {
         {id_active_trades, {"Active Trades", true,  main_window->active_trades_panel, nullptr}},
         {id_closed_trades, {"Closed Trades", true,  main_window->closed_trades_panel, nullptr}},
@@ -93,16 +93,16 @@ void CreateLinkButtons(TabPanel* parent, wxBoxSizer* sizer) {
 
     for (auto& [id, btn] : parent->link_buttons) {
         int width = parent->GetTextExtent(btn.label_text).x + margin;
-        btn.button = new TabPanelLinkButton(parent, id, btn.label_text, wxPoint(0,0), wxSize(width,height));
+        btn.button = new CTabPanelLinkButton(parent, id, btn.label_text, wxPoint(0,0), wxSize(width,height));
         sizer->Add(btn.button);
-        auto vertline_ptr = new TabPanelVerticalLine(parent, wxPoint(0,0), wxSize(vertline_panel_width,height));
+        auto vertline_ptr = new CTabPanelVerticalLine(parent, wxPoint(0,0), wxSize(vertline_panel_width,height));
         sizer->Add(vertline_ptr);
     }
 
 }
 
 
-TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
+CTabPanel::CTabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
                    const wxSize& size, long style, const wxString& name)
     : wxPanel(parent, id, pos, size, style, name)
 {
@@ -115,7 +115,7 @@ TabPanel::TabPanel(wxWindow* parent, wxWindowID id, const wxPoint& pos,
 }
 
 
-void TabPanel::OnImageButtonClick(wxMouseEvent& e) {
+void CTabPanel::OnImageButtonClick(wxMouseEvent& e) {
     std::cout << e.GetId() << std::endl;
 
     switch (e.GetId()) {
@@ -134,7 +134,7 @@ void TabPanel::OnImageButtonClick(wxMouseEvent& e) {
 }
 
 
-void TabPanel::SetSelectedLinkButton(wxWindowID id_clicked) {
+void CTabPanel::SetSelectedLinkButton(wxWindowID id_clicked) {
     for (auto& [id, btn] : this->link_buttons) {
         btn.button->is_selected = false;
         if (btn.button->GetId() == id_clicked) btn.button->is_selected = true;
@@ -143,7 +143,7 @@ void TabPanel::SetSelectedLinkButton(wxWindowID id_clicked) {
 }
 
 
-TabPanelLinkButton::TabPanelLinkButton(TabPanel* parent, wxWindowID id, const wxString& label,
+CTabPanelLinkButton::CTabPanelLinkButton(CTabPanel* parent, wxWindowID id, const wxString& label,
     const wxPoint& pos, const wxSize& size)
     : wxPanel(parent, id, pos, size)
 {
@@ -151,16 +151,16 @@ TabPanelLinkButton::TabPanelLinkButton(TabPanel* parent, wxWindowID id, const wx
 
     label_text = label;
 
-	this->Bind(wxEVT_PAINT, &TabPanelLinkButton::OnPaint, this);
-	this->Bind(wxEVT_LEFT_DOWN, &TabPanelLinkButton::OnClick, this);
-	this->Bind(wxEVT_ENTER_WINDOW, &TabPanelLinkButton::OnMouseEnter, this);
-	this->Bind(wxEVT_LEAVE_WINDOW, &TabPanelLinkButton::OnMouseLeave, this);
+	this->Bind(wxEVT_PAINT, &CTabPanelLinkButton::OnPaint, this);
+	this->Bind(wxEVT_LEFT_DOWN, &CTabPanelLinkButton::OnClick, this);
+	this->Bind(wxEVT_ENTER_WINDOW, &CTabPanelLinkButton::OnMouseEnter, this);
+	this->Bind(wxEVT_LEAVE_WINDOW, &CTabPanelLinkButton::OnMouseLeave, this);
 }
 
 
-void TabPanelLinkButton::OnClick(wxMouseEvent& e) {
-    auto panel = (TabPanel*) this->GetParent();
-    auto main_window = (MainWindow*) panel->GetParent();
+void CTabPanelLinkButton::OnClick(wxMouseEvent& e) {
+    auto panel = (CTabPanel*) this->GetParent();
+    auto main_window = (CMainWindow*) panel->GetParent();
 
     auto& btn = panel->link_buttons.at(e.GetId());
     btn.is_left_panel ?
@@ -170,21 +170,21 @@ void TabPanelLinkButton::OnClick(wxMouseEvent& e) {
 }
 
 
-void TabPanelLinkButton::OnMouseEnter(wxMouseEvent& e) {
+void CTabPanelLinkButton::OnMouseEnter(wxMouseEvent& e) {
     this->is_hot = true;
     this->Refresh();
     e.Skip();
 }
 
 
-void TabPanelLinkButton::OnMouseLeave(wxMouseEvent& e) {
+void CTabPanelLinkButton::OnMouseLeave(wxMouseEvent& e) {
     this->is_hot = false;
     this->Refresh();
     e.Skip();
 }
 
 
-void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
+void CTabPanelLinkButton::OnPaint(wxPaintEvent& e) {
     wxAutoBufferedPaintDC dc(this);
     this->PrepareDC(dc);
     dc.Clear();
@@ -233,15 +233,15 @@ void TabPanelLinkButton::OnPaint(wxPaintEvent& e) {
 }
 
 
-TabPanelVerticalLine::TabPanelVerticalLine(TabPanel* parent, const wxPoint& pos, const wxSize& size)
+CTabPanelVerticalLine::CTabPanelVerticalLine(CTabPanel* parent, const wxPoint& pos, const wxSize& size)
     : wxPanel(parent, wxID_ANY, pos, size)
 {
     this->SetBackgroundStyle(wxBG_STYLE_PAINT);
-	this->Bind(wxEVT_PAINT, &TabPanelVerticalLine::OnPaint, this);
+	this->Bind(wxEVT_PAINT, &CTabPanelVerticalLine::OnPaint, this);
 }
 
 
-void TabPanelVerticalLine::OnPaint(wxPaintEvent& e) {
+void CTabPanelVerticalLine::OnPaint(wxPaintEvent& e) {
     wxAutoBufferedPaintDC dc(this);
     this->PrepareDC(dc);
     dc.Clear();

@@ -30,20 +30,20 @@ SOFTWARE.
 #include "MainWindow.h"
 
 
-MainWindow::MainWindow(const wxString &title, const wxPoint &pos, const wxSize &size)
+CMainWindow::CMainWindow(const wxString &title, const wxPoint &pos, const wxSize &size)
     : wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
     splitter = new wxSplitterWindow(this, wxID_ANY,
         wxDefaultPosition, wxDefaultSize, wxSP_BORDER | wxSP_LIVE_UPDATE);
 
-    active_trades_panel = new ActiveTrades(splitter);
-    closed_trades_panel = new ClosedTrades(splitter);
-    transactions_panel  = new Transactions(splitter);
-    trade_history_panel = new TradeHistory(splitter);
-    ticker_totals_panel = new TickerTotals(splitter);
-    journal_notes_panel = new JournalNotes(splitter);
-    trade_plan_panel    = new TradePlan(splitter);
-    tab_panel           = new TabPanel(this, wxID_ANY, wxDefaultPosition, wxWindow::FromDIP(wxSize(500,36)));
+    active_trades_panel = new CActiveTrades(splitter);
+    closed_trades_panel = new CClosedTrades(splitter);
+    transactions_panel  = new CTransactions(splitter);
+    trade_history_panel = new CTradeHistory(splitter);
+    ticker_totals_panel = new CTickerTotals(splitter);
+    journal_notes_panel = new CJournalNotes(splitter);
+    trade_plan_panel    = new CTradePlan(splitter);
+    tab_panel           = new CTabPanel(this, wxID_ANY, wxDefaultPosition, wxWindow::FromDIP(wxSize(500,36)));
 
     current_left_panel  = active_trades_panel;
     current_right_panel = trade_history_panel;
@@ -59,11 +59,11 @@ MainWindow::MainWindow(const wxString &title, const wxPoint &pos, const wxSize &
 
     this->SetSizerAndFit(sizer);
 
-    this->Bind(wxEVT_CLOSE_WINDOW, &MainWindow::OnClose, this);
+    this->Bind(wxEVT_CLOSE_WINDOW, &CMainWindow::OnClose, this);
 }
 
 
-void MainWindow::OnClose(wxCloseEvent& event) {
+void CMainWindow::OnClose(wxCloseEvent& event) {
     // Hide the main window just prior to the destroy in order
     // to avoid seeing a flash from the window being destroyed.
     this->Hide();
@@ -75,7 +75,7 @@ void MainWindow::OnClose(wxCloseEvent& event) {
 }
 
 
-void MainWindow::SetLeftPanel(wxPanel* new_left_panel) {
+void CMainWindow::SetLeftPanel(wxPanel* new_left_panel) {
     splitter->ReplaceWindow(current_left_panel, new_left_panel);
     current_left_panel->Hide();
     new_left_panel->Show();
@@ -83,7 +83,7 @@ void MainWindow::SetLeftPanel(wxPanel* new_left_panel) {
 }
 
 
-void MainWindow::SetRightPanel(wxPanel* new_right_panel) {
+void CMainWindow::SetRightPanel(wxPanel* new_right_panel) {
     splitter->ReplaceWindow(current_right_panel, new_right_panel);
     current_right_panel->Hide();
     new_right_panel->Show();

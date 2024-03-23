@@ -27,16 +27,33 @@ SOFTWARE.
 #include <wx/wx.h>
 #include <wx/listbox.h>
 
+#include "Database/trade.h"
 #include "ActiveTrades.h"
 
 
-ActiveTrades::ActiveTrades(wxWindow* parent, wxWindowID id, const wxPoint& pos,
+CActiveTrades::CActiveTrades(wxWindow* parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, long style, const wxString& name)
     : wxPanel(parent, id, pos, size, style, name)
 {
     this->SetBackgroundColour(wxColor(200,100,100));
 
     this->listbox = new wxListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxLB_EXTENDED);
-        
+
+    wxBoxSizer* sizer = nullptr;
+    sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(this->listbox, 1, wxEXPAND);
+
+    this->SetSizerAndFit(sizer);
+
+    this->ShowActiveTrades();
+}
+
+
+void CActiveTrades::ShowActiveTrades() {
+    // Load the trades into the listbox
+    for (const auto trade : trades ) {
+        wxString item = trade->ticker_symbol + "  " + trade->ticker_name;
+        this->listbox->AppendString(item);
+    }
 
 }

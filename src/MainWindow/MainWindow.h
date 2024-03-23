@@ -39,21 +39,21 @@ SOFTWARE.
 #include "JournalNotes/JournalNotes.h"
 #include "TradePlan/TradePlan.h"
 
-class TabPanel;
+class CTabPanel;
 
-class MainWindow : public wxFrame {
+class CMainWindow : public wxFrame {
 public:
-    MainWindow(const wxString &title, const wxPoint &pos, const wxSize &size);
+    CMainWindow(const wxString &title, const wxPoint &pos, const wxSize &size);
 
     wxSplitterWindow* splitter = nullptr;
-    ActiveTrades* active_trades_panel = nullptr;
-    ClosedTrades* closed_trades_panel = nullptr;
-    Transactions* transactions_panel = nullptr;
-    TradeHistory* trade_history_panel = nullptr;
-    TabPanel* tab_panel = nullptr;
-    TickerTotals* ticker_totals_panel = nullptr;
-    TradePlan* trade_plan_panel = nullptr;
-    JournalNotes* journal_notes_panel = nullptr;
+    CActiveTrades* active_trades_panel = nullptr;
+    CClosedTrades* closed_trades_panel = nullptr;
+    CTransactions* transactions_panel = nullptr;
+    CTradeHistory* trade_history_panel = nullptr;
+    CTabPanel* tab_panel = nullptr;
+    CTickerTotals* ticker_totals_panel = nullptr;
+    CTradePlan* trade_plan_panel = nullptr;
+    CJournalNotes* journal_notes_panel = nullptr;
     wxBoxSizer* sizer = nullptr;
 
     wxPanel* current_left_panel = nullptr;

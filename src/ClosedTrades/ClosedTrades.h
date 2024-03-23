@@ -29,12 +29,13 @@ SOFTWARE.
 
 #include <wx/wx.h>
 
-class ClosedTrades : public wxPanel {
+class CClosedTrades : public wxPanel {
 public:
-    explicit ClosedTrades( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+    explicit CClosedTrades( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr );
 
 };
 
+extern CClosedTrades ClosedTrades;
 
 #endif //CLOSEDTRADES_H

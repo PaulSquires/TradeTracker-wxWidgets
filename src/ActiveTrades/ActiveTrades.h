@@ -31,14 +31,17 @@ SOFTWARE.
 #include <wx/listbox.h>
 
 
-class ActiveTrades : public wxPanel {
+class CActiveTrades : public wxPanel {
 public:
-    explicit ActiveTrades( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+    explicit CActiveTrades( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr );
+
+    void ShowActiveTrades();
 
 	wxListBox* listbox = nullptr;
 
 };
 
+extern CActiveTrades ActiveTrades;
 
 #endif //ACTIVETRADES_H

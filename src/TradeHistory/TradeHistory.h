@@ -29,9 +29,9 @@ SOFTWARE.
 
 #include <wx/wx.h>
 
-class TradeHistory : public wxPanel {
+class CTradeHistory : public wxPanel {
 public:
-    explicit TradeHistory( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+    explicit CTradeHistory( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,	long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr );
 
 };
