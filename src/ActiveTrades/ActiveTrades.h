@@ -28,7 +28,17 @@ SOFTWARE.
 #define ACTIVETRADES_H
 
 #include <wx/wx.h>
-#include <wx/listbox.h>
+#include <wx/vlbox.h>
+
+
+class CActiveTradesListBox : public wxVListBox {
+public:
+    CActiveTradesListBox(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0);
+
+protected:
+    virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const override;
+    virtual wxCoord OnMeasureItem(size_t n) const override;
+};
 
 
 class CActiveTrades : public wxPanel {
@@ -38,9 +48,9 @@ public:
 
     void ShowActiveTrades();
 
-	wxListBox* listbox = nullptr;
-
+	CActiveTradesListBox* listbox = nullptr;
 };
+
 
 extern CActiveTrades ActiveTrades;
 
