@@ -174,15 +174,15 @@ public:
     // The ticker data would not be updated until a new price occurs so we simply display the most recent price
     // rather than blank text.
     wxString itm_text = "";
-//    DWORD itm_color = COLOR_WHITELIGHT;
+//    unsigned int itm_color = COLOR_WHITELIGHT;
 
     wxString ticker_column_1;
     wxString ticker_column_2;
     wxString ticker_column_3;
     
-    DWORD ticker_column_1_clr{};
-    DWORD ticker_column_2_clr{};
-    DWORD ticker_column_3_clr{};
+    unsigned int ticker_column_1_clr{};
+    unsigned int ticker_column_2_clr{};
+    unsigned int ticker_column_3_clr{};
 
     // Dates used to calculate ROI on TradeBP.
     wxString  bp_start_date = L"99999999";            // YYYYMMDD  First transaction date

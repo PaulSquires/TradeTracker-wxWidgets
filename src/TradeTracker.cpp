@@ -33,6 +33,7 @@ SOFTWARE.
 CDatabase db;
 
 
+#ifdef __WINDOWS__
 void BindStdHandlesToConsole() {
     // Redirect the CRT standard input, output, and error handles to the console
     std::ignore = freopen("CONIN$", "r", stdin);
@@ -59,7 +60,7 @@ void BindStdHandlesToConsole() {
     std::wcin.clear();
     std::cin.clear();
 }
-
+#endif
 
 
 wxIMPLEMENT_APP(TradeTracker);
@@ -67,10 +68,13 @@ wxIMPLEMENT_APP(TradeTracker);
 bool TradeTracker::OnInit()
 {
 
+#ifdef __WINDOWS__
     // Create console terminal for GUI application in order to print out debug messages
     AllocConsole();
     // Redirect stderr/stdout/stdin to new console
     BindStdHandlesToConsole();
+#endif
+
 
     db.LoadDatabase();
 
