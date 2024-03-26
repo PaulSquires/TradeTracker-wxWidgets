@@ -31,9 +31,9 @@ FetchContent_MakeAvailable(wxWidgets)
 
 
 if(APPLE)
-    AUX_SOURCE_DIRECTORY(src/tws-api/ TWSAPISOURCES) 
+    AUX_SOURCE_DIRECTORY(src/tws-api/linux TWSAPISOURCES) 
 else()
-    AUX_SOURCE_DIRECTORY(src/tws-api/ TWSAPISOURCES) 
+    AUX_SOURCE_DIRECTORY(src/tws-api/windows TWSAPISOURCES) 
 endif()
 AUX_SOURCE_DIRECTORY(src/tws-api/IntelDecimal INTELDECIMALSOURCES) 
 
