@@ -19,10 +19,12 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(wxWidgets)
 
 
-
-
-
-# AUX_SOURCE_DIRECTORY(src/tws-api/ TWSAPISOURCES) 
+if(APPLE)
+    AUX_SOURCE_DIRECTORY(src/tws-api/ TWSAPISOURCES) 
+else()
+    AUX_SOURCE_DIRECTORY(src/tws-api/ TWSAPISOURCES) 
+endif()
+AUX_SOURCE_DIRECTORY(src/tws-api/IntelDecimal INTELDECIMALSOURCES) 
 
 set(SRCS
     src/TradeTracker.cpp;
@@ -40,11 +42,8 @@ set(SRCS
     src/Database/trade.cpp;
     src/Utilities/AfxHelper.cpp;
     src/Utilities/tws-client.cpp;
-#    ${TWSAPISOURCES};
-#    src/tws-api/IntelDecimal/IntelDecimal.cpp;
-#    src/tws-api/IntelDecimal/bid_decimal_data.c;
-#    src/tws-api/IntelDecimal/bid64_string.c;
-#    src/tws-api/IntelDecimal/bid128_2_str_tables.c;
+    ${INTELDECIMALSOURCES};
+    ${TWSAPISOURCES};
    # src/Config/Config.cpp
 )
 
@@ -71,15 +70,16 @@ else()
         )
     target_include_directories(TradeTracker PRIVATE src)
 
-    get_filename_component(LIB_A_PATH ./lib/windows/bin/TwsSocketClient.lib ABSOLUTE)
-    add_library(TwsSocketClient STATIC IMPORTED)
-    set_target_properties(TwsSocketClient PROPERTIES IMPORTED_LOCATION ${LIB_A_PATH})
+#    get_filename_component(LIB_A_PATH ./lib/windows/bin/TwsSocketClient.lib ABSOLUTE)
+#    add_library(TwsSocketClient STATIC IMPORTED)
+#    set_target_properties(TwsSocketClient PROPERTIES IMPORTED_LOCATION ${LIB_A_PATH})
 
-    get_filename_component(LIB_B_PATH ./lib/windows/bin/libbid.lib ABSOLUTE)
-    add_library(libbid STATIC IMPORTED)
-    set_target_properties(libbid PROPERTIES IMPORTED_LOCATION ${LIB_B_PATH})
+#    get_filename_component(LIB_B_PATH ./lib/windows/bin/libbid.lib ABSOLUTE)
+#    add_library(libbid STATIC IMPORTED)
+#    set_target_properties(libbid PROPERTIES IMPORTED_LOCATION ${LIB_B_PATH})
 
 endif()
 
-target_link_libraries(TradeTracker PRIVATE wxcore wxnet libbid TwsSocketClient)
+# target_link_libraries(TradeTracker PRIVATE wxcore wxnet libbid TwsSocketClient)
+target_link_libraries(TradeTracker PRIVATE wxcore wxnet)
 

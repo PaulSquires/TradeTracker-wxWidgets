@@ -28,10 +28,6 @@ SOFTWARE.
 
 #if 0
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 81bcb13 (20240326)
 #include <thread>
 #include <chrono>
 #include <unordered_map>

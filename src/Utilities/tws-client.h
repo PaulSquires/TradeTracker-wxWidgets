@@ -127,10 +127,6 @@ void tws_RequestWshMetaData(int req_id);
 void tws_RequestWshEventData(int req_id, const WshEventData& wshEventData);
 
 #endif
-<<<<<<< HEAD
-
-=======
->>>>>>> 81bcb13 (20240326)
 
 #endif //TWSCLIENT_H
 
