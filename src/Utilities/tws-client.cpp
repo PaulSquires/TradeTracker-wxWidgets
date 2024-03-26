@@ -26,6 +26,9 @@ SOFTWARE.
 
 #include <wx/wx.h>
 
+#if 0
+
+
 #include <thread>
 #include <chrono>
 #include <unordered_map>
@@ -970,3 +973,4 @@ void TwsClient::currentTime(long time) {
 	// std::cout << "current time " << time << std::endl;
 }
 
+#endif

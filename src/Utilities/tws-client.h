@@ -27,6 +27,7 @@ SOFTWARE.
 #ifndef TWSCLIENT_H
 #define TWSCLIENT_H
 
+#if 0
 
 #include "tws-api/EWrapper.h"
 #include "tws-api/EReaderOSSignal.h"
@@ -124,6 +125,8 @@ void tws_RequestPositions();
 void tws_CancelPositions();
 void tws_RequestWshMetaData(int req_id);
 void tws_RequestWshEventData(int req_id, const WshEventData& wshEventData);
+
+#endif
 
 
 #endif //TWSCLIENT_H

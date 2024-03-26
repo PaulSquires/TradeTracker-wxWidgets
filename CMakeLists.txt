@@ -18,7 +18,11 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(wxWidgets)
 
-AUX_SOURCE_DIRECTORY(src/tws-api/ TWSAPISOURCES) 
+
+
+
+
+# AUX_SOURCE_DIRECTORY(src/tws-api/ TWSAPISOURCES) 
 
 set(SRCS
     src/TradeTracker.cpp;
@@ -36,12 +40,12 @@ set(SRCS
     src/Database/trade.cpp;
     src/Utilities/AfxHelper.cpp;
     src/Utilities/tws-client.cpp;
+#    ${TWSAPISOURCES};
+#    src/tws-api/IntelDecimal/IntelDecimal.cpp;
+#    src/tws-api/IntelDecimal/bid_decimal_data.c;
+#    src/tws-api/IntelDecimal/bid64_string.c;
+#    src/tws-api/IntelDecimal/bid128_2_str_tables.c;
    # src/Config/Config.cpp
-    ${TWSAPISOURCES};
-    src/tws-api/IntelDecimal/IntelDecimal.cpp;
-    src/tws-api/IntelDecimal/bid_decimal_data.c;
-    src/tws-api/IntelDecimal/bid64_string.c;
-    src/tws-api/IntelDecimal/bid128_2_str_tables.c;
 )
 
 if(APPLE)
@@ -56,8 +60,7 @@ else()
     # instead of the main function. This is ignored on other systems,
     # so it works on all platforms
     # Default manifest can be suppressed with the following:
-if(MSVC)
-endif()
+
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)
 
@@ -67,7 +70,16 @@ endif()
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Resources/TradeTracker.exe.manifest
         )
     target_include_directories(TradeTracker PRIVATE src)
+
+    get_filename_component(LIB_A_PATH ./lib/windows/bin/TwsSocketClient.lib ABSOLUTE)
+    add_library(TwsSocketClient STATIC IMPORTED)
+    set_target_properties(TwsSocketClient PROPERTIES IMPORTED_LOCATION ${LIB_A_PATH})
+
+    get_filename_component(LIB_B_PATH ./lib/windows/bin/libbid.lib ABSOLUTE)
+    add_library(libbid STATIC IMPORTED)
+    set_target_properties(libbid PROPERTIES IMPORTED_LOCATION ${LIB_B_PATH})
+
 endif()
 
-target_link_libraries(TradeTracker PRIVATE wxcore wxnet)
+target_link_libraries(TradeTracker PRIVATE wxcore wxnet libbid TwsSocketClient)
 
