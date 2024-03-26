@@ -1,3 +1,14 @@
+# Windows uses only one build tree:
+# cmake -S. -Bbuild
+# cmake --build build -j4 --config Release
+
+# On Mac or Linux you'll need to maintain two build trees:
+# cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Debug
+# cmake --build build -j4
+# cmake -S. -Bbuild-rel -DCMAKE_BUILD_TYPE=Release
+# cmake --build build-rel -j4
+
+
 cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
 
 project(TradeTracker-wxWidgets LANGUAGES CXX C)
