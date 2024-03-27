@@ -152,7 +152,7 @@ wxString AfxGetExePath() {
 #include <mach-o/dyld.h>
 #include <climits>
 
-#elif
+#else   // Linux
 #include <unistd.h>
 #endif
 
