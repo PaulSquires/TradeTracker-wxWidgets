@@ -161,12 +161,23 @@ wxString AfxGetExePath() {
         // Windows specific
         wchar_t szPath[MAX_PATH];
         GetModuleFileNameW( NULL, szPath, MAX_PATH );
+        wxString path(std::filesystem::path(szPath).generic_string());
+        // Remove everything after the last trailing backslash
+        std::size_t found = path.find_last_of(L"/\\");
+        path = path.substr(0, found);
+        return path;
     #elif __APPLE__
         char szPath[PATH_MAX];
         uint32_t bufsize = PATH_MAX;
-        if (!_NSGetExecutablePath(szPath, &bufsize))
+        if (!_NSGetExecutablePath(szPath, &bufsize)) {
             // return std::filesystem::path{szPath}.parent_path() / ""; // to finish the folder path with (back)slash
-            return std::filesystem::path{szPath}.parent_path();
+            //return std::filesystem::path{szPath}.parent_path();
+            wxString path(std::filesystem::path(szPath).generic_string());
+            // Remove everything after the last trailing backslash
+            std::size_t found = path.find_last_of(L"/\\");
+            path = path.substr(0, found);
+            return path;
+        }
         return {};  // some error
     #else
         // Linux specific
@@ -174,12 +185,13 @@ wxString AfxGetExePath() {
         ssize_t count = readlink( "/proc/self/exe", szPath, PATH_MAX );
         if( count < 0 || count >= PATH_MAX ) return {}; // some error
         szPath[count] = '\0';
+        wxString path(std::filesystem::path(szPath).generic_string());
+        // Remove everything after the last trailing backslash
+        std::size_t found = path.find_last_of(L"/\\");
+        path = path.substr(0, found);
+        return path;
     #endif
-    wxString path(std::filesystem::path(szPath).generic_string());
-    // Remove everything after the last trailing backslash
-    std::size_t found = path.find_last_of(L"/\\");
-    path = path.substr(0, found);
-    return path;
+
 }
 
 
