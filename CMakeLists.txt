@@ -53,7 +53,7 @@ set(SRCS
     src/Database/trade.cpp;
     src/Utilities/AfxHelper.cpp;
     src/Utilities/tws-client.cpp;
-    ${INTELDECIMALSOURCES};
+    # ${INTELDECIMALSOURCES};
     ${TWSAPISOURCES};
    # src/Config/Config.cpp
 )
@@ -65,12 +65,15 @@ if(APPLE)
 
     # Set a custom plist file for the app bundle - needed for Mac OS Retina display
     set_target_properties(TradeTracker PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/src/Resources/Info.plist)
+    
+    target_link_libraries(TradeTracker PRIVATE wxcore wxnet)
 else()
     # the WIN32 is needed for Windows in order for it to look for WinMain
     # instead of the main function. This is ignored on other systems,
     # so it works on all platforms
     # Default manifest can be suppressed with the following:
 
+    # Windows compiler warnings
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)
 
@@ -85,12 +88,11 @@ else()
 #    add_library(TwsSocketClient STATIC IMPORTED)
 #    set_target_properties(TwsSocketClient PROPERTIES IMPORTED_LOCATION ${LIB_A_PATH})
 
-#    get_filename_component(LIB_B_PATH ./lib/windows/bin/libbid.lib ABSOLUTE)
-#    add_library(libbid STATIC IMPORTED)
-#    set_target_properties(libbid PROPERTIES IMPORTED_LOCATION ${LIB_B_PATH})
+    get_filename_component(LIB_B_PATH ./src/tws-api/IntelDecimal/lib/libbid.lib ABSOLUTE)
+    add_library(libbid STATIC IMPORTED)
+    set_target_properties(libbid PROPERTIES IMPORTED_LOCATION ${LIB_B_PATH})
 
+    target_link_libraries(TradeTracker PRIVATE wxcore wxnet libbid)
 endif()
 
-# target_link_libraries(TradeTracker PRIVATE wxcore wxnet libbid TwsSocketClient)
-target_link_libraries(TradeTracker PRIVATE wxcore wxnet)
 

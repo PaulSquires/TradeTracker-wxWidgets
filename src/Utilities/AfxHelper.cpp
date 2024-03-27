@@ -128,8 +128,8 @@ wxString AfxGetExePath() {
     ssize_t count = readlink("/proc/self/exe", buffer, sizeof(buffer));
     if (count != -1) {
         path.assign(buffer, count);
-        std::size_t found = buffer.find_last_of("/\\");
-        path = buffer.substr(0, found);
+        std::size_t found = path.find_last_of("/\\");
+        path = path.substr(0, found);
     }
 #endif
     return path;
