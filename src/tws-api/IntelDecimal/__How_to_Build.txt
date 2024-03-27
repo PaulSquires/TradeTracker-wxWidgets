@@ -1,0 +1,14 @@
+=============================================================================================
+How to build Intel Decimal Floating Point Library under Windows (static library - libbid.lib)
+=============================================================================================
+
+1) Extract [Intel Decimal Floating Point Library] (https://www.intel.com/content/www/us/en/developer/articles/tool/intel-decimal-floating-point-math-library.html) 
+to some directory
+
+2) In IntelRDFPMathLib20U2/LIBRARY directory execute the following commands:
+nmake -fmakefile.mak CC=cl CALL_BY_REF=0 GLOBAL_RND=0 GLOBAL_FLAGS=0 UNCHANGED_BINARY_FLAGS=0
+del *.obj
+
+Note: in the sample above all build flags are set to 0. See IntelRDFPMathLib20U2/README for details.
+
+3) As result there is libbid.lib library generated. You can use it with TestCppClientStatic.
