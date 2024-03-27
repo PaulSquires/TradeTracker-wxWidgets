@@ -165,7 +165,8 @@ wxString AfxGetExePath() {
         char szPath[PATH_MAX];
         uint32_t bufsize = PATH_MAX;
         if (!_NSGetExecutablePath(szPath, &bufsize))
-            return std::filesystem::path{szPath}.parent_path() / ""; // to finish the folder path with (back)slash
+            // return std::filesystem::path{szPath}.parent_path() / ""; // to finish the folder path with (back)slash
+            return std::filesystem::path{szPath}.parent_path();
         return {};  // some error
     #else
         // Linux specific

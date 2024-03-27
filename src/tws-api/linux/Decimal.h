@@ -62,6 +62,7 @@ inline Decimal stringToDecimal(std::string str) {
         str.clear();
     }
 //    return __bid64_from_string(const_cast<char*>(str.c_str()), 0, &flags);
+    return 0;
 }
 
 inline std::string decimalToString(Decimal value) {
@@ -69,6 +70,7 @@ inline std::string decimalToString(Decimal value) {
     unsigned int flags;
     __bid64_to_string(buf, value, &flags); // convert Decimal value to string using bid64_to_string function
 //    return buf;
+    return "";
 }
 
 inline std::string decimalStringToDisplay(Decimal value) {
