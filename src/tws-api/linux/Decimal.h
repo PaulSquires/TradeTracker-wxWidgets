@@ -61,14 +61,14 @@ inline Decimal stringToDecimal(std::string str) {
     if (str.compare(std::string{ "2147483647" }) == 0 || str.compare(std::string{ "9223372036854775807" }) == 0 || str.compare(std::string{ "1.7976931348623157E308" }) == 0) {
         str.clear();
     }
-    return __bid64_from_string(const_cast<char*>(str.c_str()), 0, &flags);
+//    return __bid64_from_string(const_cast<char*>(str.c_str()), 0, &flags);
 }
 
 inline std::string decimalToString(Decimal value) {
     char buf[64];
     unsigned int flags;
     __bid64_to_string(buf, value, &flags); // convert Decimal value to string using bid64_to_string function
-    return buf;
+//    return buf;
 }
 
 inline std::string decimalStringToDisplay(Decimal value) {
